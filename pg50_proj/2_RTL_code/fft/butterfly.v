@@ -1,34 +1,35 @@
 module butterfly #(
-    parameter                               DATA_WIDTH = 16
+    parameter                               DATA_WIDTH  = 16 ,
+    parameter                               MUTI        = 1
 )(
     input                                   clk        ,//系统时钟
     input                                   rst_n       ,//系统异步复位，低电平有效
     input                                   en         ,//使能信号，表示输入数据有效
-    input signed      [2*DATA_WIDTH-1:0]    xp_real    ,//Xm(p)
-    input signed      [2*DATA_WIDTH-1:0]    xp_imag    ,
-    input signed      [2*DATA_WIDTH-1:0]    xq_real    ,//Xm(q)
-    input signed      [2*DATA_WIDTH-1:0]    xq_imag    ,
+    input signed      [MUTI*DATA_WIDTH-1:0] xp_real    ,//Xm(p)
+    input signed      [MUTI*DATA_WIDTH-1:0] xp_imag    ,
+    input signed      [MUTI*DATA_WIDTH-1:0] xq_real    ,//Xm(q)
+    input signed      [MUTI*DATA_WIDTH-1:0] xq_imag    ,
     input signed      [14:0]                factor_real,//扩大8192 倍（左移 13 位）后的旋转因子
     input signed      [14:0]                factor_imag,
     output                                  valid      ,//输出数据有效执行信号
-    output signed     [2*DATA_WIDTH-1:0]    yp_real    ,//Xm+1(p)
-    output signed     [2*DATA_WIDTH-1:0]    yp_imag    ,
-    output signed     [2*DATA_WIDTH-1:0]    yq_real    ,//Xm+1(q)
-    output signed     [2*DATA_WIDTH-1:0]    yq_imag    
+    output signed     [MUTI*DATA_WIDTH-1:0] yp_real    ,//Xm+1(p)
+    output signed     [MUTI*DATA_WIDTH-1:0] yp_imag    ,
+    output signed     [MUTI*DATA_WIDTH-1:0] yq_real    ,//Xm+1(q)
+    output signed     [MUTI*DATA_WIDTH-1:0] yq_imag    
 );
 
     parameter           DLY = 1                 ;
 
-    reg signed [2*DATA_WIDTH+14:0]          xq_wnr_real0  ;
-    reg signed [2*DATA_WIDTH+14:0]          xq_wnr_real1  ;
-    reg signed [2*DATA_WIDTH+14:0]          xq_wnr_imag0  ;
-    reg signed [2*DATA_WIDTH+14:0]          xq_wnr_imag1  ;
-    reg signed [2*DATA_WIDTH+14:0]          xp_real_r     ;
-    reg signed [2*DATA_WIDTH+14:0]          xp_imag_r     ;
-    reg signed [2*DATA_WIDTH+15:0]          yp_real_r     ;
-    reg signed [2*DATA_WIDTH+15:0]          yp_imag_r     ;
-    reg signed [2*DATA_WIDTH+15:0]          yq_real_r     ;
-    reg signed [2*DATA_WIDTH+15:0]          yq_imag_r     ;
+    reg signed [MUTI*DATA_WIDTH+14:0]          xq_wnr_real0  ;
+    reg signed [MUTI*DATA_WIDTH+14:0]          xq_wnr_real1  ;
+    reg signed [MUTI*DATA_WIDTH+14:0]          xq_wnr_imag0  ;
+    reg signed [MUTI*DATA_WIDTH+14:0]          xq_wnr_imag1  ;
+    reg signed [MUTI*DATA_WIDTH+14:0]          xp_real_r     ;
+    reg signed [MUTI*DATA_WIDTH+14:0]          xp_imag_r     ;
+    reg signed [MUTI*DATA_WIDTH+15:0]          yp_real_r     ;
+    reg signed [MUTI*DATA_WIDTH+15:0]          yp_imag_r     ;
+    reg signed [MUTI*DATA_WIDTH+15:0]          yq_real_r     ;
+    reg signed [MUTI*DATA_WIDTH+15:0]          yq_imag_r     ;
     reg                                     valid_r       ;
     reg                                     valid_n       ;
 
@@ -100,9 +101,9 @@ always @(posedge clk or negedge rst_n) begin
 end
 
 
-assign yp_real = {yp_real_r[47], yp_real_r[44:13]};
-assign yp_imag = {yp_imag_r[47], yp_imag_r[44:13]};
-assign yq_real = {yq_real_r[47], yq_real_r[44:13]};
-assign yq_imag = {yq_imag_r[47], yq_imag_r[44:13]};
+assign yp_real = {yp_real_r[MUTI*DATA_WIDTH+15], yp_real_r[(MUTI*DATA_WIDTH+12)-:(MUTI*DATA_WIDTH-1)]};
+assign yp_imag = {yp_imag_r[MUTI*DATA_WIDTH+15], yp_imag_r[(MUTI*DATA_WIDTH+12)-:(MUTI*DATA_WIDTH-1)]};
+assign yq_real = {yq_real_r[MUTI*DATA_WIDTH+15], yq_real_r[(MUTI*DATA_WIDTH+12)-:(MUTI*DATA_WIDTH-1)]};
+assign yq_imag = {yq_imag_r[MUTI*DATA_WIDTH+15], yq_imag_r[(MUTI*DATA_WIDTH+12)-:(MUTI*DATA_WIDTH-1)]};
 assign valid = valid_r;
 endmodule

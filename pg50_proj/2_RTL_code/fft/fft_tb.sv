@@ -5,9 +5,9 @@ module fft_tb ();
     parameter T = 20;
     reg                 clk             ;
     reg                 rst_n           ;
-    reg    [63:0]      ram_in           ;
+    reg    [11:0]      ram_in           ;
     reg                start            ;
-    reg    [63:0]      ram_out          ;
+    reg    [11:0]      ram_out          ;
     reg                 ram_wen         ;
     reg                ram_ren          ;
     reg    [7:0]       ram_waddr        ;
@@ -18,6 +18,8 @@ module fft_tb ();
     reg    [63:0]      ram_out_c        ;
     wire   [7:0]       i_wire           ;
     reg                fft_done         ;
+    wire   [7:0]       ram_waddr_max1   ;
+    wire   [7:0]       ram_waddr_max2   ;
 
     integer i;
     integer j;
@@ -35,12 +37,12 @@ module fft_tb ();
         filey = $fopen("./checky.txt","w");
         #T
         rst_n = 1'b1;
-        $readmemh( "./testbench/input1.txt", img_in);
+        $readmemh( "E:/project/fpga_dasai/fft/input1.txt", img_in);
         #T
         ram_wen = 1'b1;
         for (i=0; i<=255; i=i+1) begin
-            ram_waddr=i_wire;
-            ram_out = {32'b0,{16{img_in[i][15]}},img_in[i]};
+            ram_waddr = i;
+            ram_out = img_in[i][15:4];
             #T;
         end
         ram_wen = 1'b0;
@@ -78,7 +80,7 @@ module fft_tb ();
             end
 
             if (fft_top1.fft1.fft_cnt == 'd2 && ~fft_top1.fft1.ram_ren_r) begin
-                // $display("before break");
+                $display("before break");
                 break;
             end
             if (fft_top1.fft1.butterfly1.yp_real_r[46:45] != 2'b00 && fft_top1.fft1.butterfly1.yp_real_r[46:45] != 2'b11) begin
@@ -97,7 +99,8 @@ module fft_tb ();
 fft_top #(
     .RAM_DATA_WIDTH     (16 )      , 
     .RAM_ADDR_WIDTH     (8  )      , 
-    .INOUT_DATA_WIDTH   (16 )      
+    .INOUT_DATA_WIDTH   (12 )      ,
+    .MUTI               (1  )
 ) fft_top1 (
     .clk            (clk        )               ,
     .rst_n          (rst_n      )               ,
@@ -108,7 +111,9 @@ fft_top #(
     .ram_raddr      (ram_raddr  )               ,
     .data_out       (ram_out_c  )               ,
     .start          (start      )               ,
-    .fft_done       (fft_done   )               
+    .fft_done       (fft_done   )               ,
+    .ram_waddr_max1 (ram_waddr_max1)            ,
+    .ram_waddr_max2 (ram_waddr_max2)            
 );
 
 DPRAM_WRAP #(
@@ -126,19 +131,19 @@ DPRAM_WRAP #(
 );
 
 //------------------------------------------------------------------------
-    initial begin
-        #10000000 ;
-        $finish();
-    end
+    // initial begin
+    //     #10000000 ;
+    //     $finish();
+    // end
 
-    string dump_file;
-    initial begin
-        if($value$plusargs("FSDB=%s",dump_file))
-        $display("dump_file = %s",dump_file);
-        $fsdbDumpfile(dump_file);
-        $fsdbDumpvars(0, fft_tb);
-        $fsdbDumpMDA();
-    end
+    // string dump_file;
+    // initial begin
+    //     if($value$plusargs("FSDB=%s",dump_file))
+    //     $display("dump_file = %s",dump_file);
+    //     $fsdbDumpfile(dump_file);
+    //     $fsdbDumpvars(0, fft_tb);
+    //     $fsdbDumpMDA();
+    // end
 //------------------------------------------------------------------------
 
 

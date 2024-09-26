@@ -1,57 +1,62 @@
+
+`timescale 1ns / 1ps
+
 module fft_top #(
     parameter                                   RAM_DATA_WIDTH      = 16     ,
     parameter                                   RAM_ADDR_WIDTH      = 8      ,
-    parameter                                   INOUT_DATA_WIDTH    = 16    
+    parameter                                   INOUT_DATA_WIDTH    = 12     ,
+    parameter                                   MUTI                = 1
 
 )
 (
-    input                                       clk                     ,
-    input                                       rst_n                   ,
-    input      signed   [INOUT_DATA_WIDTH-1:0]  data_in                 ,
-    output reg                                  ram_wen                 ,
-    output                                      ram_ren                 ,
-    output              [RAM_ADDR_WIDTH-1:0]    ram_waddr               ,
-    output reg          [RAM_ADDR_WIDTH-1:0]    ram_raddr               ,
-    output reg signed   [INOUT_DATA_WIDTH-1:0]  data_out                ,   
-    input                                       start                   ,
-    output                                      fft_done                ,
-    output reg          [RAM_ADDR_WIDTH-1:0]    ram_waddr_max1          ,
-    output reg          [RAM_ADDR_WIDTH-1:0]    ram_waddr_max2          
+    input                                                       clk                     ,
+    input                                                       rst_n                   ,
+    input      signed   [INOUT_DATA_WIDTH-1:0]                  data_in                 ,
+    output                                                      ram_wen                 ,
+    output                                                      ram_ren                 ,
+    output              [RAM_ADDR_WIDTH-1:0]                    ram_waddr               ,
+    output reg          [RAM_ADDR_WIDTH-1:0]                    ram_raddr               ,
+    output reg signed   [INOUT_DATA_WIDTH-1:0]                  data_out                ,   
+    input                                                       start                   ,
+    output                                                      fft_done                ,
+    output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max1          ,
+    output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max2          
 );
 
-reg  signed             [4*RAM_DATA_WIDTH-1:0]  ram_in                  ;
-wire                                            start                   ;
-wire signed             [4*RAM_DATA_WIDTH-1:0]  ram_out                 ;
-wire                                            ram_wen_f               ;
-wire                                            ram_ren_f               ;
-wire                    [RAM_ADDR_WIDTH-1:0]    ram_waddr_f             ;
-wire                    [RAM_ADDR_WIDTH-1:0]    ram_raddr_f             ;
-wire                    [15:0]                  loop_cnt                ;
-wire                    [4*RAM_DATA_WIDTH-1:0]  ram_in_fr               ;
-wire                    [4*RAM_DATA_WIDTH-1:0]  ram_out_fr              ;
-wire                                            ram_wen_fr              ;
-wire                                            ram_ren_fr              ;
-wire                    [RAM_ADDR_WIDTH-1:0]    ram_waddr_fr            ;
-wire                    [RAM_ADDR_WIDTH-1:0]    ram_raddr_fr            ;
-wire                                            fft_valid               ;
-reg                     [15:0]                  loop_cnt_r              ;
-wire signed             [2*RAM_DATA_WIDTH-1:0]  ram_out_real            ;
-wire signed             [2*RAM_DATA_WIDTH-1:0]  ram_out_imag            ;
-reg                     [INOUT_DATA_WIDTH-1:0]  data_out_max1           ;
-reg                     [INOUT_DATA_WIDTH-1:0]  data_out_max2           ;
+reg  signed             [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_in                  ;
+wire signed             [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_out                 ;
+wire                                                            ram_wen_f               ;
+wire                                                            ram_ren_f               ;
+wire                    [RAM_ADDR_WIDTH-1:0]                    ram_waddr_f             ;
+wire                    [RAM_ADDR_WIDTH-1:0]                    ram_raddr_f             ;
+wire                    [15:0]                                  loop_cnt                ;
+wire                    [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_in_fr               ;
+wire                    [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_out_fr              ;
+wire                                                            ram_wen_fr              ;
+wire                                                            ram_ren_fr              ;
+wire                    [RAM_ADDR_WIDTH-1:0]                    ram_waddr_fr            ;
+wire                    [RAM_ADDR_WIDTH-1:0]                    ram_raddr_fr            ;
+wire                                                            fft_valid               ;
+reg                     [15:0]                                  loop_cnt_r              ;
+wire signed             [MUTI*RAM_DATA_WIDTH-1:0]               ram_out_real            ;
+wire signed             [MUTI*RAM_DATA_WIDTH-1:0]               ram_out_imag            ;
+reg                     [INOUT_DATA_WIDTH-1:0]                  data_out_max1           ;
+reg                     [INOUT_DATA_WIDTH-1:0]                  data_out_max2           ;
 
-parameter                                       DLY = 1                 ;
+parameter                                                       DLY = 1                 ;
+
+//=============== 实数虚数分别取绝对值 ====================
+assign ram_out_real = (ram_out[MUTI*RAM_DATA_WIDTH-1])? (~ram_out[MUTI*RAM_DATA_WIDTH-1:0]+1) : ram_out[MUTI*RAM_DATA_WIDTH-1:0];
+assign ram_out_imag = (ram_out[2*MUTI*RAM_DATA_WIDTH-1])? (~ram_out[2*MUTI*RAM_DATA_WIDTH-1:MUTI*RAM_DATA_WIDTH]+1) : ram_out[2*MUTI*RAM_DATA_WIDTH-1:MUTI*RAM_DATA_WIDTH];
 
 
-assign ram_out_real = (ram_out[2*RAM_DATA_WIDTH-1])? (~ram_out[2*RAM_DATA_WIDTH-1:0]+1) : ram_out[2*RAM_DATA_WIDTH-1:0];
-assign ram_out_imag = (ram_out[4*RAM_DATA_WIDTH-1])? (~ram_out[4*RAM_DATA_WIDTH-1:2*RAM_DATA_WIDTH]+1) : ram_out[4*RAM_DATA_WIDTH-1:2*RAM_DATA_WIDTH];
-
+//=============== 复数取绝对值 输出 ==========================
 always @(*) begin
     data_out = 'd0;
     ram_in = 'd0;
     if (loop_cnt_r == 'd0) begin
-        ram_in[2*RAM_DATA_WIDTH-1:0] = data_in;
-        ram_in[4*RAM_DATA_WIDTH-1:2*RAM_DATA_WIDTH] = 'd0;
+        ram_in[MUTI*RAM_DATA_WIDTH-1:0] = data_in;
+        ram_in[2*MUTI*RAM_DATA_WIDTH-1:MUTI*RAM_DATA_WIDTH] = 'd0;
     end else begin
         ram_in = ram_in_fr;
     end
@@ -107,7 +112,9 @@ assign ram_waddr = (loop_cnt >= 'h007f)? ram_waddr_f: 'd0;
 // assign ram_raddr = (loop_cnt == 'd0)? ram_raddr_f: 'd0;
 
 fft #(
-    .DATA_WIDTH     (RAM_DATA_WIDTH )           
+    .DATA_WIDTH     (RAM_DATA_WIDTH )               ,
+    .ADDR_WIDTH     (RAM_ADDR_WIDTH )               ,
+    .MUTI           (MUTI           )              
 ) fft1 (
     .clk            (clk            )               ,
     .rst_n          (rst_n          )               ,
@@ -124,7 +131,7 @@ fft #(
 
 DPRAM_WRAP #(
     .ADDR_WIDTH     (RAM_ADDR_WIDTH     )               ,      
-    .DATA_WIDTH     (4*RAM_DATA_WIDTH   )                       
+    .DATA_WIDTH     (2*MUTI*RAM_DATA_WIDTH   )                       
 ) DPRAM_WRAP_fft (
     .wclk           (clk                )               ,
     .rclk           (clk                )               ,
@@ -136,6 +143,8 @@ DPRAM_WRAP #(
     .dout           (ram_in_fr          )                
 );
 
+
+//================ 主频副频抓取 ===========================
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
         data_out_max1 <=  #DLY 'd0;

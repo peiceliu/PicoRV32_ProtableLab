@@ -1,18 +1,19 @@
 module fft #(
     parameter                           DATA_WIDTH      = 16    ,
-    parameter                           ADDR_WIDTH      = 8
+    parameter                           ADDR_WIDTH      = 8     ,
+    parameter                           MUTI            =1
 )
 (
     input                               clk                     ,
     input                               rst_n                   ,
-    input           [4*DATA_WIDTH-1:0]  ram_in                  ,
+    input           [2*MUTI*DATA_WIDTH-1:0]  ram_in                  ,
     input                               start                   ,
-    output  signed  [4*DATA_WIDTH-1:0]  ram_out                 ,
+    output  signed  [2*MUTI*DATA_WIDTH-1:0]  ram_out                 ,
     output                              ram_wen                 ,
     output                              ram_ren                 ,
     output          [ADDR_WIDTH-1:0]    ram_waddr               ,
     output          [ADDR_WIDTH-1:0]    ram_raddr               ,
-    output          [15:0]              loop_cnt                ,
+    output reg      [15:0]              loop_cnt                ,
     output reg                          fft_done                    //
 );
 
@@ -21,13 +22,13 @@ module fft #(
     // reg signed  [15:0]  xp_imag                     ;
     // reg signed  [15:0]  xq_real                     ;
     // reg signed  [15:0]  xq_imag                     ;
-    wire signed [2*DATA_WIDTH-1:0]      yp_real                 ;
-    wire signed [2*DATA_WIDTH-1:0]      yp_imag                 ;
-    wire signed [2*DATA_WIDTH-1:0]      yq_real                 ;
-    wire signed [2*DATA_WIDTH-1:0]      yq_imag                 ;
+    wire signed [MUTI*DATA_WIDTH-1:0]      yp_real                 ;
+    wire signed [MUTI*DATA_WIDTH-1:0]      yp_imag                 ;
+    wire signed [MUTI*DATA_WIDTH-1:0]      yq_real                 ;
+    wire signed [MUTI*DATA_WIDTH-1:0]      yq_imag                 ;
     reg         [15:0]                  fft_cnt                 ;
-    reg         [4*DATA_WIDTH-1:0]      ram_in_r                ;
-    reg         [4*DATA_WIDTH-1:0]      ram_out_p               ;
+    reg         [2*MUTI*DATA_WIDTH-1:0]      ram_in_r                ;
+    reg         [2*MUTI*DATA_WIDTH-1:0]      ram_out_p               ;
     reg                                 ram_wen_r               ;
     reg                                 ram_ren_r               ;
     reg         [15:0]                  ram_waddr_r             ;
@@ -37,7 +38,6 @@ module fft #(
     reg         [15:0]                  ram_raddr_r3            ;
     wire                                fft_valid               ;
     reg                                 fft_cnt_b               ;
-    reg         [15:0]                  loop_cnt                ;
     reg         [ADDR_WIDTH-1:0]        factor_addr             ;
 
 
@@ -183,15 +183,16 @@ always @(posedge clk or negedge rst_n) begin
 end
 
 butterfly #(
-    .DATA_WIDTH         (DATA_WIDTH                                 )
+    .DATA_WIDTH         (DATA_WIDTH                                 ),
+    .MUTI               (MUTI                                       )
 ) butterfly1 (
     .clk                (clk                                        ),//系统时钟
     .rst_n              (rst_n                                      ),//系统异步复位，低电平有效
     .en                 (fft_en                                     ),//使能信号，表示输入数据有效
-    .xp_real            (ram_in_r[2*DATA_WIDTH-1:0]                 ),//Xm(p)
-    .xp_imag            (ram_in_r[4*DATA_WIDTH-1:2*DATA_WIDTH]      ),
-    .xq_real            (ram_in[2*DATA_WIDTH-1:0]                   ),//Xm(q)
-    .xq_imag            (ram_in[4*DATA_WIDTH-1:2*DATA_WIDTH]        ),
+    .xp_real            (ram_in_r[MUTI*DATA_WIDTH-1:0]                 ),//Xm(p)
+    .xp_imag            (ram_in_r[2*MUTI*DATA_WIDTH-1:MUTI*DATA_WIDTH]      ),
+    .xq_real            (ram_in[MUTI*DATA_WIDTH-1:0]                   ),//Xm(q)
+    .xq_imag            (ram_in[2*MUTI*DATA_WIDTH-1:MUTI*DATA_WIDTH]        ),
     .factor_real        (factor_real                                ),//扩大8192 倍（左移 13 位）后的旋转因子
     .factor_imag        (factor_imag                                ),
     .valid              (fft_valid                                  ),//输出数据有效执行信号
@@ -269,8 +270,8 @@ end
 
 assign factor_real = (factor_addr[6])? (-factor_imag_rom): factor_real_rom;
 assign factor_imag = (factor_addr[6])? factor_real_rom: factor_imag_rom;
-assign ram_out[2*DATA_WIDTH-1:0] = (fft_valid)? yp_real : yq_real;
-assign ram_out[4*DATA_WIDTH-1:2*DATA_WIDTH] = (fft_valid)? yp_imag : yq_imag;
+assign ram_out[MUTI*DATA_WIDTH-1:0] = (fft_valid)? yp_real : yq_real;
+assign ram_out[2*MUTI*DATA_WIDTH-1:MUTI*DATA_WIDTH] = (fft_valid)? yp_imag : yq_imag;
 assign ram_waddr = ram_waddr_r[ADDR_WIDTH-1:0];
 assign ram_raddr = ram_raddr_r[ADDR_WIDTH-1:0];
 assign ram_wen = ram_wen_r;
