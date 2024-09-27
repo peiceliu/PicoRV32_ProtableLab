@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module my_logic_analysis #(
     parameter                       INPUT_WIDTH = 2             //  任意分频方式（每次递增INCREASE）的计数器最大位宽，越大则精度越高
 )(  
@@ -14,7 +16,7 @@ module my_logic_analysis #(
 );
 
 reg                                 bps_start               ;
-reg                                 clk_bps                 ;
+wire                                clk_bps                 ;
 reg             [12:0]              bps_ctrl                ;   
 reg                                 clk_bps_r               ;           
 wire                                clk_posedge             ; 

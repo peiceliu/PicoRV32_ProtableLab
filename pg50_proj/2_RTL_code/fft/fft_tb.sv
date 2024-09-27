@@ -20,6 +20,7 @@ module fft_tb ();
     reg                fft_done         ;
     wire   [7:0]       ram_waddr_max1   ;
     wire   [7:0]       ram_waddr_max2   ;
+        wire               GRS_N;
 
     integer i;
     integer j;
@@ -96,6 +97,11 @@ module fft_tb ();
     end
 
     always #10 clk = ~clk;
+
+    GTP_GRS GRS_INST(
+        .GRS_N(1'b1)
+    );
+
 fft_top #(
     .RAM_DATA_WIDTH     (16 )      , 
     .RAM_ADDR_WIDTH     (8  )      , 

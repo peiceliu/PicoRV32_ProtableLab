@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module MY_UART_TOP (
    clk            ,
    rst_n          ,

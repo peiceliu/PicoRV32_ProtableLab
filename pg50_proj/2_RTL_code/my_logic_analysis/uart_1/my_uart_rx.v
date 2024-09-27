@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module my_uart_rx#(
     parameter DLY = 0
   )(

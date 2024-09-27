@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module clk_div (
 	input clk, 
 	input rst_n, 

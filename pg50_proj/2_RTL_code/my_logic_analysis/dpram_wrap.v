@@ -12,7 +12,7 @@
 // Modified Date: 
 // Description: 
 // ========================================================================================================== //
-
+`timescale 1ns / 1ps
 module DPRAM_WRAP #(
     parameter        ADDR_WIDTH = 12                ,
     parameter        DATA_WIDTH = 8                 

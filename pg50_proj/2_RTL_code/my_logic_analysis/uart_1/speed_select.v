@@ -1,3 +1,5 @@
+
+`timescale 1ns / 1ps
 module speed_select #(
     parameter DLY = 0
   )(
