@@ -85,34 +85,19 @@ module tb_logic_analysis();
         dout_r_valid = 'd1;
         #20
         dout_r_valid = 'd0;
-        wait (my_logic_analysis_1.clk_negedge == 1'b1);
-        #600;
-        dout_r_valid = 'd1;
-        #20
-        dout_r_valid = 'd0;
-        wait (my_logic_analysis_1.clk_negedge == 1'b1);
-        #6000;
-        dout_r_valid = 'd1;
-        #20
-        dout_r_valid = 'd0;
-        wait (my_logic_analysis_1.clk_negedge == 1'b1);
-        #6000;
-        dout_r_valid = 'd1;
-        #20
-        dout_r_valid = 'd0;
     end
 
-    always @(posedge clk or negedge rst_n) begin
-        if(rst_n == 1'b0) begin
-            cnt <= 'd0;
-        end else begin
-            if (my_logic_analysis_1.clk_negedge && cnt == 'd3) begin
-                cnt <= 'd0;
-            end else if (my_logic_analysis_1.clk_negedge) begin
-                cnt <= cnt + 1;
-            end
-        end
-    end
+    // always @(posedge clk or negedge rst_n) begin
+    //     if(rst_n == 1'b0) begin
+    //         cnt <= 'd0;
+    //     end else begin
+    //         if (my_logic_analysis_1.clk_negedge && cnt == 'd3) begin
+    //             cnt <= 'd0;
+    //         end else if (my_logic_analysis_1.clk_negedge) begin
+    //             cnt <= cnt + 1;
+    //         end
+    //     end
+    // end
 
     always @(posedge clk or negedge rst_n) begin
         if(rst_n == 1'b0) begin
@@ -129,20 +114,7 @@ module tb_logic_analysis();
             rxd <= 'd1;
         end else begin
             if (dout_r_valid) begin
-                case(cnt)
-                    'd0: begin
-                        rxd = dout_r[3];
-                    end
-                    'd1: begin
-                        rxd = dout_r[2];
-                    end
-                    'd2: begin
-                        rxd = dout_r[1];
-                    end
-                    'd3: begin
-                        rxd = dout_r[0];
-                    end
-                endcase
+                rxd = dout_r[0];
             end 
         end
     end
@@ -157,7 +129,7 @@ module tb_logic_analysis();
         .rst_n              (rst_n           )  ,
         .config_valid       (config_valid    )  ,
         .config_in          (config_in       )  ,
-        .din                ({1'b0,txd_debug})  ,
+        .din                ({5'b0,txd_debug})  ,
         .dout               (dout            )  ,
         .fifo_wen           (fifo_wen        )  ,
         .fifo_data_full     (fifo_data_full  )  ,

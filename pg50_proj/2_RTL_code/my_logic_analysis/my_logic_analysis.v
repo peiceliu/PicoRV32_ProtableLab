@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module my_logic_analysis #(
-    parameter                       INPUT_WIDTH = 2             //  任意分频方式（每次递增INCREASE）的计数器最大位宽，越大则精度越高
+    parameter                       INPUT_WIDTH = 6             //  任意分频方式（每次递增INCREASE）的计数器最大位宽，越大则精度越高
 )(  
     input                           clk                     ,
     input                           rst_n                   ,
@@ -23,7 +23,7 @@ wire                                clk_posedge             ;
 wire                                clk_negedge             ;
 reg             [7:0]               config_in_r             ;
 reg             [7:0]               dout_r                  ;           
-reg             [3:0]               din_cnt                 ;
+// reg             [3:0]               din_cnt                 ;
 reg             [INPUT_WIDTH-1:0]   din_r                   ;
 
 
@@ -87,34 +87,32 @@ always @(posedge clk or negedge rst_n) begin
     end
 end
 //=====================================
-always @(posedge clk or negedge rst_n) begin
-    if(rst_n == 1'b0) begin
-        din_cnt <= #DLY 'd0;
-    end else begin
-        if (config_in_r[3] && clk_posedge && din_cnt == 'd3) begin
-            din_cnt <= #DLY 'd0;
-        end else if (config_in_r[3] && clk_posedge) begin
-            din_cnt <= #DLY din_cnt + 'd1;
-        end
-        if (~config_in_r[3] && clk_negedge && din_cnt == 'd3) begin
-            din_cnt <= #DLY 'd0;
-        end else if (~config_in_r[3] && clk_negedge) begin
-            din_cnt <= #DLY din_cnt + 'd1;
-        end
-    end
-end
+// always @(posedge clk or negedge rst_n) begin
+//     if(rst_n == 1'b0) begin
+//         din_cnt <= #DLY 'd0;
+//     end else begin
+//         if (config_in_r[3] && clk_posedge && din_cnt == 'd3) begin
+//             din_cnt <= #DLY 'd0;
+//         end else if (config_in_r[3] && clk_posedge) begin
+//             din_cnt <= #DLY din_cnt + 'd1;
+//         end
+//         if (~config_in_r[3] && clk_negedge && din_cnt == 'd3) begin
+//             din_cnt <= #DLY 'd0;
+//         end else if (~config_in_r[3] && clk_negedge) begin
+//             din_cnt <= #DLY din_cnt + 'd1;
+//         end
+//     end
+// end
 
 always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
         dout_r <= #DLY 'd0;
     end else begin
         if (config_in_r[3] && clk_posedge) begin
-            dout_r[3:0] <= #DLY {dout_r[2:0],din[0]};
-            dout_r[7:4] <= #DLY {dout_r[6:4],din[1]};
+            dout_r <= #DLY {2'b0,din};
         end
         if (~config_in_r[3] && clk_negedge) begin
-            dout_r[3:0] <= #DLY {dout_r[2:0],din[0]};
-            dout_r[7:4] <= #DLY {dout_r[6:4],din[1]};
+            dout_r <= #DLY {2'b0,din};
         end
     end
 end
@@ -126,9 +124,9 @@ always @(posedge clk or negedge rst_n) begin
     end else begin
         if (fifo_wen) begin
             fifo_wen <= #DLY 'd0;
-        end else if (config_in_r[3] && clk_posedge && din_cnt == 'd3 && ~fifo_data_full) begin
+        end else if (config_in_r[3] && clk_posedge && ~fifo_data_full) begin
             fifo_wen <= #DLY 'd1;
-        end else if (~config_in_r[3] && clk_negedge && din_cnt == 'd3 && ~fifo_data_full) begin
+        end else if (~config_in_r[3] && clk_negedge && ~fifo_data_full) begin
             fifo_wen <= #DLY 'd1;
         end
     end
