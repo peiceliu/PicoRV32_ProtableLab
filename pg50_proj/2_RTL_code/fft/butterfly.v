@@ -1,3 +1,5 @@
+
+`timescale 1ns / 1ps
 module butterfly #(
     parameter                               DATA_WIDTH  = 16 ,
     parameter                               MUTI        = 1

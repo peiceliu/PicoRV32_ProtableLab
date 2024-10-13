@@ -11,23 +11,34 @@ module fft_top #(
 (
     input                                                       clk                     ,
     input                                                       rst_n                   ,
-    input      signed   [INOUT_DATA_WIDTH-1:0]                  data_in                 ,
-    output                                                      ram_wen                 ,
-    output                                                      ram_ren                 ,
-    output              [RAM_ADDR_WIDTH-1:0]                    ram_waddr               ,
-    output reg          [RAM_ADDR_WIDTH-1:0]                    ram_raddr               ,
-    output reg signed   [INOUT_DATA_WIDTH-1:0]                  data_out                ,   
-    input                                                       start                   ,
-    output                                                      fft_done                ,
-    output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max1          ,
-    output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max2          
-);
+//======================== 输入端口 =====================================
+    input      signed   [INOUT_DATA_WIDTH-1:0]                  fft_data_in             ,
+    input              [RAM_ADDR_WIDTH-1:0]                     fft_addr_in             ,
+    input                                                       fft_data_in_en          ,
+    input                                                       ad_clk                  ,
+    output reg                                                  s_axis_data_tready      ,
+//======================== 输出端口 =====================================
+    input                                                       fft_data_out_en         ,   //data_req
+    output reg                                                  fft_data_out_last       ,   //fft_eop
+    output              [INOUT_DATA_WIDTH-1:0]                  fft_data_out            ,   
+    input               [RAM_ADDR_WIDTH-1:0]                    fft_addr_out            ,   //fft_point_cnt
+    input                                                       hdmi_clk                ,
+
+    input                                                       start                   ,   //本轮fft计算开始
+    output                                                      fft_done                ,   //本轮fft计算完成
+    output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max1          ,   //主频
+    output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max2              //副频
+);  
 
 reg  signed             [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_in                  ;
 wire signed             [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_out                 ;
+wire                                                            ram_wen                 ;
 wire                                                            ram_wen_f               ;
+wire                                                            ram_ren                 ;
 wire                                                            ram_ren_f               ;
+wire                    [RAM_ADDR_WIDTH-1:0]                    ram_waddr               ;
 wire                    [RAM_ADDR_WIDTH-1:0]                    ram_waddr_f             ;
+reg                     [RAM_ADDR_WIDTH-1:0]                    ram_raddr               ;
 wire                    [RAM_ADDR_WIDTH-1:0]                    ram_raddr_f             ;
 wire                    [15:0]                                  loop_cnt                ;
 wire                    [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_in_fr               ;
@@ -42,6 +53,11 @@ wire signed             [MUTI*RAM_DATA_WIDTH-1:0]               ram_out_real    
 wire signed             [MUTI*RAM_DATA_WIDTH-1:0]               ram_out_imag            ;
 reg                     [INOUT_DATA_WIDTH-1:0]                  data_out_max1           ;
 reg                     [INOUT_DATA_WIDTH-1:0]                  data_out_max2           ;
+reg                     [INOUT_DATA_WIDTH-1:0]                  data_out                ;
+reg                     [7:0]                                   fft_data_in_cnt         ;
+wire                    [INOUT_DATA_WIDTH-1:0]                  data_in                 ;
+reg                     [7:0]                                   fft_data_out_cnt        ;
+reg                                                             fft_start               ;
 
 parameter                                                       DLY = 1                 ;
 
@@ -55,8 +71,7 @@ always @(*) begin
     data_out = 'd0;
     ram_in = 'd0;
     if (loop_cnt_r == 'd0) begin
-        ram_in[MUTI*RAM_DATA_WIDTH-1:0] = data_in;
-        ram_in[2*MUTI*RAM_DATA_WIDTH-1:MUTI*RAM_DATA_WIDTH] = 'd0;
+        ram_in[2*MUTI*RAM_DATA_WIDTH-1:0] = {20'b0,data_in};
     end else begin
         ram_in = ram_in_fr;
     end
@@ -91,6 +106,70 @@ always @(posedge clk or negedge rst_n) begin
     end
 end
 
+//======================= 输入逻辑 ===========================================
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        s_axis_data_tready <= 'd0;
+    end else begin
+        if (s_axis_data_tready && fft_data_in && fft_data_in_cnt == 'd255) begin
+            s_axis_data_tready <= 'd0;
+        end else if (start) begin
+            s_axis_data_tready <= 'd1;
+        end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        fft_data_in_cnt <= 'd0;
+    end else begin
+        if (s_axis_data_tready && fft_data_in && fft_data_in_cnt == 'd255) begin
+            fft_data_in_cnt <= 'd0;
+        end else if (s_axis_data_tready && fft_data_in) begin
+            fft_data_in_cnt <= fft_data_in_cnt + 'd1;
+        end 
+    end
+end
+
+//=============================== 输出逻辑 ==============================
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        fft_data_out_last <= 'd0;
+    end else begin
+        if (fft_data_out_last) begin
+            fft_data_out_last <= 'd0;
+        end else if (fft_data_out_en && fft_data_out_cnt == 'd254) begin
+            fft_data_out_last <= 'd1;
+        end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        fft_data_out_cnt <= 'd0;
+    end else begin
+        if (fft_data_out_last) begin
+            fft_data_out_cnt <= 'd0;
+        end else if (fft_data_out_en) begin
+            fft_data_out_cnt <= fft_data_out_cnt + 'd1;
+        end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        fft_start <= 'd0;
+    end else begin
+        if (s_axis_data_tready && fft_data_in && fft_data_in_cnt == 'd255) begin
+            fft_start <= 'd1;
+        end else if (fft_start) begin
+            fft_start <= 'd0;
+        end
+    end
+end
+
+            
+
 assign ram_wen_fr = (loop_cnt < 'h007f)? ram_wen_f:'d0;
 assign ram_ren_fr = (loop_cnt != 'd0)? ram_ren_f:'d0;
 assign ram_ren = (loop_cnt == 'd0)? ram_ren_f:'d0;
@@ -119,7 +198,7 @@ fft #(
     .clk            (clk            )               ,
     .rst_n          (rst_n          )               ,
     .ram_in         (ram_in         )               ,
-    .start          (start          )               ,
+    .start          (fft_start      )               ,
     .ram_out        (ram_out        )               ,
     .ram_wen        (ram_wen_f      )               ,
     .ram_ren        (ram_ren_f      )               ,
@@ -143,6 +222,31 @@ DPRAM_WRAP #(
     .dout           (ram_in_fr          )                
 );
 
+ram_fftout u_ram_fftout (
+    .wr_data        (data_out           )               , //input write data
+    .wr_addr        (ram_waddr          )               , //input write address
+    .wr_en          (ram_wen            )               , //input write enable
+    .wr_clk         (clk                )               , //input write clock
+    .wr_rst         (~rst_n             )               , //input write reset
+    .rd_data        (fft_data_out       )               , //output read data
+    .rd_addr        (fft_addr_out       )               , //input read address
+    .rd_clk         (hdmi_clk           )               , //input read clock
+    .rd_clk_en      (fft_data_out_en    )               , //input read clock enable
+    .rd_rst         (~rst_n             )                 //input read reset
+);
+
+ram_fftin u_ram_fftine (
+    .wr_data        (fft_data_in        ),    // input [11:0]
+    .wr_addr        (fft_addr_in        ),    // input [7:0]
+    .wr_en          (fft_data_in_en     ),        // input
+    .wr_clk         (ad_clk             ),      // input
+    .wr_rst         (rst_n              ),      // input
+    .rd_addr        (ram_raddr          ),    // input [7:0]
+    .rd_data        (data_in            ),    // output [11:0]
+    .rd_clk         (clk                ),      // input
+    .rd_clk_en      (ram_ren            ), //input read clock enable
+    .rd_rst         (~rst_n             )       // input
+);
 
 //================ 主频副频抓取 ===========================
 always @(posedge clk or negedge rst_n) begin
@@ -152,12 +256,12 @@ always @(posedge clk or negedge rst_n) begin
         ram_waddr_max1 <=  #DLY 'd0;
         ram_waddr_max2 <=  #DLY 'd0;
     end else begin
-        if (data_out > data_out_max1 && ram_wen) begin
+        if (data_out > data_out_max1 && ram_wen && ram_waddr != 'd0) begin
             data_out_max2 <= #DLY data_out_max1;
             ram_waddr_max2 <= #DLY ram_waddr_max1;
             data_out_max1 <= #DLY data_out;
             ram_waddr_max1 <= #DLY ram_waddr;
-        end else if (data_out > data_out_max2 && data_out < data_out_max1 && ram_wen) begin
+        end else if (data_out > data_out_max2 && data_out <= data_out_max1 && ram_wen && ram_waddr != 'd0) begin
             data_out_max2 <= #DLY data_out;
             ram_waddr_max2 <= #DLY ram_waddr;
         end else if (start) begin
