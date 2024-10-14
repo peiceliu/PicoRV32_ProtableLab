@@ -13,7 +13,7 @@
 // Description: 
 // ========================================================================================================== //
 
-`timescale 1ns / 1ps
+// `timescale 1ns / 1ps
 
 module SYN_FIFO(
 clk                   ,
@@ -27,15 +27,15 @@ alfull                ,
 empty                 ,
 full                   
 );
-parameter      DLY           =   1            ;
+parameter      DLY           =   0            ;
 parameter      ADDR_WIDTH    =   12            ;
-parameter      DATA_WIDTH    =   8           ;
+parameter      DATA_WIDTH    =   64           ;
 
 input                       clk               ;
 input                       rst_n             ;
 input                       wen               ;
 input                       ren               ;
-input   [ADDR_WIDTH:0]      level             ; //the space be occupied.   
+input   [ADDR_WIDTH-1:0]      level             ; //the space be occupied.   
 input   [DATA_WIDTH-1:0]    din               ;
 output  [DATA_WIDTH-1:0]    dout              ;
 output                      alfull            ;
@@ -73,8 +73,8 @@ always @(negedge rst_n or posedge clk) begin
     end
 end
 
-assign alfull = (waddr - raddr) >= level  ;
-assign empty  = raddr == waddr            ;
+assign alfull = (waddr[ADDR_WIDTH] != raddr[ADDR_WIDTH]) & (waddr[ADDR_WIDTH-1:0] == raddr[ADDR_WIDTH-1:0] - 1);
+assign empty  = (waddr - raddr) <= level ;
 assign full = (waddr[ADDR_WIDTH] != raddr[ADDR_WIDTH]) & (waddr[ADDR_WIDTH-1:0] == raddr[ADDR_WIDTH-1:0]); 
 
 DPRAM_WRAP U_DPRAM_WRAP(
