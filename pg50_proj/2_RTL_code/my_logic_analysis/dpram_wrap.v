@@ -15,7 +15,7 @@
 `timescale 1ns / 1ps
 module DPRAM_WRAP #(
     parameter        ADDR_WIDTH = 12                ,
-    parameter        DATA_WIDTH = 8                 
+    parameter        DATA_WIDTH = 64                 
 )
 (
 wclk               ,
@@ -27,7 +27,7 @@ wen                ,
 ren                ,
 dout                
 );
-parameter        DLY        = 1                  ;
+parameter        DLY        = 0                  ;
 parameter        MEM_DEPTH  = 2 ** ADDR_WIDTH    ;
 
 input                                    wclk    ;

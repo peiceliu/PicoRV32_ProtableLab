@@ -1,9 +1,9 @@
-`timescale 1ns / 1ps
+// `timescale 1ns / 1ps
 module clk_div (
 	input clk, 
 	input rst_n, 
 	input bps_start, 
-    input [12:0] uart_ctrl, //baudrates config.
+    input [31:0] uart_ctrl, //baudrates config.
 	output reg clk_bps   
 );
 
@@ -20,43 +20,10 @@ module clk_div (
 //           bps115200_2 = 13'd216;
 
 //wire [12:0] bps_para = (UART_CTRL);  
-wire [12:0] bps_para = uart_ctrl;  
-//wire [12:0] bps_para_2 = (UART_CTRL - 1) >> 1;    
-wire [12:0] bps_para_2 = (uart_ctrl - 1) >> 1;    
-reg[12:0] cnt;          
+wire [31:0] bps_para = uart_ctrl; 
+reg[31:0] cnt;        
 //reg clk_bps_r;       
-localparam DLY = 1;
-//----------------------------------------------------------
-//reg[2:0] uart_ctrl; 
-//----------------------------------------------------------
-// generate
-// 	case (UART_CTRL)
-// 		3'd0:begin
-//             assign bps_para = bps9600;
-//             assign bps_para_2 = bps9600_2;
-//         end
-//         3'd1:begin
-//             assign bps_para = bps19200;
-//             assign bps_para_2 = bps19200_2;
-//         end
-//         3'd2:begin
-//              assign bps_para = bps38400;
-//              assign bps_para_2 = bps38400_2;
-//         end
-//         3'd3:begin
-//             assign bps_para = bps57600;
-//             assign bps_para_2 = bps57600_2;
-//         end
-//         3'd4:begin
-//             assign bps_para = bps115200;
-//             assign bps_para_2 = bps115200_2;
-//         end
-//         default:begin
-//         	assign bps_para = bps9600;
-//             assign bps_para_2 = bps9600_2;
-//         end
-// 	endcase
-// endgenerate
+localparam DLY = 0;
 
 always @ (posedge clk or negedge rst_n) begin
     if(!rst_n) begin
@@ -74,13 +41,14 @@ always @ (posedge clk or negedge rst_n) begin
 	end else begin
 		if (~bps_start) begin 
 			clk_bps <= #DLY 1'b0;
-		end else if((cnt == bps_para_2) && bps_start) begin
-    		clk_bps <= #DLY 1'b1; 
-    	end else if ((cnt == bps_para) && bps_start) begin
-		    clk_bps <= #DLY 1'b0;
-		end 
+		end else if ((cnt == bps_para) && bps_start) begin
+		    clk_bps <= #DLY 'd1;
+		end else begin
+			clk_bps <= #DLY 1'b0;
+		end
 	end
 end
+
 
 endmodule
 
