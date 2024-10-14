@@ -13,7 +13,7 @@ module fft_top #(
     input                                                       rst_n                   ,
 //======================== 输入端口 =====================================
     input      signed   [INOUT_DATA_WIDTH-1:0]                  fft_data_in             ,
-    input              [RAM_ADDR_WIDTH-1:0]                     fft_addr_in             ,
+    input               [RAM_ADDR_WIDTH-1:0]                    fft_addr_in             ,
     input                                                       fft_data_in_en          ,
     input                                                       ad_clk                  ,
     output reg                                                  s_axis_data_tready      ,
@@ -25,7 +25,7 @@ module fft_top #(
     input                                                       hdmi_clk                ,
 
     input                                                       start                   ,   //本轮fft计算开始
-    output                                                      fft_done                ,   //本轮fft计算完成
+    output reg                                                  fft_done                ,   //本轮fft计算完成
     output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max1          ,   //主频
     output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max2              //副频
 );  
@@ -58,6 +58,9 @@ reg                     [7:0]                                   fft_data_in_cnt 
 wire                    [INOUT_DATA_WIDTH-1:0]                  data_in                 ;
 reg                     [7:0]                                   fft_data_out_cnt        ;
 reg                                                             fft_start               ;
+wire                                                            fft_done_r0             ;
+reg                                                             fft_done_r1             ;
+reg                                                             fft_done_r2             ;
 
 parameter                                                       DLY = 1                 ;
 
@@ -107,68 +110,81 @@ always @(posedge clk or negedge rst_n) begin
 end
 
 //======================= 输入逻辑 ===========================================
-always @(posedge clk or negedge rst_n) begin
+always @(posedge ad_clk or negedge rst_n) begin
     if (~rst_n) begin
         s_axis_data_tready <= 'd0;
     end else begin
         if (s_axis_data_tready && fft_data_in && fft_data_in_cnt == 'd255) begin
-            s_axis_data_tready <= 'd0;
+            s_axis_data_tready <= #DLY 'd0;
         end else if (start) begin
-            s_axis_data_tready <= 'd1;
+            s_axis_data_tready <= #DLY 'd1;
         end
     end
 end
 
-always @(posedge clk or negedge rst_n) begin
+always @(posedge ad_clk or negedge rst_n) begin
     if (~rst_n) begin
         fft_data_in_cnt <= 'd0;
     end else begin
         if (s_axis_data_tready && fft_data_in && fft_data_in_cnt == 'd255) begin
-            fft_data_in_cnt <= 'd0;
+            fft_data_in_cnt <= #DLY 'd0;
         end else if (s_axis_data_tready && fft_data_in) begin
-            fft_data_in_cnt <= fft_data_in_cnt + 'd1;
+            fft_data_in_cnt <= #DLY fft_data_in_cnt + 'd1;
         end 
     end
 end
 
-//=============================== 输出逻辑 ==============================
-always @(posedge clk or negedge rst_n) begin
-    if (~rst_n) begin
-        fft_data_out_last <= 'd0;
-    end else begin
-        if (fft_data_out_last) begin
-            fft_data_out_last <= 'd0;
-        end else if (fft_data_out_en && fft_data_out_cnt == 'd254) begin
-            fft_data_out_last <= 'd1;
-        end
-    end
-end
-
-always @(posedge clk or negedge rst_n) begin
-    if (~rst_n) begin
-        fft_data_out_cnt <= 'd0;
-    end else begin
-        if (fft_data_out_last) begin
-            fft_data_out_cnt <= 'd0;
-        end else if (fft_data_out_en) begin
-            fft_data_out_cnt <= fft_data_out_cnt + 'd1;
-        end
-    end
-end
-
-always @(posedge clk or negedge rst_n) begin
+always @(posedge ad_clk or negedge rst_n) begin
     if (~rst_n) begin
         fft_start <= 'd0;
     end else begin
         if (s_axis_data_tready && fft_data_in && fft_data_in_cnt == 'd255) begin
-            fft_start <= 'd1;
-        end else if (fft_start) begin
-            fft_start <= 'd0;
+            fft_start <= #DLY 'd1;
+        end else if (loop_cnt != 'd0) begin
+            fft_start <= #DLY 'd0;
+        end
+    end
+end
+//=============================== 输出逻辑 ==============================
+always @(posedge hdmi_clk or negedge rst_n) begin
+    if (~rst_n) begin
+        fft_data_out_last <= 'd0;
+    end else begin
+        if (fft_data_out_last) begin
+            fft_data_out_last <= #DLY 'd0;
+        end else if (fft_data_out_en && fft_data_out_cnt == 'd127) begin
+            fft_data_out_last <= #DLY 'd1;
         end
     end
 end
 
-            
+always @(posedge hdmi_clk or negedge rst_n) begin
+    if (~rst_n) begin
+        fft_data_out_cnt <= 'd0;
+    end else begin
+        if (fft_data_out_last) begin
+            fft_data_out_cnt <= #DLY 'd0;
+        end else if (fft_data_out_en) begin
+            fft_data_out_cnt <= #DLY fft_data_out_cnt + 'd1;
+        end
+    end
+end
+
+always @(posedge hdmi_clk or negedge rst_n) begin
+    if (~rst_n) begin
+        fft_done_r1 <= 'd0;
+        fft_done_r2 <= 'd0;
+        fft_done <= 'd0;
+    end else begin
+        if (fft_done_r0) begin
+            fft_done_r1 <= #DLY 'd1;
+        end else begin
+            fft_done_r1 <= #DLY 'd0;
+        end
+        fft_done_r2 <= #DLY fft_done_r1;
+        fft_done <= #DLY fft_done_r2;
+    end
+end
 
 assign ram_wen_fr = (loop_cnt < 'h007f)? ram_wen_f:'d0;
 assign ram_ren_fr = (loop_cnt != 'd0)? ram_ren_f:'d0;
@@ -205,7 +221,7 @@ fft #(
     .ram_waddr      (ram_waddr_f    )               ,
     .ram_raddr      (ram_raddr_f    )               ,
     .loop_cnt       (loop_cnt       )               ,
-    .fft_done       (fft_done       )               
+    .fft_done       (fft_done_r0    )               
 );
 
 DPRAM_WRAP #(

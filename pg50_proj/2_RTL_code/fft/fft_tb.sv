@@ -42,6 +42,7 @@ module fft_tb ();
         #T
         start = 1;
         wait (s_axis_data_tready);
+        #T;
         start = 0;
         ram_wen = 1'b1;
         for (i=0; i<=255; i=i+1) begin

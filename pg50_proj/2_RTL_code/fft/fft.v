@@ -144,12 +144,10 @@ always @(posedge clk or negedge rst_n) begin
     end else begin
         if (fft_done) begin
             ram_raddr_r <= #DLY 'd0;
-        end else if ((ram_ren_r && ~fft_cnt_b) || start) begin
-            ram_raddr_r <= #DLY ((fft_cnt & (~loop_cnt)) << 1) + (fft_cnt & loop_cnt);
-            // ram_raddr_r <= #DLY {fft_cnt[loop_cnt +:8] << 1,fft_cnt[loop_cnt -: 8]};
         end else if (ram_ren_r && fft_cnt_b) begin
             ram_raddr_r <= #DLY ((fft_cnt & (~loop_cnt)) << 1) + (fft_cnt & loop_cnt) + (loop_cnt + 1);
-            // ram_raddr_r <= #DLY {fft_cnt[loop_cnt +:8] << 1,fft_cnt[loop_cnt -: 8]} + (1 << loop_cnt);
+        end else if ((ram_ren_r && ~fft_cnt_b) || start) begin
+            ram_raddr_r <= #DLY ((fft_cnt & (~loop_cnt)) << 1) + (fft_cnt & loop_cnt);
         end
     end
 end
