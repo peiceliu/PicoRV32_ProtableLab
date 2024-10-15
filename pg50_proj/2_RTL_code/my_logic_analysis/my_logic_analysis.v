@@ -1,4 +1,5 @@
 // `timescale 1ns / 1ps
+// `timescale 1ns / 1ps
 
 module my_logic_analysis #(
     parameter                       INPUT_WIDTH     =   6   
@@ -14,6 +15,8 @@ module my_logic_analysis #(
     input                           ethernet_read_done      ,
     input       [2:0]               trigger_channel         ,
     input       [INPUT_WIDTH-1:0]   din                     ,                            //  逻辑分析输入数据
+    output reg                      dout_done               ,
+    output      [63:0]              dout                    ,
     output reg                      dout_done               ,
     output      [63:0]              dout                    ,
     output reg                      fifo_wen                ,
@@ -150,7 +153,7 @@ end
 
 always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
-        din_cnt <= #DLY 'd0;
+        din_cnt <= #DLY 'd7;
     end else begin
         if (clk_bps && din_cnt == 'd7) begin
             din_cnt <= #DLY 'd0;
@@ -166,6 +169,8 @@ always @(posedge clk or negedge rst_n) begin
     end else begin
         if (clk_bps && (triger || triger_r)) begin
             dout_r[din_cnt*8+:8] <= #DLY {2'b0,din_r2};
+        if (clk_bps && (triger || triger_r)) begin
+            dout_r[din_cnt*8+:8] <= #DLY {2'b0,din_r2};
         end
     end
 end
@@ -178,7 +183,9 @@ always @(posedge clk or negedge rst_n) begin
         if (fifo_wen) begin
             fifo_wen <= #DLY 'd0;
         end else if (clk_bps && ~fifo_data_full && din_cnt == 'd0) begin
+        end else if (clk_bps && ~fifo_data_full && din_cnt == 'd0) begin
             fifo_wen <= #DLY 'd1;
+        end else if (dout_done) begin
         end else if (dout_done) begin
             fifo_wen <= #DLY 'd1;
         end
@@ -186,6 +193,8 @@ always @(posedge clk or negedge rst_n) begin
 end
 
 always @(posedge clk or negedge rst_n) begin
+    if(rst_n == 1'b0) begin     
+        dout_done <= 'd0;
     if(rst_n == 1'b0) begin     
         dout_done <= 'd0;
     end else begin
@@ -198,8 +207,10 @@ always @(posedge clk or negedge rst_n) begin
 end
 
 
+
 always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
+        bps_start <= 'd0;
         bps_start <= 'd0;
     end else begin
         if (sample_num_cnt + 1 == sample_num) begin  
@@ -217,6 +228,10 @@ clk_div clk_div_1 (
     .sample_clk_cfg (sample_clk_cfg )   , 
 	.clk_bps        (clk_bps        ) 
 );
+//50Mhz : 0
+//25Mhz : 1
+//12.5Mhz : 3
+//5Mhz  : 9
 //50Mhz : 0
 //25Mhz : 1
 //12.5Mhz : 3

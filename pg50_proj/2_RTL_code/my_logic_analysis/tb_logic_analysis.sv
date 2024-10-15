@@ -1,4 +1,5 @@
 `timescale 1 ps / 1 ps
+`timescale 1 ps / 1 ps
 
 module tb_logic_analysis();
 `include "../../example_design/bench/mem/ddr3_parameters.vh"
@@ -18,6 +19,7 @@ parameter T = 1000000 / CLKIN_FREQ;
     reg rst_n;
     reg rxd;
     reg txd_debug;
+    reg [5:0] din;
     reg [5:0] din;
     reg config_valid;
     reg [7:0] tx_data;
@@ -103,14 +105,21 @@ parameter T = 1000000 / CLKIN_FREQ;
             end
             if (u_ddr3.dout_done) begin
                 break;
+            if (u_ddr3.dout_done) begin
+                break;
             end
         end
     end
 
     always @ (posedge clk or negedge rst_n) begin
         if(!rst_n) begin
+    always @ (posedge clk or negedge rst_n) begin
+        if(!rst_n) begin
             rxd <= 'd1;
         end else begin
+            if (u_ddr3.u_my_logic_analysis.clk_bps) begin
+                rxd <= u_ddr3.dout[0];
+            end
             if (u_ddr3.u_my_logic_analysis.clk_bps) begin
                 rxd <= u_ddr3.dout[0];
             end
@@ -248,6 +257,8 @@ MY_UART_TOP u_uart_debug(
     .rs232_tx       (txd_debug      )   , 
     .uart_ctrl_tx   (13'd16       )   , 
     .uart_ctrl_rx   (13'd16       )   , 
+    .uart_ctrl_tx   (13'd16       )   , 
+    .uart_ctrl_rx   (13'd16       )   , 
     .tx_start       (tx_start       )   , 
     .tx_data        (tx_data        )   , 
     .tx_done        (tx_done        )   , 
@@ -260,7 +271,10 @@ task uart_send_byte(input [7:0] data);
     tx_data  = data;
     #20
     tx_start = 1'b1;
+    #20
+    tx_start = 1'b1;
     @(posedge clk);
+    tx_start = 1'b0;
     tx_start = 1'b0;
     wait (tx_done == 1'b1);
 endtask
