@@ -1,18 +1,18 @@
 // `timescale 1ns / 1ps
 
 module my_logic_analysis #(
-    parameter                       INPUT_WIDTH     =   6   ,
-    parameter                       CONFIG_WIDTH    =   32    //  
+    parameter                       INPUT_WIDTH     =   6   
 
 )(  
     input                           clk                     ,
     input                           rst_n                   ,
     // input                           start                   ,
-    input       [CONFIG_WIDTH-1:0]  config_in_r             ,
-    input       [31:0]              time_need               ,
+    input       [3:0]               sample_clk_cfg          ,
+    input       [31:0]              sample_num              ,
     input       [1:0]               triger_type             , 
-    input                           start                   , 
-    input                           touch_start             , 
+    input                           sample_run              , 
+    input                           ethernet_read_done      ,
+    input       [2:0]               trigger_channel         ,
     input       [INPUT_WIDTH-1:0]   din                     ,                            //  逻辑分析输入数据
     output reg                      dout_done               ,
     output      [63:0]              dout                    ,
@@ -29,23 +29,48 @@ wire                                clk_bps                 ;
 // wire                                clk_negedge             ;
 reg             [63:0]              dout_r                  ;           
 reg             [7:0]               din_cnt                 ;
-reg             [31:0]              time_need_cnt           ;
+reg             [31:0]              sample_num_cnt          ;
 reg             [INPUT_WIDTH-1:0]   din_r0                  ;
 reg             [INPUT_WIDTH-1:0]   din_r1                  ;
 reg             [INPUT_WIDTH-1:0]   din_r2                  ;
 reg                                 triger                  ;
 reg                                 triger_r                ;
-
+reg                                 start_r0                ;
+reg                                 start_r1                ;
+reg                                 start_r2                ;
+reg                                 start_posedge           ;
 
 localparam DLY = 0;
-localparam HV = 1;
-localparam LV = 2;
-localparam PE = 3;
-localparam NE = 4;
+localparam HV = 0;
+localparam LV = 1;
+localparam PE = 2;
+localparam NE = 3;
 
 integer i;
 
+always @(posedge clk or negedge rst_n) begin
+    if(rst_n == 1'b0) begin
+        start_r0 <= 'd0;
+        start_r1 <= 'd0;
+        start_r2 <= 'd0;
+    end else begin
+        start_r0 <= sample_run;
+        start_r1 <= start_r0;
+        start_r2 <= start_r1;
+    end
+end
 
+always @(posedge clk or negedge rst_n) begin
+    if(rst_n == 1'b0) begin
+        start_posedge <= 'd0;
+    end else begin
+        if (~start_r2 && start_r1) begin
+            start_posedge <= 'd1;
+        end else if (start_posedge) begin
+            start_posedge <= 'd0;
+        end
+    end
+end
 
 always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
@@ -76,7 +101,7 @@ always @(posedge clk or negedge rst_n) begin
     end else begin
         if (triger) begin
             triger_r <= 'd1;
-        end else if (time_need_cnt + 1 == time_need) begin
+        end else if (sample_num_cnt + 1 == sample_num) begin
             triger_r <= 'd0;
         end
     end
@@ -85,54 +110,52 @@ end
 
 always @(*) begin
     triger <= 'd0;
-    if (clk_bps) begin                //TODO posedge or negedge
-        for (i=0 ; i < INPUT_WIDTH ; i=i+1) begin
-            case (triger_type[1:0])
-                HV: begin                     //高电平触发
-                    if (din_r2[i] && din_r1[i]) begin
-                        triger <= 'd1;
-                    end
+    if (clk_bps) begin         
+        case (triger_type[1:0])
+            HV: begin                     //高电平触发
+                if (din_r2[trigger_channel] && din_r1[trigger_channel]) begin
+                    triger <= 'd1;
                 end
-                LV: begin
-                    if (~din_r2[i] && ~din_r1[i]) begin
-                        triger <= 'd1;
-                    end
+            end
+            LV: begin                   //低电平触发
+                if (~din_r2[trigger_channel] && ~din_r1[trigger_channel]) begin
+                    triger <= 'd1;
                 end
-                PE: begin
-                    if (~din_r2[i] && din_r1[i]) begin
-                        triger <= 'd1;
-                    end
+            end
+            PE: begin
+                if (~din_r2[trigger_channel] && din_r1[trigger_channel]) begin
+                    triger <= 'd1;
                 end
-                NE: begin
-                    if (din_r2[i] && ~din_r1[i]) begin
-                        triger <= 'd1;
-                    end
+            end
+            NE: begin
+                if (din_r2[trigger_channel] && ~din_r1[trigger_channel]) begin
+                    triger <= 'd1;
                 end
-            endcase
+            end
+        endcase
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if(rst_n == 1'b0) begin
+        sample_num_cnt <= 'd0;
+    end else begin
+        if (sample_num_cnt + 1 == sample_num) begin
+            sample_num_cnt <= 'd0;
+        end else if ((triger || triger_r) && clk_bps) begin
+            sample_num_cnt <= sample_num_cnt + 'd1;
         end
     end
 end
 
 always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
-        time_need_cnt <= 'd0;
+        din_cnt <= #DLY 'd0;
     end else begin
-        if (time_need_cnt + 1 == time_need) begin
-            time_need_cnt <= 'd0;
-        end else if (triger || triger_r) begin
-            time_need_cnt <= time_need_cnt + 'd1;
-        end
-    end
-end
-
-always @(posedge clk or negedge rst_n) begin
-    if(rst_n == 1'b0) begin
-        din_cnt <= #DLY 'd7;
-    end else begin
-        if (clk_bps && din_cnt == 'd0) begin
-            din_cnt <= #DLY 'd7;
+        if (clk_bps && din_cnt == 'd7) begin
+            din_cnt <= #DLY 'd0;
         end else if (clk_bps) begin
-            din_cnt <= #DLY din_cnt - 'd1;
+            din_cnt <= #DLY din_cnt + 'd1;
         end
     end
 end
@@ -166,7 +189,7 @@ always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin     
         dout_done <= 'd0;
     end else begin
-        if (time_need_cnt + 1 == time_need) begin
+        if (sample_num_cnt + 1 == sample_num) begin
             dout_done <= 'd1;
         end else if (dout_done) begin
             dout_done <= 'd0;
@@ -179,9 +202,9 @@ always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
         bps_start <= 'd0;
     end else begin
-        if (time_need_cnt + 1 == time_need) begin  
+        if (sample_num_cnt + 1 == sample_num) begin  
             bps_start <= #DLY 'd0;
-        end else if (start && touch_start) begin
+        end else if (start_posedge && ethernet_read_done) begin   //TODO 数据传输完成信号
             bps_start <= #DLY 'd1;
         end
     end
@@ -191,7 +214,7 @@ clk_div clk_div_1 (
 	.clk            (clk            )   , 
 	.rst_n          (rst_n          )   , 
 	.bps_start      (bps_start      )   , 
-    .uart_ctrl      (config_in_r    )   , //baudrates config.
+    .sample_clk_cfg (sample_clk_cfg )   , 
 	.clk_bps        (clk_bps        ) 
 );
 //50Mhz : 0

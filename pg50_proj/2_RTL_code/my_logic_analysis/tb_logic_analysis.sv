@@ -2,11 +2,7 @@
 
 module tb_logic_analysis();
 `include "../../example_design/bench/mem/ddr3_parameters.vh"
-localparam S_RD_IDLE  = 3'd0;
-localparam S_RA_START = 3'd1;
-localparam S_RD_WAIT  = 3'd2; 
-localparam S_RD_PROC  = 3'd3;
-localparam S_RD_DONE  = 3'd4;
+
 localparam TIME_RST_N  = 64'd200000000;
 
 parameter MEM_ADDR_WIDTH = 15;
@@ -21,7 +17,6 @@ parameter T = 1000000 / CLKIN_FREQ;
     reg clk;
     reg rst_n;
     reg rxd;
-    reg txd;
     reg txd_debug;
     reg [5:0] din;
     reg config_valid;
@@ -30,49 +25,20 @@ parameter T = 1000000 / CLKIN_FREQ;
     wire rx_done;
     wire [7:0] rx_data;
     reg  rx_start;
-    wire [1:0] err;
-    reg fifo_data_full  ;
-    reg fifo_data_alfull;
-    reg  [31:0] config_in;
     reg tx_start            ;
-    reg [1:0] cnt ;
     reg  [7:0] dout;
-    reg fifo_wen;
-    reg ren;
-    reg [7:0] dout_r;
-    reg fifo_wen_r;
-    reg   clk_valid   ;
-    reg dout_r_valid ;
     wire  GRS_N;
-    reg  [27:0]   axi_araddr   ;    
-    reg           axi_aruser_ap;
-    reg  [3:0]    axi_aruser_id;
-    reg  [3:0]    axi_arlen    ;
-    reg           axi_arready  ;
-    reg           axi_arvalid  ;
-    reg  [63:0]    axi_rdata    ;
-    reg  [3:0]   axi_rid      ;
-    reg          axi_rlast    ;
-    reg          axi_rvalid   ;
-    reg [2:0]       rd_state;
-    reg [27:0]      reg_rd_adrs;
-    reg [10:0]      reg_rd_len;
-    reg             reg_arvalid;
-    reg [7:0]       reg_r_len;
-    reg [7:0]       rd_addr_cnt;
-    reg [7:0]       data_valid_cnt;   
-    reg             reg_r_last;
-    reg             reg_w_finish; 
-    reg             rd_fifo_almost_end; 
-    reg             once_rd_num; 
-    reg             rd_start    ;
-    reg [10:0]      rd_len  ;
-    reg [31:0]      time_need   ;
+    reg [31:0]      sample_num   ;
+    reg [3:0]       sample_clk_cfg  ;
     reg [1:0]       triger_type ;
-    reg             start       ;
-    reg             touch_start ;
-    reg             read_start  ;
+    reg [2:0]       trigger_channel ;
+    reg             sample_run   ;
     reg             ddr_init_done   ;
+    reg             fifo_ren_net        ;
+    reg             fifo_rdata_net      ;
+    reg             fifo_empty_net      ;
+    reg             almost_empty        ;
+    reg             ethernet_read_done  ;
     wire                          mem_rst_n        ; 
     wire                          mem_ck           ;
     wire                          mem_ck_n         ;
@@ -95,46 +61,27 @@ parameter T = 1000000 / CLKIN_FREQ;
     integer file;
     integer file1;
 
-    assign axi_araddr     = reg_rd_adrs;
-    assign axi_arlen      = reg_r_len[3:0];
-    assign axi_arvalid    = reg_arvalid;
 
 
     initial begin
         din = 'd0;
+        sample_clk_cfg = 'h0;
+        trigger_channel = 'd0;
         file = $fopen("./input.txt","w");
         file1 = $fopen("./output.txt","w");
-        config_valid = 'd0;
-        config_in = 32'h00000001;
-        dout_r_valid = 'd0;
-        time_need = 32'h0000c000;
-        rx_start = 'd1;
-        rd_len = 32 << 3;
+        sample_num = 32'h40000000;
+        ethernet_read_done = 'd1;
         i = 0;
         j = 0;
-        fifo_data_full   = 'd0;
-        fifo_data_alfull = 'd0;
-        triger_type = 'b10;
+        triger_type = 'b11;
         #T
         rst_n = 1'b1;
         wait (ddr_init_done == 'd1);
-        config_valid = 'd1;
         #T
-        config_valid = 'd0;
-        start       = 'd1;
-        touch_start = 'd1;
+        sample_run       = 'd1;
         #T
-        start       = 'd0;
-        touch_start = 'd0;
-        for (i=0; i<=32; i=i+1) begin
-            uart_send_byte(33);
-            uart_send_byte(55);
-            uart_send_byte(33);
-            uart_send_byte(56);
-            uart_send_byte(38);
-            uart_send_byte(45);
-        end
-        read_start = 'd1;
+        sample_run  = 'd0;
+        ethernet_read_done = 'd0;
         for (i=0; i<=32; i=i+1) begin
             uart_send_byte(33);
             uart_send_byte(55);
@@ -255,37 +202,42 @@ my_logic_analysis_top #(
     .CTRL_ADDR_WIDTH    (28         )       ,
     .INPUT_WIDTH        (6          )       ,
     .MEM_SPACE_AW       (18         )       
-) u_ddr3 (
-    .clk            (clk            )       ,
-    .rst_n          (rst_n          )       ,
-    .config_valid   (config_valid   )       ,
-    .config_in      (config_in      )       ,  
-    .time_need      (time_need      )       , 
-    .triger_type    (triger_type    )       , 
-    .start          (start          )       , 
-    .touch_start    (touch_start    )       , 
-    .read_start     (read_start     )       ,   
-    .din            ({5'd0,txd_debug}      )       ,
-    .ddr_init_done  (ddr_init_done  )       ,
-    .axi_rdata      (axi_rdata      )       ,
-    .axi_rvalid     (axi_rvalid     )       ,
+) u_my_logic_analysis_top (
+    .clk                (clk                )       ,
+    .clk_net            (clk                )       ,
+    .in_rst_n           (rst_n              )       ,
+    .sample_clk_cfg     (sample_clk_cfg     )       ,
+    .sample_num         (sample_num         )       ,  
+    .triger_type        (triger_type        )       , 
+    .trigger_channel    (trigger_channel    )       ,
+    .sample_run         (sample_run         )       , 
+    .din                ({5'd0,txd_debug}   )       ,
+    .ddr_init_done      (ddr_init_done      )       ,
+    .axi_rdata          (axi_rdata          )       ,
+    .axi_rvalid         (axi_rvalid         )       ,
 
-    .mem_rst_n         (mem_rst_n        ),
-    .mem_ck            (mem_ck           ),
-    .mem_ck_n          (mem_ck_n         ),
-    .mem_cke           (mem_cke          ),
-    .mem_ras_n         (mem_ras_n        ),
-    .mem_cas_n         (mem_cas_n        ),
-    .mem_cs_n          (mem_cs_n         ),
-    .mem_we_n          (mem_we_n         ), 
-    .mem_odt           (mem_odt          ),
-    .mem_a             (mem_a            ),   
-    .mem_ba            (mem_ba           ),   
-    .mem_dqs           (mem_dqs          ),
-    .mem_dqs_n         (mem_dqs_n        ),
-    .mem_dq            (mem_dq           ),
-    .mem_dm            (mem_dm           )
-    );
+    .fifo_ren_net       (fifo_ren_net       )       ,
+    .fifo_rdata_net     (fifo_rdata_net     )       ,
+    .fifo_empty_net     (fifo_empty_net     )       ,
+    .almost_empty       (almost_empty       )       ,
+    .ethernet_read_done (ethernet_read_done )       ,
+
+    .mem_rst_n          (mem_rst_n          )       ,
+    .mem_ck             (mem_ck             )       ,
+    .mem_ck_n           (mem_ck_n           )       ,
+    .mem_cke            (mem_cke            )       ,
+    .mem_ras_n          (mem_ras_n          )       ,
+    .mem_cas_n          (mem_cas_n          )       ,
+    .mem_cs_n           (mem_cs_n           )       ,
+    .mem_we_n           (mem_we_n           )       , 
+    .mem_odt            (mem_odt            )       ,
+    .mem_a              (mem_a              )       ,   
+    .mem_ba             (mem_ba             )       ,   
+    .mem_dqs            (mem_dqs            )       ,
+    .mem_dqs_n          (mem_dqs_n          )       ,
+    .mem_dq             (mem_dq             )       ,
+    .mem_dm             (mem_dm             )       
+    );  
 
     
 
