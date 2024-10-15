@@ -5,7 +5,6 @@ module fft_tb ();
     parameter T = 20;
     reg                 clk             ;
     reg                 rst_n           ;
-    reg                 start            ;
     reg    [11:0]       ram_out          ;
     reg                 ram_wen         ;
     reg    [7:0]        ram_waddr        ;
@@ -20,8 +19,10 @@ module fft_tb ();
     reg    [7:0]        fft_addr_out        ; 
         wire               GRS_N;
 
-    integer i;
-    integer j;
+    integer i1;
+    integer j1;
+    integer i2;
+    integer j2;
     integer file;
     integer file1;
     integer filey;
@@ -29,7 +30,6 @@ module fft_tb ();
     initial begin
         clk = 1'b1;
         rst_n = 1'b0;
-        start = 0;
         file = $fopen("./output.txt","w");
         file1 = $fopen("./check1.txt","w");
         filey = $fopen("./checky.txt","w");
@@ -40,21 +40,7 @@ module fft_tb ();
         rst_n = 1'b1;
         $readmemh( "E:/project/fpga_dasai/fft/input1.txt", img_in);
         #T
-        start = 1;
-        wait (s_axis_data_tready);
-        #T;
-        start = 0;
-        ram_wen = 1'b1;
-        for (i=0; i<=255; i=i+1) begin
-            ram_waddr = i;
-            ram_out = img_in[i][15:4];
-            #T;
-        end
-        ram_wen = 1'b0;
-        #10;
-        $display("@%0t,test",$time());
         #T; 
-        start = 0;
         while(1)begin
             // $display("in while");
             @(posedge clk);
@@ -86,13 +72,6 @@ module fft_tb ();
         //         $fwrite(file, "%h\n", DPRAM_WRAP1.mem[i]);
         //     end
         // end
-        wait (fft_done);
-        for (i=0; i<=127; i=i+1) begin
-            fft_addr_out = i;
-            fft_data_out_en = 'd1;
-            #T;
-        end
-        fft_data_out_en = 'd0;
     end
 
     always #10 clk = ~clk;
@@ -100,6 +79,26 @@ module fft_tb ();
     GTP_GRS GRS_INST(
         .GRS_N(1'b1)
     );
+
+    initial begin
+        sent_data;
+        sent_data;
+        sent_data;
+        sent_data;
+        sent_data;
+
+    end
+
+    initial begin
+        rec_data;
+        rec_data;
+        rec_data;
+        rec_data;
+        rec_data;
+        rec_data;
+        rec_data;
+        rec_data;
+    end
 
 fft_top #(
     .RAM_DATA_WIDTH     (16 )      , 
@@ -122,7 +121,6 @@ fft_top #(
     .fft_addr_out       (fft_addr_out       )   ,
     .hdmi_clk           (clk                )   ,
 
-    .start          (start      )               ,
     .fft_done       (fft_done   )               ,
     .ram_waddr_max1 (ram_waddr_max1)            ,
     .ram_waddr_max2 (ram_waddr_max2)            
@@ -145,7 +143,25 @@ fft_top #(
     // end
 //------------------------------------------------------------------------
 
-
-
+task sent_data () ;
+    @(posedge s_axis_data_tready);
+    #T;
+    ram_wen = 1'b1;
+    for (i1=0; i1<=255; i1=i1+1) begin
+        ram_waddr = i1;
+        ram_out = img_in[i1][15:4];
+        #T;
+    end
+    ram_wen = 1'b0;
+endtask
+task rec_data () ;
+    wait (fft_done);
+    for (i2=0; i2<=127; i2=i2+1) begin
+        fft_addr_out = i2;
+        fft_data_out_en = 'd1;
+        #T;
+    end
+    fft_data_out_en = 'd0;
+endtask
 
 endmodule

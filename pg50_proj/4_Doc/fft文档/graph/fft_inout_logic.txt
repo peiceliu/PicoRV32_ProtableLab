@@ -1,0 +1,13 @@
+{signal: [
+  {name: 'clk', wave: 'p..|..|....|.......|........'},
+  {name: 'start', wave: '010|..|....|..', data: ['addr']},
+  {name: 's_axis_data_tready', wave: '0.1|..|...0|..', data: ['addr']},
+  {name: 'fft_data_in_en', wave: '0..|1.|...0|..'},
+  {name: 'fft_addr_in', wave: 'x..|34|567x|..', data: ['ad0','ad1','a253','a254','a255']},     
+  {name: 'fft_data_in', wave: 'x..|34|567x|..', data: ['d0','d1','d253','d254','d255']},  
+  {name: 'fft_done', wave: '0..........|10|..|..' ,data: ['d0','dn-2', 'dn-1','dn', '5']},
+  {name: 'fft_data_out_en', wave: '0..........|..|1.|...0..' ,data: ['d0','dn-2', 'dn-1','dn', '5']},
+  {name: 'fft_addr_out', wave: 'x..........|..|34|567x..', data: ['ad0','ad1','a125','a126','a127']},  
+  {name: 'fft_data_out', wave: 'x..........|..|.348567x.', data: ['d0','d1','d2','d125','d126','d127']},  
+  {name: 'fft_data_out_last', wave: '0..........|..|..|...10.' ,data: ['d0','dn-2', 'dn-1','dn', '5']},
+]} 

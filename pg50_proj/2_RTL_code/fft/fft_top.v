@@ -24,7 +24,7 @@ module fft_top #(
     input               [RAM_ADDR_WIDTH-1:0]                    fft_addr_out            ,   //fft_point_cnt
     input                                                       hdmi_clk                ,
 
-    input                                                       start                   ,   //本轮fft计算开始
+    // input                                                       start                   ,   //本轮fft计算开始
     output reg                                                  fft_done                ,   //本轮fft计算完成
     output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max1          ,   //主频
     output reg          [RAM_ADDR_WIDTH-1:0]                    ram_waddr_max2              //副频
@@ -42,12 +42,12 @@ reg                     [RAM_ADDR_WIDTH-1:0]                    ram_raddr       
 wire                    [RAM_ADDR_WIDTH-1:0]                    ram_raddr_f             ;
 wire                    [15:0]                                  loop_cnt                ;
 wire                    [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_in_fr               ;
-wire                    [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_out_fr              ;
+// wire                    [2*MUTI*RAM_DATA_WIDTH-1:0]             ram_out_fr              ;
 wire                                                            ram_wen_fr              ;
 wire                                                            ram_ren_fr              ;
-wire                    [RAM_ADDR_WIDTH-1:0]                    ram_waddr_fr            ;
-wire                    [RAM_ADDR_WIDTH-1:0]                    ram_raddr_fr            ;
-wire                                                            fft_valid               ;
+// wire                    [RAM_ADDR_WIDTH-1:0]                    ram_waddr_fr            ;
+// wire                    [RAM_ADDR_WIDTH-1:0]                    ram_raddr_fr            ;
+// wire                                                            fft_valid               ;
 reg                     [15:0]                                  loop_cnt_r              ;
 wire signed             [MUTI*RAM_DATA_WIDTH-1:0]               ram_out_real            ;
 wire signed             [MUTI*RAM_DATA_WIDTH-1:0]               ram_out_imag            ;
@@ -61,6 +61,8 @@ reg                                                             fft_start       
 wire                                                            fft_done_r0             ;
 reg                                                             fft_done_r1             ;
 reg                                                             fft_done_r2             ;
+reg                                                             ram_in_full             ;
+reg                                                             ram_empty               ;
 
 parameter                                                       DLY = 1                 ;
 
@@ -112,11 +114,11 @@ end
 //======================= 输入逻辑 ===========================================
 always @(posedge ad_clk or negedge rst_n) begin
     if (~rst_n) begin
-        s_axis_data_tready <= 'd0;
+        s_axis_data_tready <= 'd1;
     end else begin
-        if (s_axis_data_tready && fft_data_in && fft_data_in_cnt == 'd255) begin
+        if (s_axis_data_tready && fft_data_in_en && fft_data_in_cnt == 'd255) begin
             s_axis_data_tready <= #DLY 'd0;
-        end else if (start) begin
+        end else if (~ram_in_full) begin
             s_axis_data_tready <= #DLY 'd1;
         end
     end
@@ -126,9 +128,9 @@ always @(posedge ad_clk or negedge rst_n) begin
     if (~rst_n) begin
         fft_data_in_cnt <= 'd0;
     end else begin
-        if (s_axis_data_tready && fft_data_in && fft_data_in_cnt == 'd255) begin
+        if (s_axis_data_tready && fft_data_in_en && fft_data_in_cnt == 'd255) begin
             fft_data_in_cnt <= #DLY 'd0;
-        end else if (s_axis_data_tready && fft_data_in) begin
+        end else if (s_axis_data_tready && fft_data_in_en) begin
             fft_data_in_cnt <= #DLY fft_data_in_cnt + 'd1;
         end 
     end
@@ -136,15 +138,16 @@ end
 
 always @(posedge ad_clk or negedge rst_n) begin
     if (~rst_n) begin
-        fft_start <= 'd0;
+        ram_in_full <= 'd0;
     end else begin
-        if (s_axis_data_tready && fft_data_in && fft_data_in_cnt == 'd255) begin
-            fft_start <= #DLY 'd1;
-        end else if (loop_cnt != 'd0) begin
-            fft_start <= #DLY 'd0;
-        end
+        if (s_axis_data_tready && fft_data_in_en && fft_data_in_cnt == 'd255) begin
+            ram_in_full <= #DLY 'd1;
+        end else if (ram_empty) begin
+            ram_in_full <= #DLY 'd0;
+        end 
     end
 end
+
 //=============================== 输出逻辑 ==============================
 always @(posedge hdmi_clk or negedge rst_n) begin
     if (~rst_n) begin
@@ -170,21 +173,52 @@ always @(posedge hdmi_clk or negedge rst_n) begin
     end
 end
 
-always @(posedge hdmi_clk or negedge rst_n) begin
+always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
         fft_done_r1 <= 'd0;
-        fft_done_r2 <= 'd0;
-        fft_done <= 'd0;
     end else begin
         if (fft_done_r0) begin
             fft_done_r1 <= #DLY 'd1;
-        end else begin
+        end else if (fft_data_out_en) begin
             fft_done_r1 <= #DLY 'd0;
         end
+    end
+end
+
+always @(posedge hdmi_clk or negedge rst_n) begin
+    if (~rst_n) begin
+        fft_done_r2 <= 'd0;
+        fft_done <= 'd0;
+    end else begin
         fft_done_r2 <= #DLY fft_done_r1;
         fft_done <= #DLY fft_done_r2;
     end
 end
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        fft_start <= 'd0;
+    end else begin
+        if (ram_in_full && loop_cnt_r == 'd0 && ~fft_done_r1) begin
+            fft_start <= #DLY 'd1;
+        end else if (fft_start) begin
+            fft_start <= #DLY 'd0;
+        end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        ram_empty <= 'd0;
+    end else begin
+        if (ram_raddr == 'd255) begin
+            ram_empty <= #DLY 'd1;
+        end else if (s_axis_data_tready && fft_data_in_en) begin
+            ram_empty <= #DLY 'd0;
+        end
+    end
+end
+
 
 assign ram_wen_fr = (loop_cnt < 'h007f)? ram_wen_f:'d0;
 assign ram_ren_fr = (loop_cnt != 'd0)? ram_ren_f:'d0;
@@ -256,7 +290,7 @@ ram_fftin u_ram_fftine (
     .wr_addr        (fft_addr_in        ),    // input [7:0]
     .wr_en          (fft_data_in_en     ),        // input
     .wr_clk         (ad_clk             ),      // input
-    .wr_rst         (rst_n              ),      // input
+    .wr_rst         (~rst_n             ),      // input
     .rd_addr        (ram_raddr          ),    // input [7:0]
     .rd_data        (data_in            ),    // output [11:0]
     .rd_clk         (clk                ),      // input
@@ -280,7 +314,7 @@ always @(posedge clk or negedge rst_n) begin
         end else if (data_out > data_out_max2 && data_out <= data_out_max1 && ram_wen && ram_waddr != 'd0) begin
             data_out_max2 <= #DLY data_out;
             ram_waddr_max2 <= #DLY ram_waddr;
-        end else if (start) begin
+        end else if (fft_start) begin
             data_out_max1 <=  #DLY 'd0;
             data_out_max2 <=  #DLY 'd0;
             ram_waddr_max1 <=  #DLY 'd0;
