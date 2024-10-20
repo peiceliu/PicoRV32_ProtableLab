@@ -2,46 +2,45 @@
 // `timescale 1ns / 1ps
 
 module my_logic_analysis #(
-    parameter                       INPUT_WIDTH     =   6   
+    parameter                       INPUT_WIDTH     =   6   ,
+    parameter                       MEM_DQ_WIDTH    =   32  
 
 )(  
-    input                           clk                     ,
-    input                           rst_n                   ,
-    // input                           start                   ,
-    input       [3:0]               sample_clk_cfg          ,
-    input       [31:0]              sample_num              ,
-    input       [1:0]               triger_type             , 
-    input                           sample_run              , 
-    input                           ethernet_read_done      ,
-    input       [2:0]               trigger_channel         ,
-    input       [INPUT_WIDTH-1:0]   din                     ,                            //  逻辑分析输入数据
-    output reg                      dout_done               ,
-    output      [63:0]              dout                    ,
-    output reg                      dout_done               ,
-    output      [63:0]              dout                    ,
-    output reg                      fifo_wen                ,
-    input                           fifo_data_full          ,
-    input                           fifo_data_alfull                                        //
+    input                               clk                     ,
+    input                               rst_n                   ,
+    // input                               start                   ,
+    input       [3:0]                   sample_clk_cfg          ,
+    input       [31:0]                  sample_num              ,
+    input       [1:0]                   triger_type             , 
+    input                               sample_run           , 
+    input                               ethernet_read_done      ,
+    input       [2:0]                   trigger_channel         ,
+    input       [INPUT_WIDTH-1:0]       din                     ,                            //  逻辑分析输入数据
+    output reg                          dout_done               ,
+    output      [MEM_DQ_WIDTH*8-1:0]    dout                    ,
+    output reg                          fifo_wen                ,
+    input                               fifo_data_full          ,
+    input                               fifo_data_alfull                                        //
 );
 
-reg                                 bps_start               ;
-wire                                clk_bps                 ;
+reg                                     bps_start               ;
+wire                                    clk_bps                 ;
 // reg             [12:0]              bps_ctrl                ;   
 // reg                                 clk_bps_r               ;           
 // wire                                clk_posedge             ; 
 // wire                                clk_negedge             ;
-reg             [63:0]              dout_r                  ;           
-reg             [7:0]               din_cnt                 ;
-reg             [31:0]              sample_num_cnt          ;
-reg             [INPUT_WIDTH-1:0]   din_r0                  ;
-reg             [INPUT_WIDTH-1:0]   din_r1                  ;
-reg             [INPUT_WIDTH-1:0]   din_r2                  ;
-reg                                 triger                  ;
-reg                                 triger_r                ;
-reg                                 start_r0                ;
-reg                                 start_r1                ;
-reg                                 start_r2                ;
-reg                                 start_posedge           ;
+reg             [MEM_DQ_WIDTH*8-1:0]    dout_r                  ;           
+reg             [7:0]                   din_cnt                 ;
+reg             [31:0]                  sample_num_cnt          ;
+reg             [INPUT_WIDTH-1:0]       din_r0                  ;
+reg             [INPUT_WIDTH-1:0]       din_r1                  ;
+reg             [INPUT_WIDTH-1:0]       din_r2                  ;
+reg                                     triger                  ;
+reg                                     triger_r                ;
+reg                                     start_r0                ;
+reg                                     start_r1                ;
+reg                                     start_r2                ;
+reg                                     start_posedge           ;
 
 localparam DLY = 0;
 localparam HV = 0;
@@ -153,12 +152,14 @@ end
 
 always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
-        din_cnt <= #DLY 'd7;
+        din_cnt <= #DLY 'd0;
     end else begin
-        if (clk_bps && din_cnt == 'd7) begin
+        if (clk_bps && din_cnt == MEM_DQ_WIDTH - 1) begin
             din_cnt <= #DLY 'd0;
-        end else if (clk_bps) begin
+        end else if (clk_bps && (triger || triger_r)) begin
             din_cnt <= #DLY din_cnt + 'd1;
+        end else if (sample_num_cnt + 1 == sample_num) begin
+            din_cnt <= #DLY 'd0;
         end
     end
 end
@@ -167,8 +168,6 @@ always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
         dout_r <= #DLY 'd0;
     end else begin
-        if (clk_bps && (triger || triger_r)) begin
-            dout_r[din_cnt*8+:8] <= #DLY {2'b0,din_r2};
         if (clk_bps && (triger || triger_r)) begin
             dout_r[din_cnt*8+:8] <= #DLY {2'b0,din_r2};
         end
@@ -182,10 +181,8 @@ always @(posedge clk or negedge rst_n) begin
     end else begin
         if (fifo_wen) begin
             fifo_wen <= #DLY 'd0;
-        end else if (clk_bps && ~fifo_data_full && din_cnt == 'd0) begin
-        end else if (clk_bps && ~fifo_data_full && din_cnt == 'd0) begin
+        end else if (clk_bps && ~fifo_data_full && din_cnt == MEM_DQ_WIDTH - 1) begin
             fifo_wen <= #DLY 'd1;
-        end else if (dout_done) begin
         end else if (dout_done) begin
             fifo_wen <= #DLY 'd1;
         end
@@ -193,8 +190,6 @@ always @(posedge clk or negedge rst_n) begin
 end
 
 always @(posedge clk or negedge rst_n) begin
-    if(rst_n == 1'b0) begin     
-        dout_done <= 'd0;
     if(rst_n == 1'b0) begin     
         dout_done <= 'd0;
     end else begin
@@ -210,7 +205,6 @@ end
 
 always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
-        bps_start <= 'd0;
         bps_start <= 'd0;
     end else begin
         if (sample_num_cnt + 1 == sample_num) begin  

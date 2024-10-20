@@ -4,9 +4,10 @@ module my_logic_analysis_top #(
     parameter   MEM_ROW_WIDTH       =   15                                                  ,    
     parameter   MEM_COLUMN_WIDTH    =   10                                                  , 
     parameter   MEM_BANK_WIDTH      =   3                                                   ,    
-    parameter   MEM_DQ_WIDTH        =   8                                                   ,   
-    parameter   MEM_DM_WIDTH        =   1                                                   ,   
-    parameter   MEM_DQS_WIDTH       =   1                                                   ,   
+    parameter   MEM_DQ_WIDTH        =   32                                                  ,   
+    parameter   DDR_WIDTH_SHIFT     =   3                                                   , //TODO log2(MEM_DQ_WIDTH)?
+    parameter   MEM_DM_WIDTH        =   MEM_DQ_WIDTH/8                                      ,   
+    parameter   MEM_DQS_WIDTH       =   MEM_DQ_WIDTH/8                                      ,   
     parameter   REGION_NUM          =   3                                                   ,   
     parameter   CTRL_ADDR_WIDTH     =   MEM_ROW_WIDTH + MEM_COLUMN_WIDTH + MEM_BANK_WIDTH   ,
     parameter   INPUT_WIDTH         =   6                                                   ,
@@ -19,17 +20,17 @@ module my_logic_analysis_top #(
     input       [31:0]                  sample_num          ,
     input       [1:0]                   triger_type         ,
     input       [2:0]                   trigger_channel     ,
-    input                               sample_run          ,
+    input                               sample_run       ,
     input       [INPUT_WIDTH-1:0]       din                 ,
     output                              ddr_init_done       ,
-    output      [MEM_DQ_WIDTH*8-1:0]    axi_rdata           ,
-    output                              axi_rvalid          , //TODO delete
 
     input                               fifo_ren_net        ,
-    output [7:0]                        fifo_rdata_net      ,
+    output      [7:0]                   fifo_rdata_net      ,
     output                              fifo_empty_net      ,
     output                              almost_empty        ,
     input                               ethernet_read_done  ,
+
+    output reg                          dout_done_r         ,
 
     output                              mem_rst_n           ,                       
     output                              mem_ck              ,
@@ -40,17 +41,18 @@ module my_logic_analysis_top #(
     output                              mem_we_n            , 
     output                              mem_odt             ,
     output                              mem_cs_n            ,
-    output 	    [14:0]                  mem_a               ,   
-    output 	    [2:0]                   mem_ba              ,   
-    inout 	    [1:0]                   mem_dqs             ,
-    inout 	    [1:0]                   mem_dqs_n           ,
-    inout 	    [15:0]                  mem_dq              ,
-    output 	    [1:0]                   mem_dm              
+    output 	    [MEM_ROW_WIDTH-1:0]     mem_a               ,   
+    output 	    [MEM_BANK_WIDTH-1:0]    mem_ba              ,   
+    inout 	    [MEM_DQS_WIDTH-1:0]     mem_dqs             ,
+    inout 	    [MEM_DQS_WIDTH-1:0]     mem_dqs_n           ,
+    inout 	    [MEM_DQ_WIDTH-1:0]      mem_dq              ,
+    output 	    [MEM_DM_WIDTH-1:0]      mem_dm              
 );
-    localparam   DLY                 =   0                ;
-    localparam [CTRL_ADDR_WIDTH:0] AXI_ADDR_MAX = (1'b1<<MEM_SPACE_AW);
+    localparam   DLY                 =   1                ;
+    // localparam [CTRL_ADDR_WIDTH:0] AXI_ADDR_MAX = (1'b1<<MEM_SPACE_AW);
 
     wire                            clk_ip                 ;  
+    wire                            clkout1             ;
     wire [MEM_DQ_WIDTH*8-1:0]       dout                ;       
     wire                            fifo_wen            ;
     wire                            fifo_data_full      ;
@@ -80,15 +82,26 @@ module my_logic_analysis_top #(
     reg  [2:0]                      cur_r_state            ;
     reg  [2:0]                      nex_r_state            ;  
     wire                            axi_wlast           ;
-    reg     [11:0]                  fifo_cnt            ;
-    reg     [3:0]                   axi_w_cnt           ;
+    reg     [31:0]                  fifo_cnt            ;
+    reg     [7:0]                   axi_w_cnt           ;
+    reg     [7:0]                   axi_awlen_cnt       ;
     reg                             first_ddr_read      ; 
-    reg     [3:0]                   axi_r_cnt           ;
+    reg     [7:0]                   axi_r_cnt           ;
+    reg     [7:0]                   axi_arlen_cnt       ;
     reg                             dout_done           ;
     wire                            rst_n               ;
     reg                             wr_full             ;
-    reg                             dout_done_r         ;
 
+    reg     [MEM_DQ_WIDTH*8-1:0]    axi_rdata           ;
+    reg                             axi_rvalid          ;
+    wire                            ddrout_almost_full  ;
+    reg     [31:0]                  fifo_cnt_r0         ;
+    reg     [31:0]                  fifo_cnt_r1         ;
+    wire    [7:0]                   ck_dly_set_bin = 'h15   ;
+    wire                            fifo_rst            ;
+    reg                             ethernet_read_done_r0       ;
+    reg                             ethernet_read_done_r1       ;
+    wire                            ethernet_read_done_posedge  ;
 
 
 
@@ -104,28 +117,29 @@ localparam S_RD_WAIT  = 3'd2;
 localparam S_RR_WAIT  = 3'd3;
 localparam S_RR_DONE  = 3'd4;
 
-assign axi_wstrb = 8'b11111111;
+
+assign axi_wstrb = {MEM_DQ_WIDTH{1'b1}};
 
 always @(posedge clk_ip or negedge rst_n) begin
     if (!rst_n) begin
-        cur_r_state <= S_RR_IDLE;
+        cur_r_state <= #DLY S_RR_IDLE;
     end else begin
-        cur_r_state <= nex_r_state;
+        cur_r_state <= #DLY nex_r_state;
     end
 end
 
 always @(posedge clk_ip or negedge rst_n) begin
     if (!rst_n) begin
-        cur_w_state <= S_WR_IDLE;
+        cur_w_state <= #DLY S_WR_IDLE;
     end else begin
-        cur_w_state <= nex_w_state;
+        cur_w_state <= #DLY nex_w_state;
     end
 end
 
 always @(*) begin
     case (cur_w_state)
         S_WR_IDLE  : begin
-            if (~empty) begin
+            if (~empty || (dout_done_r && axi_awaddr < (fifo_cnt_r1 << DDR_WIDTH_SHIFT))) begin
                 nex_w_state =  S_WA_START;
             end else begin
                 nex_w_state =  S_WR_IDLE;
@@ -146,7 +160,7 @@ always @(*) begin
             end
         end
         S_WR_WAIT  : begin
-            if (axi_w_cnt == 'd0 && axi_wready == 'd0) begin
+            if (axi_awlen_cnt == axi_w_cnt && axi_wready == 'd0) begin
                 nex_w_state =  S_WR_DONE;
             end else begin
                 nex_w_state =  S_WR_WAIT;
@@ -164,9 +178,10 @@ end
 always @(*) begin
     case (cur_r_state)
         S_RR_IDLE  : begin
-            if (ddr_init_done && ~first_ddr_read) begin
-                nex_r_state =  S_RA_START;
-            end else if (dout_done && (axi_awaddr > axi_araddr)) begin    //TODO  
+            // if (ddr_init_done && ~first_ddr_read) begin
+            //     nex_r_state =  S_RA_START;
+            // end else 
+            if (~ddrout_almost_full && dout_done_r && (axi_awaddr > axi_araddr)) begin
                 nex_r_state =  S_RA_START;
             end else begin
                 nex_r_state =  S_RR_IDLE;
@@ -187,7 +202,7 @@ always @(*) begin
             end
         end
         S_RR_WAIT : begin
-            if (axi_r_cnt == 'd0 && axi_rvalid == 'd0) begin
+            if (axi_awlen_cnt == axi_w_cnt && axi_rvalid == 'd0) begin
                 nex_r_state =  S_RR_DONE;
             end else begin
                 nex_r_state =  S_RR_WAIT;
@@ -203,29 +218,35 @@ always @(*) begin
 end
 
 //========================= WRITE ======================================
-always @(posedge clk_ip or negedge rst_n) begin
+always @(posedge clkout1 or negedge rst_n) begin
     if (!rst_n) begin
         fifo_cnt <= 'd0;
     end else begin
-        if (fifo_wen && ~ren) begin
+        if (fifo_wen) begin
             fifo_cnt <= fifo_cnt + 'd1;
-        end else if (~fifo_wen && ren) begin
-            fifo_cnt <= fifo_cnt - 'd1;
+        end else if (ethernet_read_done) begin
+            fifo_cnt <= 'd0;
         end
     end
 end
 
 always @(posedge clk_ip or negedge rst_n) begin
     if (!rst_n) begin
-        axi_awlen <= 'd0;
+        fifo_cnt_r0 <= #DLY 'd0;
+        fifo_cnt_r1 <= #DLY 'd0;
     end else begin
-        if (cur_w_state == S_WA_START && fifo_cnt >= 'd16) begin
-            axi_awlen <= 'd15;
-        end else if (cur_w_state == S_WA_START && fifo_cnt < 'd16) begin
-            axi_awlen <= fifo_cnt;
-        end else if (cur_w_state == S_WR_DONE) begin
-            axi_awlen <= 'd0;
-        end
+        fifo_cnt_r0 <= #DLY fifo_cnt;
+        fifo_cnt_r1 <= #DLY fifo_cnt_r0;
+    end
+end
+
+always @(*) begin
+    if (axi_awaddr + 'h80 <= (fifo_cnt_r1 << DDR_WIDTH_SHIFT)) begin
+        axi_awlen = 'd15;
+    end else if (axi_awaddr + 'h80 > (fifo_cnt_r1 << DDR_WIDTH_SHIFT)) begin
+        axi_awlen = fifo_cnt_r1 - (axi_awaddr >> DDR_WIDTH_SHIFT) - 'd1;
+    end else begin
+        axi_awlen = 'd0;
     end
 end
 
@@ -235,14 +256,14 @@ always @(posedge clk_ip or negedge rst_n) begin
         axi_awvalid    <= #DLY 1'b0; 
     end else begin
         if(axi_awvalid && axi_awready) begin
-            axi_awaddr <= #DLY axi_awaddr + ((axi_awlen + 'd1) << 3 ) ; 
+            axi_awaddr <= #DLY axi_awaddr + ((axi_awlen + 'd1) << DDR_WIDTH_SHIFT ) ; 
         end else if (ethernet_read_done) begin
             axi_awaddr <= #DLY 'd0;
         end
-        if(cur_w_state == S_WA_START) begin
-            axi_awvalid <= #DLY 'd1;
-        end else if (cur_w_state != S_WA_START) begin
+        if (cur_w_state != S_WA_START || (axi_awaddr + 'd128 >= (fifo_cnt_r1 << DDR_WIDTH_SHIFT) && axi_awvalid & axi_awready)) begin
             axi_awvalid <= #DLY 'd0;
+        end else if(cur_w_state == S_WA_START) begin
+            axi_awvalid <= #DLY 'd1;
         end
     end
 end
@@ -268,73 +289,94 @@ always @(posedge clk_ip or negedge rst_n) begin
     if (!rst_n) begin
         axi_w_cnt <= 'd0;
     end else begin
-        if (axi_wready) begin
-            axi_w_cnt <= axi_w_cnt + 'd1;
-        end else if ((nex_w_state == S_WR_DONE) || axi_wlast) begin
-            axi_w_cnt <= 'd0;
-        end 
+        if (nex_w_state == S_WR_DONE) begin
+            axi_w_cnt <= #DLY 'd0;
+        end else if (axi_wready) begin
+            axi_w_cnt <= #DLY axi_w_cnt + 'd1;
+        end
+    end
+end
+
+always @(posedge clk_ip or negedge rst_n) begin
+    if (!rst_n) begin
+        axi_awlen_cnt <= 'd0;
+    end else begin
+        if (nex_w_state == S_WR_DONE) begin
+            axi_awlen_cnt <= 'd0;
+        end else if (axi_awvalid && axi_awready) begin
+            axi_awlen_cnt <= axi_awlen_cnt + (axi_awlen + 1);
+        end
     end
 end
 
 //========================= READ ====================================================
-always @(posedge clk_ip or negedge rst_n) begin
-    if (!rst_n) begin
+always @(*) begin
+    if ((axi_awaddr - axi_araddr) >= 'h80) begin
+        axi_arlen  <= #DLY 'd15;
+    end else if ((axi_awaddr - axi_araddr) < 'h80 && axi_awaddr != axi_araddr) begin
+        axi_arlen  <= #DLY ((axi_awaddr - axi_araddr) >> 3) - 'd1;
+    end else begin
         axi_arlen  <= 'd0;
-    end else begin
-        if ((axi_awaddr - axi_araddr) >= 'd16) begin
-            axi_arlen  <= 'd15;
-        end else if ((axi_awaddr - axi_araddr) < 'd16) begin
-            axi_arlen  <= (axi_awaddr - axi_araddr) - 1;
-        end else if (ethernet_read_done) begin
-            axi_arlen  <= 'd0;  
-        end
     end
 end
 
 always @(posedge clk_ip or negedge rst_n) begin
     if (!rst_n) begin
-        axi_araddr <= 'd0;
-        axi_arvalid <= 'd0;
+        axi_araddr <= #DLY 'd0;
+        axi_arvalid <= #DLY 'd0;
     end else begin
-        if (cur_r_state == S_RA_START) begin
-            axi_arvalid <= 'd1;
-        end else if (cur_r_state != S_RA_START) begin
-            axi_arvalid <= 'd0;
+        if (cur_r_state != S_RA_START || ((axi_awaddr - axi_araddr) <= 'd128 && axi_arvalid & axi_arready)) begin
+            axi_arvalid <= #DLY 'd0;
+        end else if (cur_r_state == S_RA_START) begin
+            axi_arvalid <= #DLY 'd1;
         end
-        if (ethernet_read_done || (cur_r_state == S_RD_WAIT && ~first_ddr_read)) begin
-            axi_araddr <= 'd0;
+        // if (ethernet_read_done || (cur_r_state == S_RD_WAIT && ~first_ddr_read)) begin
+        if (ethernet_read_done) begin
+            axi_araddr <= #DLY 'd0;
         end else if (axi_arvalid && axi_arready) begin
-            axi_araddr <= #DLY axi_araddr + ((axi_arlen + 1)<<3);     
+            axi_araddr <= #DLY axi_araddr + ((axi_arlen + 1)<<DDR_WIDTH_SHIFT);     
         end
     end
 end
 
 always @(posedge clk_ip or negedge rst_n) begin
     if (!rst_n) begin
-        axi_r_cnt <= 'd0;
+        axi_r_cnt <= #DLY 'd0;
     end else begin
-        if (axi_rvalid) begin
-            axi_r_cnt <= axi_r_cnt + 'd1;
-        end else if ((nex_w_state == S_RR_DONE) || axi_rlast) begin
-            axi_r_cnt <= 'd0;
-        end 
+        if (nex_r_state == S_RR_DONE) begin
+            axi_r_cnt <= #DLY 'd0;
+        end else if (axi_rvalid) begin
+            axi_r_cnt <= #DLY axi_r_cnt + 'd1;
+        end
     end
 end
 
 always @(posedge clk_ip or negedge rst_n) begin
     if (!rst_n) begin
-        first_ddr_read <= 'd0;
+        axi_arlen_cnt <= 'd0;
     end else begin
-        if (cur_r_state == S_RR_WAIT) begin
-            first_ddr_read <= 'd1;
-        end else if (ethernet_read_done) begin
-            first_ddr_read <= 'd0;
+        if (nex_r_state == S_RR_DONE) begin
+            axi_arlen_cnt <= 'd0;
+        end else if (axi_arvalid && axi_arready) begin
+            axi_arlen_cnt <= axi_arlen_cnt + (axi_arlen + 1);
         end
     end
 end
 
+// always @(posedge clk_ip or negedge rst_n) begin
+//     if (!rst_n) begin
+//         first_ddr_read <= #DLY 'd0;
+//     end else begin
+//         if (cur_r_state == S_RR_DONE && first_ddr_read == 'd0) begin
+//             first_ddr_read <= #DLY 'd1;
+//         end else if (ethernet_read_done_posedge) begin
+//             first_ddr_read <= #DLY 'd0;
+//         end
+//     end
+// end
 
-always @(posedge clk_ip or negedge rst_n) begin
+
+always @(posedge clkout1 or negedge rst_n) begin
     if (!rst_n) begin
         dout_done_r <= 'd0;
     end else begin
@@ -349,14 +391,15 @@ end
 
 
 my_logic_analysis #(
-    .INPUT_WIDTH (6 )           
+    .INPUT_WIDTH        (6                  )       ,
+    .MEM_DQ_WIDTH       (MEM_DQ_WIDTH       )           
 ) u_my_logic_analysis (  
     .clk                (clkout1            )       ,
     .rst_n              (rst_n              )       ,
     .sample_clk_cfg     (sample_clk_cfg     )       ,
     .sample_num         (sample_num         )       ,
     .triger_type        (triger_type        )       ,
-    .sample_run         (sample_run         )       ,
+    .sample_run      (sample_run      )       ,
     .ethernet_read_done (ethernet_read_done )       ,
     .trigger_channel    (trigger_channel    )       ,
     .din                (din                )       ,   
@@ -369,13 +412,13 @@ my_logic_analysis #(
 
 fifo_ddrin u_fifo_ddrin (
     .wr_clk         (clkout1        ),                // input
-    .wr_rst         (~rst_n         ),                // input
+    .wr_rst         (fifo_rst       ),                // input
     .wr_en          (fifo_wen       ),                  // input
     .wr_data        (dout           ),              // input [63:0]
     .wr_full        (wr_full        ),              // output
     .almost_full    (fifo_data_alfull),      // output
     .rd_clk         (clk_ip         ),                // input
-    .rd_rst         (~rst_n         ),                // input
+    .rd_rst         (fifo_rst       ),                // input
     .rd_en          (ren            ),                  // input
     .rd_data        (axi_wdata      ),              // output [63:0]
     .rd_empty       (               ),            // output
@@ -384,13 +427,13 @@ fifo_ddrin u_fifo_ddrin (
 
 fifo_ddrout u_fifo_ddrout (
     .wr_clk         (clk_ip         ),                // input
-    .wr_rst         (~rst_n         ),                // input
+    .wr_rst         (fifo_rst       ),                // input
     .wr_en          (axi_rvalid     ),                  // input
     .wr_data        (axi_rdata      ),              // input [63:0]
     .wr_full        (               ),              // output
-    .almost_full    (               ),      // output
+    .almost_full    (ddrout_almost_full    ),              // output
     .rd_clk         (clk_net        ),                // input
-    .rd_rst         (~rst_n         ),                // input
+    .rd_rst         (fifo_rst       ),                // input
     .rd_en          (fifo_ren_net   ),              // input    fifo_ren_net   
     .rd_data        (fifo_rdata_net ),              // output [7:0]     fifo_rdata_net 
     .rd_empty       (fifo_empty_net ),              // output     fifo_empty_net 
@@ -401,7 +444,7 @@ fifo_ddrout u_fifo_ddrout (
 
 ddr3_ip u_ddr3_ip(
     .ref_clk                (clk          ),
-    .resetn                 (rst_n        ),
+    .resetn                 (~fifo_rst    ),
     .ddr_init_done          ( ddr_init_done  ),
     .ddrphy_clkin           (clk_ip       ),  
     .pll_lock               ( ),
@@ -444,7 +487,7 @@ ddr3_ip u_ddr3_ip(
     .debug_data             (     ),
     .debug_slice_state      (   ),
     .debug_calib_ctrl       (   ),   
-    .ck_dly_set_bin         (8'h15),//8��h14
+    .ck_dly_set_bin         (ck_dly_set_bin),//8��h14
     .dll_step               (),
     .dll_lock               (),
     .init_read_clk_ctrl     ('d0),                                                 
@@ -479,7 +522,18 @@ pll_ip u_pll_ip (
   	.clkout1(clkout1)       // output
 );
 assign rst_n = pll_lock & in_rst_n;
+assign fifo_rst = ~rst_n || ethernet_read_done_posedge;
 
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        ethernet_read_done_r0 <= 'd0;
+        ethernet_read_done_r1 <= 'd0;
+    end else begin
+        ethernet_read_done_r0 <= ethernet_read_done;
+        ethernet_read_done_r1 <= ethernet_read_done_r0;
+    end
+end
 
+assign ethernet_read_done_posedge = ethernet_read_done_r0 & ~ethernet_read_done_r1;
 
 endmodule

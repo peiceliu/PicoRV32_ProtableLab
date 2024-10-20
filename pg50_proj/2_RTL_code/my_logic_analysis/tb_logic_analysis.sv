@@ -8,7 +8,7 @@ localparam TIME_RST_N  = 64'd200000000;
 
 parameter MEM_ADDR_WIDTH = 15;
 parameter MEM_BADDR_WIDTH = 3;
-parameter MEM_DQ_WIDTH = 16;
+parameter MEM_DQ_WIDTH = 32;
 parameter MEM_DM_WIDTH         = MEM_DQ_WIDTH/8;
 parameter MEM_DQS_WIDTH        = MEM_DQ_WIDTH/8;
 parameter MEM_NUM              = MEM_DQ_WIDTH/16;
@@ -20,14 +20,13 @@ parameter T = 1000000 / CLKIN_FREQ;
     reg rxd;
     reg txd_debug;
     reg [5:0] din;
-    reg [5:0] din;
     reg config_valid;
     reg [7:0] tx_data;
     wire tx_done;
     wire rx_done;
     wire [7:0] rx_data;
     reg  rx_start;
-    reg tx_start            ;
+    reg tx_start  ;
     reg  [7:0] dout;
     wire  GRS_N;
     reg [31:0]      sample_num   ;
@@ -37,7 +36,7 @@ parameter T = 1000000 / CLKIN_FREQ;
     reg             sample_run   ;
     reg             ddr_init_done   ;
     reg             fifo_ren_net        ;
-    reg             fifo_rdata_net      ;
+    reg [7:0]       fifo_rdata_net      ;
     reg             fifo_empty_net      ;
     reg             almost_empty        ;
     reg             ethernet_read_done  ;
@@ -60,31 +59,29 @@ parameter T = 1000000 / CLKIN_FREQ;
 
     integer i;
     integer j;
-    integer file;
-    integer file1;
+    integer file    ;
+    integer file1   ;
+    integer file2   ;
 
 
 
     initial begin
         din = 'd0;
-        sample_clk_cfg = 'h0;
+        sample_clk_cfg = 'hd;
         trigger_channel = 'd0;
         file = $fopen("./input.txt","w");
         file1 = $fopen("./output.txt","w");
-        sample_num = 32'h40000000;
-        ethernet_read_done = 'd1;
+        file2 = $fopen("./output_fifo.txt","w");
+        sample_num = 32'h00000fdd;          //max   32'h00010000
+        fifo_ren_net = 'd0;
         i = 0;
         j = 0;
         triger_type = 'b11;
         #T
+        fifo_ren_net = ~fifo_empty_net;
         rst_n = 1'b1;
         wait (ddr_init_done == 'd1);
-        #T
-        sample_run       = 'd1;
-        #T
-        sample_run  = 'd0;
-        ethernet_read_done = 'd0;
-        for (i=0; i<=32; i=i+1) begin
+        for (i=0; i<=200; i=i+1) begin
             uart_send_byte(33);
             uart_send_byte(55);
             uart_send_byte(33);
@@ -95,33 +92,67 @@ parameter T = 1000000 / CLKIN_FREQ;
     end
 
     initial begin
+        fifo_ren_net = 'd0;
+        wait(u_my_logic_analysis_top.axi_araddr == u_my_logic_analysis_top.axi_awaddr && u_my_logic_analysis_top.axi_araddr != 0);
+        fifo_ren_net = 'd1;
+        @(posedge fifo_empty_net);
+        fifo_ren_net = 'd0;
+    end
+
+
+    initial begin
         while (1) begin
-            @(posedge u_ddr3.clk_ip)
-            if (axi_rvalid) begin
-                $fwrite(file1, "%h\n", axi_rdata);
+            @(posedge u_my_logic_analysis_top.clk_ip)
+            if (u_my_logic_analysis_top.axi_rvalid) begin
+                $fwrite(file1, "%h\n", u_my_logic_analysis_top.axi_rdata);
             end
-            if (u_ddr3.axi_wready) begin
-                $fwrite(file, "%h\n", u_ddr3.axi_wdata);
+            if (u_my_logic_analysis_top.axi_wready) begin
+                $fwrite(file, "%h\n", u_my_logic_analysis_top.axi_wdata);
             end
-            if (u_ddr3.dout_done) begin
-                break;
-            if (u_ddr3.dout_done) begin
-                break;
+            // if (u_my_logic_analysis_top.axi_araddr == u_my_logic_analysis_top.axi_awaddr && u_my_logic_analysis_top.axi_araddr != 0) begin
+            //     $fclose(file );
+            //     $fclose(file1);
+            //     $fclose(file2);
+            //     break;
+            // end
+        end
+    end
+
+
+    initial begin
+        while (1) begin
+            @(posedge u_my_logic_analysis_top.clk_ip)
+            if (fifo_ren_net) begin
+                @(posedge u_my_logic_analysis_top.clk_ip)
+                $fwrite(file2, "%h\n", fifo_rdata_net);
             end
         end
     end
 
-    always @ (posedge clk or negedge rst_n) begin
-        if(!rst_n) begin
+    initial begin
+        sample_run = 'd0;
+        ethernet_read_done = 'd1;
+        // while(1) begin
+            @(posedge ddr_init_done);
+            #1000;
+            sample_run = 'd1;
+            #T
+            sample_run = 'd0;
+            ethernet_read_done = 'd0;
+            @(posedge fifo_empty_net);
+            ethernet_read_done = 'd1;
+        // end
+    end
+
     always @ (posedge clk or negedge rst_n) begin
         if(!rst_n) begin
             rxd <= 'd1;
         end else begin
-            if (u_ddr3.u_my_logic_analysis.clk_bps) begin
-                rxd <= u_ddr3.dout[0];
+            if (u_my_logic_analysis_top.u_my_logic_analysis.clk_bps) begin
+                rxd <= u_my_logic_analysis_top.dout[0];
             end
-            if (u_ddr3.u_my_logic_analysis.clk_bps) begin
-                rxd <= u_ddr3.dout[0];
+            if (u_my_logic_analysis_top.u_my_logic_analysis.clk_bps) begin
+                rxd <= u_my_logic_analysis_top.dout[0];
             end
         end
     end
@@ -200,17 +231,17 @@ end
 endgenerate
 
 my_logic_analysis_top #(
-    .DFI_CLK_PERIOD     (10000      )       ,    
-    .MEM_ROW_WIDTH      (15         )       ,    
-    .MEM_COLUMN_WIDTH   (10         )       , 
-    .MEM_BANK_WIDTH     (3          )       ,    
-    .MEM_DQ_WIDTH       (8          )       ,   
-    .MEM_DM_WIDTH       (1          )       ,   
-    .MEM_DQS_WIDTH      (1          )       ,   
-    .REGION_NUM         (3          )       ,   
-    .CTRL_ADDR_WIDTH    (28         )       ,
-    .INPUT_WIDTH        (6          )       ,
-    .MEM_SPACE_AW       (18         )       
+    .DFI_CLK_PERIOD     (10000              )       ,    
+    .MEM_ROW_WIDTH      (15                 )       ,    
+    .MEM_COLUMN_WIDTH   (10                 )       , 
+    .MEM_BANK_WIDTH     (3                  )       ,    
+    .MEM_DQ_WIDTH       (MEM_DQ_WIDTH       )       ,   
+    .MEM_DM_WIDTH       (MEM_DQ_WIDTH/8     )       ,   
+    .MEM_DQS_WIDTH      (MEM_DQ_WIDTH/8     )       ,   
+    .REGION_NUM         (3                  )       ,   
+    .CTRL_ADDR_WIDTH    (28                 )       ,
+    .INPUT_WIDTH        (6                  )       ,
+    .MEM_SPACE_AW       (18                 )       
 ) u_my_logic_analysis_top (
     .clk                (clk                )       ,
     .clk_net            (clk                )       ,
@@ -220,10 +251,8 @@ my_logic_analysis_top #(
     .triger_type        (triger_type        )       , 
     .trigger_channel    (trigger_channel    )       ,
     .sample_run         (sample_run         )       , 
-    .din                ({5'd0,txd_debug}   )       ,
+    .din                ({5'h1f,txd_debug}   )       ,
     .ddr_init_done      (ddr_init_done      )       ,
-    .axi_rdata          (axi_rdata          )       ,
-    .axi_rvalid         (axi_rvalid         )       ,
 
     .fifo_ren_net       (fifo_ren_net       )       ,
     .fifo_rdata_net     (fifo_rdata_net     )       ,
@@ -255,8 +284,6 @@ MY_UART_TOP u_uart_debug(
     .rst_n          (rst_n          )   , 
     .rs232_rx       (rxd            )   , 
     .rs232_tx       (txd_debug      )   , 
-    .uart_ctrl_tx   (13'd16       )   , 
-    .uart_ctrl_rx   (13'd16       )   , 
     .uart_ctrl_tx   (13'd16       )   , 
     .uart_ctrl_rx   (13'd16       )   , 
     .tx_start       (tx_start       )   , 
