@@ -8,11 +8,11 @@ module my_logic_analysis #(
 )(  
     input                               clk                     ,
     input                               rst_n                   ,
-    // input                               start                   ,
+    input                               ddr_init_done           ,
     input       [3:0]                   sample_clk_cfg          ,
     input       [31:0]                  sample_num              ,
     input       [1:0]                   triger_type             , 
-    input                               sample_run           , 
+    input                               start_posedge           , 
     input                               ethernet_read_done      ,
     input       [2:0]                   trigger_channel         ,
     input       [INPUT_WIDTH-1:0]       din                     ,                            //  逻辑分析输入数据
@@ -37,10 +37,11 @@ reg             [INPUT_WIDTH-1:0]       din_r1                  ;
 reg             [INPUT_WIDTH-1:0]       din_r2                  ;
 reg                                     triger                  ;
 reg                                     triger_r                ;
-reg                                     start_r0                ;
-reg                                     start_r1                ;
-reg                                     start_r2                ;
-reg                                     start_posedge           ;
+// reg                                     start_r0                ;
+// reg                                     start_r1                ;
+// reg                                     start_r2                ;
+// reg                                     start_posedge           ;
+reg                                     dout_done_r             ;
 
 localparam DLY = 0;
 localparam HV = 0;
@@ -50,29 +51,29 @@ localparam NE = 3;
 
 integer i;
 
-always @(posedge clk or negedge rst_n) begin
-    if(rst_n == 1'b0) begin
-        start_r0 <= 'd0;
-        start_r1 <= 'd0;
-        start_r2 <= 'd0;
-    end else begin
-        start_r0 <= sample_run;
-        start_r1 <= start_r0;
-        start_r2 <= start_r1;
-    end
-end
+// always @(posedge clk or negedge rst_n) begin
+//     if(rst_n == 1'b0) begin
+//         start_r0 <= 'd0;
+//         start_r1 <= 'd0;
+//         start_r2 <= 'd0;
+//     end else begin
+//         start_r0 <= sample_run;
+//         start_r1 <= start_r0;
+//         start_r2 <= start_r1;
+//     end
+// end
 
-always @(posedge clk or negedge rst_n) begin
-    if(rst_n == 1'b0) begin
-        start_posedge <= 'd0;
-    end else begin
-        if (~start_r2 && start_r1) begin
-            start_posedge <= 'd1;
-        end else if (start_posedge) begin
-            start_posedge <= 'd0;
-        end
-    end
-end
+// always @(posedge clk or negedge rst_n) begin
+//     if(rst_n == 1'b0) begin
+//         start_posedge <= 'd0;
+//     end else begin
+//         if (~start_r2 && start_r1 && ddr_init_done) begin
+//             start_posedge <= 'd1;
+//         end else if (~ethernet_read_done) begin
+//             start_posedge <= 'd0;
+//         end
+//     end
+// end
 
 always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
@@ -101,10 +102,10 @@ always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
         triger_r <= 'd0;
     end else begin
-        if (triger) begin
-            triger_r <= 'd1;
-        end else if (sample_num_cnt + 1 == sample_num) begin
+        if (sample_num_cnt + 'd1 >= sample_num) begin
             triger_r <= 'd0;
+        end else if (triger) begin
+            triger_r <= 'd1;
         end
     end
 end
@@ -142,10 +143,12 @@ always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
         sample_num_cnt <= 'd0;
     end else begin
-        if (sample_num_cnt + 1 == sample_num) begin
+        if (ethernet_read_done) begin
             sample_num_cnt <= 'd0;
+        end else if (sample_num_cnt + 'd1 >= sample_num) begin
+            sample_num_cnt <= sample_num_cnt;
         end else if ((triger || triger_r) && clk_bps) begin
-            sample_num_cnt <= sample_num_cnt + 'd1;
+            sample_num_cnt <= sample_num_cnt + 32'h0000_0001;
         end
     end
 end
@@ -154,12 +157,12 @@ always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
         din_cnt <= #DLY 'd0;
     end else begin
-        if (clk_bps && din_cnt == MEM_DQ_WIDTH - 1) begin
+        if (sample_num_cnt + 'd1 >= sample_num) begin
+            din_cnt <= #DLY 'd0;
+        end else if (clk_bps && din_cnt >= MEM_DQ_WIDTH - 1) begin
             din_cnt <= #DLY 'd0;
         end else if (clk_bps && (triger || triger_r)) begin
             din_cnt <= #DLY din_cnt + 'd1;
-        end else if (sample_num_cnt + 1 == sample_num) begin
-            din_cnt <= #DLY 'd0;
         end
     end
 end
@@ -181,9 +184,9 @@ always @(posedge clk or negedge rst_n) begin
     end else begin
         if (fifo_wen) begin
             fifo_wen <= #DLY 'd0;
-        end else if (clk_bps && ~fifo_data_full && din_cnt == MEM_DQ_WIDTH - 1) begin
+        end else if (clk_bps && ~fifo_data_full && din_cnt >= MEM_DQ_WIDTH - 'd1 && (triger || triger_r)) begin
             fifo_wen <= #DLY 'd1;
-        end else if (dout_done) begin
+        end else if (dout_done && ~dout_done_r) begin
             fifo_wen <= #DLY 'd1;
         end
     end
@@ -193,23 +196,29 @@ always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin     
         dout_done <= 'd0;
     end else begin
-        if (sample_num_cnt + 1 == sample_num) begin
+        if (sample_num_cnt + 'd1 >= sample_num) begin
             dout_done <= 'd1;
-        end else if (dout_done) begin
+        end else if (ethernet_read_done) begin
             dout_done <= 'd0;
         end
     end
 end
 
-
+always @(posedge clk or negedge rst_n) begin
+    if(rst_n == 1'b0) begin     
+        dout_done_r <= 'd0;
+    end else begin
+        dout_done_r <= dout_done;
+    end
+end
 
 always @(posedge clk or negedge rst_n) begin
     if(rst_n == 1'b0) begin
         bps_start <= 'd0;
     end else begin
-        if (sample_num_cnt + 1 == sample_num) begin  
+        if (sample_num_cnt + 'd1 >= sample_num) begin  
             bps_start <= #DLY 'd0;
-        end else if (start_posedge && ethernet_read_done) begin   //TODO 数据传输完成信号
+        end else if (start_posedge && ethernet_read_done) begin   
             bps_start <= #DLY 'd1;
         end
     end

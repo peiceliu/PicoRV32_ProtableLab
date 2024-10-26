@@ -6,20 +6,24 @@ module la_net_top #(
     parameter   MEM_DQS_WIDTH   =   MEM_DQ_WIDTH/8          ,
     parameter   MEM_DM_WIDTH    =   MEM_DQ_WIDTH/8          
 )(
-    input                               clk             /* synthesis PAP_MARK_DEBUG="true" */    ,
+    input                               clk            /* synthesis PAP_MARK_DEBUG="<0/c0/0>" */     ,
+    input                               clkout1             ,
     input                               rst_n               ,
-    // input       [3:0]                   sample_clk_cfg      ,
-    // input       [31:0]                  sample_num          ,
-    // input       [1:0]                   triger_type         ,
-    // input       [2:0]                   trigger_channel     ,
+    input       [3:0]                   sample_clk_cfg      ,
+    input       [31:0]                  sample_num          ,
+    input       [1:0]                   triger_type         ,
+    input       [2:0]                   trigger_channel     ,
     input                               sample_run          ,
     input       [INPUT_WIDTH-1:0]       din                 ,  
 
     output                              ddr_init_done       ,
     output                              ethernet_read_done  ,
-    output                              dout_done_r         ,
+    output                              dout_done           ,
+    output                              ddrout_almost_full  ,
+    output                              almost_empty        ,
     output                              led4                ,
     output                              led5                ,
+    output                              led6                ,
 
     output                              mem_rst_n           ,
     output                              mem_ck              ,
@@ -53,20 +57,21 @@ module la_net_top #(
 //reg                                     start_r0                ;
 //reg                                     start_r1                ;
 //reg                                     start_r2                ;
-//reg                                     start_posedge           ;
-reg                                     fifo_ren_net            ;
-reg     [7:0]                           fifo_rdata_net          ;         
-reg                                     almost_empty            ;
-reg                                     ethernet_read_done      ;
+wire                                    start_posedge           ;
+wire                                    rgmii_clk               ;
+wire                                    fifo_ren_net            ;
+wire    [7:0]                           fifo_rdata_net          ;         
+// reg                                     almost_empty            ;
+wire                                    ethernet_read_done      ;
 wire                                    mac_rx_data_valid       ;
 wire    [7:0]                           mac_rx_data             ;    
 wire                                    mac_data_valid          ;   
 wire    [7:0]                           mac_tx_data             ;  
 
-wire    [3:0]                   sample_clk_cfg  = 'hd    ;
-wire    [31:0]                  sample_num      = 32'h00003fff    ;
-wire    [1:0]                   triger_type     = 'b11   ;
-wire    [2:0]                   trigger_channel = 'd0    ;
+// wire    [3:0]                   sample_clk_cfg  = 'hc    ;
+// wire    [31:0]                  sample_num      = 32'h0003fdd    ;
+// wire    [1:0]                   triger_type     = 'b11   ;
+// wire    [2:0]                   trigger_channel = 'd0    ;
 
 
 
@@ -120,7 +125,7 @@ eth_udp_test#(
     .almost_empty           (almost_empty       )   ,
     .sample_num             (sample_num         )   ,
     .ethernet_read_done     (ethernet_read_done )   ,
-    .sample_run          (sample_run      )   ,
+    .start_posedge          (start_posedge      )   ,
 
     .udp_rec_data_valid     (                   )   ,         
     .udp_rec_rdata          (                   )   ,             
@@ -142,8 +147,9 @@ my_logic_analysis_top #(
     .MEM_SPACE_AW       (18                 )          
 ) u_my_logic_analysis_top (
     .clk                (clk                )   ,
-    .clk_net            (clk_net            )   ,
-    .in_rst_n           (rst_n              )   ,
+    .clkout1            (clkout1            )   ,
+    .clk_net            (rgmii_clk          )   ,
+    .rst_n              (rst_n              )   ,
     .sample_clk_cfg     (sample_clk_cfg     )   ,
     .sample_num         (sample_num         )   ,
     .triger_type        (triger_type        )   ,
@@ -151,13 +157,16 @@ my_logic_analysis_top #(
     .sample_run      (sample_run      )   ,
     .din                (din                )   ,
     .ddr_init_done      (ddr_init_done      )   ,
+    .start_posedge      (start_posedge      )   ,
 
     .fifo_ren_net       (fifo_ren_net       )   ,
     .fifo_rdata_net     (fifo_rdata_net     )   ,
     .fifo_empty_net     (                   )   ,
     .almost_empty       (almost_empty       )   ,
     .ethernet_read_done (ethernet_read_done )   ,
-    .dout_done_r        (dout_done_r        )   ,
+    .dout_done          (dout_done          )   ,
+    .ddrout_almost_full (ddrout_almost_full )   ,
+    .led6               (led6               )   ,
 
     .mem_rst_n          (mem_rst_n          )   ,                       
     .mem_ck             (mem_ck             )   ,

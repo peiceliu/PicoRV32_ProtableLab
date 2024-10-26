@@ -28,7 +28,7 @@ module eth_udp_test#(
     parameter       DEST_IP   = 32'hC0_A8_01_66,//192.168.1.105  102
     parameter       DEST_PORT = 16'h8080 
 )(
-    input               rgmii_clk   /* synthesis PAP_MARK_DEBUG="true" */   ,
+    input               rgmii_clk   ,
     input               rstn,
     input               gmii_rx_dv,
     input  [7:0]        gmii_rxd,
@@ -41,9 +41,9 @@ module eth_udp_test#(
     output reg          fifo_ren    ,
     input  [7:0]        fifo_data   ,     
     input               almost_empty,
-    input               sample_num         ,
+    input  [31:0]       sample_num         ,
     output reg          ethernet_read_done /* synthesis PAP_MARK_DEBUG="true" */ ,
-    input               sample_run    /* synthesis PAP_MARK_DEBUG="true" */   ,
+    input               start_posedge      ,
 
     output              udp_rec_data_valid,         
     output [7:0]        udp_rec_rdata ,             
@@ -66,6 +66,8 @@ module eth_udp_test#(
     
     wire                 mac_not_exist ;
     wire                 arp_found ;
+
+    reg     [31:0]      wr_cnt  ;
     
     parameter IDLE          = 9'b000_000_001 ;
     parameter ARP_REQ       = 9'b000_000_010 ;
@@ -76,7 +78,7 @@ module eth_udp_test#(
     parameter SEND          = 9'b001_000_000 ;
     parameter WAIT          = 9'b010_000_000 ;
     parameter CHECK_ARP     = 9'b100_000_000 ;
-    parameter ONE_SECOND_CNT= 32'd125_000_000;//32'd12500;//
+    parameter ONE_SECOND_CNT= 32'd125000;//32'd12500;//
     
     reg [8:0]    state  ;
     reg [8:0]    state_n ;
@@ -157,7 +159,7 @@ module eth_udp_test#(
     end
 
 assign led4 = (state == WAIT) ;
-assign led5 = (state == WRITE_RAM) ;
+assign led5 = (wr_cnt == 'd0) ;
 
 
     reg          gmii_rx_dv_1d;
@@ -262,7 +264,7 @@ assign led5 = (state == WRITE_RAM) ;
     end
     
     reg [15:0]  test_cnt;
-    reg [31:0]  wr_cnt  ;
+
 
     always@(posedge rgmii_clk)
     begin
@@ -272,14 +274,12 @@ assign led5 = (state == WRITE_RAM) ;
             // ram_wr_data <= 0;
             ram_wr_en  <= 0 ;
             test_cnt   <= 0;
+            wr_cnt <= 'd0;
         end
         else if (state == WRITE_RAM)
         begin
-            if(test_cnt == 'd1000 || wr_cnt == sample_num)
+            if(test_cnt == 'd1000 || wr_cnt >= sample_num)
             begin
-                if (wr_cnt == sample_num) begin
-                    wr_cnt <= 'd0;
-                end
                 ram_wr_en <=1'b0;
                 write_end <= 1'b1;
             end
@@ -294,6 +294,9 @@ assign led5 = (state == WRITE_RAM) ;
         end
         else
         begin
+            if (wr_cnt >= sample_num) begin
+                wr_cnt <= 'd0;
+            end
             write_end  <= 1'b0;
             // ram_wr_data <= 0;
             ram_wr_en  <= 0 ;
@@ -305,7 +308,9 @@ always @(posedge rgmii_clk) begin
     if(rstn == 1'b0) begin
         fifo_ren <= 'd0;
     end else begin
-        if (state_n == WRITE_RAM) begin
+        if (test_cnt >= 'd999) begin
+            fifo_ren <= 'd0;
+        end else if (state_n == WRITE_RAM) begin
             fifo_ren <= 'd1;
         end
     end
@@ -315,41 +320,41 @@ always @(posedge rgmii_clk) begin
     if(rstn == 1'b0) begin
         ethernet_read_done <= 'd1;
     end else begin
-        if (wr_cnt == sample_num && sample_num != 'd0) begin
-            ethernet_read_done <= 'd1;
-        end else if (start_posedge) begin
+        if (start_posedge) begin
             ethernet_read_done <= 'd0;
+        end else if (wr_cnt >= sample_num && sample_num != 'd0) begin
+            ethernet_read_done <= 'd1;
         end
     end
 end
 
-reg                                     start_r0                ;
-reg                                     start_r1                ;
-reg                                     start_r2                ;
-reg                                     start_posedge      /* synthesis PAP_MARK_DEBUG="true" */     ;
+// reg                                     start_r0                ;
+// reg                                     start_r1                ;
+// reg                                     start_r2                ;
+// reg                                     start_posedge      /* synthesis PAP_MARK_DEBUG="true" */     ;
 
-always @(posedge rgmii_clk or negedge rstn) begin
-    if(rstn == 1'b0) begin
-        start_r0 <= 'd0;
-        start_r1 <= 'd0;
-        start_r2 <= 'd0;
-    end else begin
-        start_r0 <= sample_run;
-        start_r1 <= start_r0;
-        start_r2 <= start_r1;
-    end
-end
+// always @(posedge rgmii_clk or negedge rstn) begin
+//     if(rstn == 1'b0) begin
+//         start_r0 <= 'd0;
+//         start_r1 <= 'd0;
+//         start_r2 <= 'd0;
+//     end else begin
+//         start_r0 <= sample_run;
+//         start_r1 <= start_r0;
+//         start_r2 <= start_r1;
+//     end
+// end
 
-always @(posedge rgmii_clk or negedge rstn) begin
-    if(rstn == 1'b0) begin
-        start_posedge <= 'd0;
-    end else begin
-        if (~start_r2 && start_r1) begin
-            start_posedge <= 'd1;
-        end else if (start_posedge) begin
-            start_posedge <= 'd0;
-        end
-    end
-end
+// always @(posedge rgmii_clk or negedge rstn) begin
+//     if(rstn == 1'b0) begin
+//         start_posedge <= 'd0;
+//     end else begin
+//         if (~start_r2 && start_r1) begin
+//             start_posedge <= 'd1;
+//         end else if (start_posedge) begin
+//             start_posedge <= 'd0;
+//         end
+//     end
+// end
 
 endmodule

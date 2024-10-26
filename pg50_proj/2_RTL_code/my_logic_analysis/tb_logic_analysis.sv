@@ -67,16 +67,16 @@ parameter T = 1000000 / CLKIN_FREQ;
 
     initial begin
         din = 'd0;
-        sample_clk_cfg = 'hd;
+        sample_clk_cfg = 'hc;
         trigger_channel = 'd0;
         file = $fopen("./input.txt","w");
         file1 = $fopen("./output.txt","w");
         file2 = $fopen("./output_fifo.txt","w");
-        sample_num = 32'h00000fdd;          //max   32'h00010000
+        sample_num = 32'h00002fff;          //max   32'h00010000
         fifo_ren_net = 'd0;
         i = 0;
         j = 0;
-        triger_type = 'b11;
+        triger_type = 'b00;
         #T
         fifo_ren_net = ~fifo_empty_net;
         rst_n = 1'b1;
@@ -130,14 +130,17 @@ parameter T = 1000000 / CLKIN_FREQ;
     end
 
     initial begin
-        sample_run = 'd0;
+        sample_run = 'd1;
         ethernet_read_done = 'd1;
         // while(1) begin
             @(posedge ddr_init_done);
             #1000;
-            sample_run = 'd1;
-            #T
             sample_run = 'd0;
+            #T
+            sample_run = 'd1;
+            wait(u_my_logic_analysis_top.start_posedge);
+            #T;
+            #T;
             ethernet_read_done = 'd0;
             @(posedge fifo_empty_net);
             ethernet_read_done = 'd1;
@@ -244,14 +247,15 @@ my_logic_analysis_top #(
     .MEM_SPACE_AW       (18                 )       
 ) u_my_logic_analysis_top (
     .clk                (clk                )       ,
+    .clkout1            (clk                )       ,
     .clk_net            (clk                )       ,
-    .in_rst_n           (rst_n              )       ,
+    .rst_n              (rst_n              )       ,
     .sample_clk_cfg     (sample_clk_cfg     )       ,
     .sample_num         (sample_num         )       ,  
     .triger_type        (triger_type        )       , 
     .trigger_channel    (trigger_channel    )       ,
     .sample_run         (sample_run         )       , 
-    .din                ({5'h1f,txd_debug}   )       ,
+    .din                ({5'h1f,txd_debug}  )       ,
     .ddr_init_done      (ddr_init_done      )       ,
 
     .fifo_ren_net       (fifo_ren_net       )       ,
@@ -259,6 +263,9 @@ my_logic_analysis_top #(
     .fifo_empty_net     (fifo_empty_net     )       ,
     .almost_empty       (almost_empty       )       ,
     .ethernet_read_done (ethernet_read_done )       ,
+    .ddrout_almost_full (ddrout_almost_full )       ,
+    .led6               (led6               )       ,
+    .dout_done          (dout_done          )       ,
 
     .mem_rst_n          (mem_rst_n          )       ,
     .mem_ck             (mem_ck             )       ,

@@ -14,23 +14,26 @@ module my_logic_analysis_top #(
     parameter   MEM_SPACE_AW        =   18                                                  
 )(
     input                               clk                 ,
+    input                               clkout1             ,
     input                               clk_net             ,
-    input                               in_rst_n            ,
+    input                               rst_n               ,
     input       [3:0]                   sample_clk_cfg      ,
     input       [31:0]                  sample_num          ,
     input       [1:0]                   triger_type         ,
     input       [2:0]                   trigger_channel     ,
-    input                               sample_run       ,
+    input                               sample_run          ,
     input       [INPUT_WIDTH-1:0]       din                 ,
     output                              ddr_init_done       ,
+    output reg                          start_posedge       ,
 
     input                               fifo_ren_net        ,
     output      [7:0]                   fifo_rdata_net      ,
     output                              fifo_empty_net      ,
-    output                              almost_empty        ,
+    output                              almost_empty     /* synthesis PAP_MARK_DEBUG="true" */   ,
     input                               ethernet_read_done  ,
-
-    output reg                          dout_done_r         ,
+    output                              ddrout_almost_full  ,
+    output                              led6                ,
+    output                              dout_done           ,
 
     output                              mem_rst_n           ,                       
     output                              mem_ck              ,
@@ -51,31 +54,29 @@ module my_logic_analysis_top #(
     localparam   DLY                 =   1                ;
     // localparam [CTRL_ADDR_WIDTH:0] AXI_ADDR_MAX = (1'b1<<MEM_SPACE_AW);
 
-    wire                            clk_ip                 ;  
-    wire                            clkout1             ;
+    wire                            clk_ip       /* synthesis PAP_MARK_DEBUG="<0/c0/0>" */          ;  
+    // wire                            clkout1      /* synthesis PAP_MARK_DEBUG="<0/c0/0>" */       ;            
     wire [MEM_DQ_WIDTH*8-1:0]       dout                ;       
     wire                            fifo_wen            ;
     wire                            fifo_data_full      ;
     wire                            empty               ;
     wire                            fifo_data_alfull    ;
     reg  [CTRL_ADDR_WIDTH-1:0]      axi_awaddr          ;
-    reg                             axi_awuser_ap       ;
-    reg  [3:0]                      axi_awuser_id       ;
     reg  [3:0]                      axi_awlen           ;
-    reg                             axi_awready         ;
-    reg                             axi_awvalid         ;
-    reg  [MEM_DQ_WIDTH*8-1:0]       axi_wdata           ;
-    reg  [MEM_DQ_WIDTH*8/8-1:0]     axi_wstrb           ;
-    reg                             axi_wready          ;
+    wire                            axi_awready    /* synthesis PAP_MARK_DEBUG="true" */     ;
+    reg                             axi_awvalid    /* synthesis PAP_MARK_DEBUG="true" */     ;
+    wire [MEM_DQ_WIDTH*8-1:0]       axi_wdata           ;
+    wire [MEM_DQ_WIDTH*8/8-1:0]     axi_wstrb           ;
+    wire                            axi_wready          ;
     wire                            ren                 ;
     reg                             ren_r               ;
     reg                             ren_reset           ;
 
     reg  [CTRL_ADDR_WIDTH-1:0]       axi_araddr         ;
     reg  [3:0]                       axi_arlen          ;
-    reg                              axi_arready        ;
-    reg                              axi_arvalid        ;
-    reg                              axi_rlast          ;
+    wire                             axi_arready      /* synthesis PAP_MARK_DEBUG="true" */    ;
+    reg                              axi_arvalid      /* synthesis PAP_MARK_DEBUG="true" */    ;
+    wire                             axi_rlast          ;
 
     reg  [2:0]                      cur_w_state            ;
     reg  [2:0]                      nex_w_state            ;
@@ -88,13 +89,15 @@ module my_logic_analysis_top #(
     reg                             first_ddr_read      ; 
     reg     [7:0]                   axi_r_cnt           ;
     reg     [7:0]                   axi_arlen_cnt       ;
-    reg                             dout_done           ;
-    wire                            rst_n               ;
-    reg                             wr_full             ;
+    reg                             start_r0            ;
+    reg                             start_r1            ;
+    reg                             start_r2            ;
+    // reg                             start_posedge       ;
+    wire                            wr_full             ;
 
-    reg     [MEM_DQ_WIDTH*8-1:0]    axi_rdata           ;
-    reg                             axi_rvalid          ;
-    wire                            ddrout_almost_full  ;
+    wire    [MEM_DQ_WIDTH*8-1:0]    axi_rdata           ;
+    wire                            axi_rvalid          ;
+    // wire                            ddrout_almost_full  ;
     reg     [31:0]                  fifo_cnt_r0         ;
     reg     [31:0]                  fifo_cnt_r1         ;
     wire    [7:0]                   ck_dly_set_bin = 'h15   ;
@@ -117,7 +120,7 @@ localparam S_RD_WAIT  = 3'd2;
 localparam S_RR_WAIT  = 3'd3;
 localparam S_RR_DONE  = 3'd4;
 
-
+assign led6 = (axi_awaddr == axi_araddr);
 assign axi_wstrb = {MEM_DQ_WIDTH{1'b1}};
 
 always @(posedge clk_ip or negedge rst_n) begin
@@ -139,7 +142,7 @@ end
 always @(*) begin
     case (cur_w_state)
         S_WR_IDLE  : begin
-            if (~empty || (dout_done_r && axi_awaddr < (fifo_cnt_r1 << DDR_WIDTH_SHIFT))) begin
+            if (~empty || (dout_done && axi_awaddr < (fifo_cnt_r1 << DDR_WIDTH_SHIFT))) begin
                 nex_w_state =  S_WA_START;
             end else begin
                 nex_w_state =  S_WR_IDLE;
@@ -181,7 +184,7 @@ always @(*) begin
             // if (ddr_init_done && ~first_ddr_read) begin
             //     nex_r_state =  S_RA_START;
             // end else 
-            if (~ddrout_almost_full && dout_done_r && (axi_awaddr > axi_araddr)) begin
+            if (~ddrout_almost_full && dout_done && (axi_awaddr > axi_araddr)) begin
                 nex_r_state =  S_RA_START;
             end else begin
                 nex_r_state =  S_RR_IDLE;
@@ -376,17 +379,17 @@ end
 // end
 
 
-always @(posedge clkout1 or negedge rst_n) begin
-    if (!rst_n) begin
-        dout_done_r <= 'd0;
-    end else begin
-        if (dout_done) begin    
-            dout_done_r <= 'd1;
-        end else if (ethernet_read_done) begin
-            dout_done_r <= 'd0;
-        end
-    end
-end
+// always @(posedge clkout1 or negedge rst_n) begin
+//     if (!rst_n) begin
+//         dout_done_r <= 'd0;
+//     end else begin
+//         if (dout_done) begin    
+//             dout_done_r <= 'd1;
+//         end else if (ethernet_read_done) begin
+//             dout_done_r <= 'd0;
+//         end
+//     end
+// end
 
 
 
@@ -396,10 +399,11 @@ my_logic_analysis #(
 ) u_my_logic_analysis (  
     .clk                (clkout1            )       ,
     .rst_n              (rst_n              )       ,
+    .ddr_init_done      (ddr_init_done      )       ,
     .sample_clk_cfg     (sample_clk_cfg     )       ,
     .sample_num         (sample_num         )       ,
     .triger_type        (triger_type        )       ,
-    .sample_run      (sample_run      )       ,
+    .start_posedge      (start_posedge      )       ,
     .ethernet_read_done (ethernet_read_done )       ,
     .trigger_channel    (trigger_channel    )       ,
     .din                (din                )       ,   
@@ -514,14 +518,38 @@ ddr3_ip u_ddr3_ip(
 );
 
 
-pll_ip u_pll_ip (
-  	.pll_rst(~in_rst_n),      // input
-  	.clkin1(clk),        // input
-  	.pll_lock(pll_lock),    // output
-  	.clkout0(clkout0),      // output
-  	.clkout1(clkout1)       // output
-);
-assign rst_n = pll_lock & in_rst_n;
+always @(posedge clk or negedge rst_n) begin
+    if(rst_n == 1'b0) begin
+        start_r0 <= 'd0;
+        start_r1 <= 'd0;
+        start_r2 <= 'd0;
+    end else begin
+        start_r0 <= sample_run;
+        start_r1 <= start_r0;
+        start_r2 <= start_r1;
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if(rst_n == 1'b0) begin
+        start_posedge <= 'd0;
+    end else begin
+        if (~start_r2 && start_r1 && ddr_init_done) begin
+            start_posedge <= 'd1;
+        end else if (~ethernet_read_done) begin
+            start_posedge <= 'd0;
+        end
+    end
+end
+
+// pll_ip u_pll_ip (
+//   	.pll_rst(~in_rst_n),      // input
+//   	.clkin1(clk),        // input
+//   	.pll_lock(pll_lock),    // output
+//   	.clkout0(clkout0),      // output
+//   	.clkout1(clkout1)       // output
+// );
+// assign rst_n = in_rst_n;
 assign fifo_rst = ~rst_n || ethernet_read_done_posedge;
 
 always @(posedge clk or negedge rst_n) begin

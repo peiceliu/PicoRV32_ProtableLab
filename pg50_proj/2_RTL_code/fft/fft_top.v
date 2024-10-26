@@ -314,11 +314,6 @@ always @(posedge clk or negedge rst_n) begin
         end else if (data_out > data_out_max2 && data_out <= data_out_max1 && ram_wen && ram_waddr != 'd0) begin
             data_out_max2 <= #DLY data_out;
             ram_waddr_max2 <= #DLY ram_waddr;
-        end else if (fft_start) begin
-            data_out_max1 <=  #DLY 'd0;
-            data_out_max2 <=  #DLY 'd0;
-            ram_waddr_max1 <=  #DLY 'd0;
-            ram_waddr_max2 <=  #DLY 'd0;
         end
     end
 end
