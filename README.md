@@ -28,19 +28,19 @@ PicoRV32软核作为主控MCU与FPGA的并行处理能力相结合，系统实�
 4. 逻辑分析仪
 支持最高500 MHz采样速率和1 GSa采样深度，8G DDR3存储容量，支持通过以太网进行数据传输，确保大规模数据采集的同时具备低延迟传输能力。支持UART、SPI、I2C、CAN、1-Wire等多种协议解析，且解析模块可灵活配置。
 ### 项目文件路径说明：
-│ README.md								 作品介绍及完成性能指标
-├─pg50_proj
-│   ├─ 1_Hardware								 自制转接板PCB文件
-│   ├─ 2_RTL_code								FPGA部分Verilog代码
-│   │	├─ PicoRV32_SoC								 软核SoC
-│   │	├─ Signal_Generator							   信号发生器
-│   │	├─ Oscilloscope										示波器
-│   │	├─ Spectrum_Analyzer									频谱仪
-│   │	├─ Logic_Analyzer							   逻辑分析仪
-│   │	├─ HDMI_Display							 HDMI显示屏
-│   ├─ 3_Software				  软核C语言程序及上位机Python程序
-│   └─ 4_Doc									比赛初期简易设计文档
-├─reference_doc												 参考文献
+README.md  // 作品介绍及完成性能指标
+├─ pg50_proj
+│   ├─ 1_Hardware           // 自制转接板PCB文件
+│   ├─ 2_RTL_code           // FPGA部分Verilog代码
+│   │   ├─ PicoRV32_SoC     // 软核SoC
+│   │   ├─ Signal_Generator  // 信号发生器
+│   │   ├─ Oscilloscope      // 示波器
+│   │   ├─ Spectrum_Analyzer  // 频谱仪
+│   │   ├─ Logic_Analyzer     // 逻辑分析仪
+│   │   └─ HDMI_Display       // HDMI显示屏
+│   ├─ 3_Software            // 软核C语言程序及上位机Python程序
+│   └─ 4_Doc                 // 比赛初期简易设计文档
+├─ reference_doc             // 参考文献
 │   ├─ 《11_以太网传输实验例程说明v1》
 │   ├─ 《5_6_HDMI实验例程说明v2》
 │   ├─ 《7_DDR读写实验例程说明v1》
@@ -50,3 +50,4 @@ PicoRV32软核作为主控MCU与FPGA的并行处理能力相结合，系统实�
 │   ├─ 《PicoRV32 DEMO应用指南》
 │   ├─ 《PicoRV32 IDE Quick Start应用指南v1.0》
 │   └─ 《开拓者Nios II开发指南 V3.0》
+
