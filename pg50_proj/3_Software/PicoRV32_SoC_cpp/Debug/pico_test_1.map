@@ -1,0 +1,257 @@
+Archive member included to satisfy reference by file (symbol)
+
+d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(muldf3.o)
+                              ./src/uart.o (__muldf3)
+d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(subdf3.o)
+                              ./src/uart.o (__subdf3)
+d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(fixdfsi.o)
+                              ./src/uart.o (__fixdfsi)
+d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(floatunsidf.o)
+                              ./src/uart.o (__floatunsidf)
+d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clzsi2.o)
+                              d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(muldf3.o) (__clzsi2)
+d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clz.o)
+                              d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clzsi2.o) (__clz_tab)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+SMEM             0x0000000000001000 0x0000000000010000 xr
+RAM              0x0000000000000000 0x0000000000001000 xrw
+//FLASH          0x0000000000100000 0x0000000000400000 xr
+//RAM            0x0000000000000000 0x0000000000000400 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD ./src/main.o
+LOAD ./src/start.o
+LOAD ./src/uart.o
+LOAD d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a
+START GROUP
+LOAD d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a
+LOAD d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libg.a
+LOAD d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libc.a
+END GROUP
+LOAD d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a
+
+.text           0x0000000000001000     0x1990
+                0x0000000000001000                . = ALIGN (0x4)
+ *(.text)
+ .text          0x0000000000001000        0x0 ./src/main.o
+ .text          0x0000000000001000       0xc0 ./src/start.o
+ .text          0x00000000000010c0        0x0 ./src/uart.o
+ .text          0x00000000000010c0        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(muldf3.o)
+ .text          0x00000000000010c0        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(subdf3.o)
+ .text          0x00000000000010c0        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(fixdfsi.o)
+ .text          0x00000000000010c0        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(floatunsidf.o)
+ .text          0x00000000000010c0        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clzsi2.o)
+ .text          0x00000000000010c0        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clz.o)
+ *(.text*)
+ .text.startup.main
+                0x00000000000010c0       0x28 ./src/main.o
+                0x00000000000010c0                main
+ .text.print_num
+                0x00000000000010e8        0x6 ./src/uart.o
+                0x00000000000010e8                print_num
+ .text.print_num.part.0
+                0x00000000000010ee       0x4c ./src/uart.o
+ .text.put_char
+                0x000000000000113a       0x20 ./src/uart.o
+                0x000000000000113a                put_char
+ .text.print_str
+                0x000000000000115a       0x28 ./src/uart.o
+                0x000000000000115a                print_str
+ .text.print_hex
+                0x0000000000001182       0x4c ./src/uart.o
+                0x0000000000001182                print_hex
+ .text.print_hex2
+                0x00000000000011ce       0x10 ./src/uart.o
+                0x00000000000011ce                print_hex2
+ .text.print_dec
+                0x00000000000011de       0x10 ./src/uart.o
+                0x00000000000011de                print_dec
+ .text.print_flt
+                0x00000000000011ee       0x78 ./src/uart.o
+                0x00000000000011ee                print_flt
+ .text.printk   0x0000000000001266      0x134 ./src/uart.o
+                0x0000000000001266                printk
+ .text.read_uart
+                0x000000000000139a        0xa ./src/uart.o
+                0x000000000000139a                read_uart
+ .text.serial_receive_data
+                0x00000000000013a4       0xf0 ./src/uart.o
+                0x00000000000013a4                serial_receive_data
+ .text.uart_handler
+                0x0000000000001494       0x52 ./src/uart.o
+                0x0000000000001494                uart_handler
+ .text.getchar_prompt
+                0x00000000000014e6       0x84 ./src/uart.o
+                0x00000000000014e6                getchar_prompt
+ .text.get_char
+                0x000000000000156a       0x2a ./src/uart.o
+                0x000000000000156a                get_char
+ .text.__muldf3
+                0x0000000000001594      0x68c d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(muldf3.o)
+                0x0000000000001594                __muldf3
+ .text.__subdf3
+                0x0000000000001c20      0x880 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(subdf3.o)
+                0x0000000000001c20                __subdf3
+ .text.__fixdfsi
+                0x00000000000024a0       0x84 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(fixdfsi.o)
+                0x00000000000024a0                __fixdfsi
+ .text.__floatunsidf
+                0x0000000000002524       0xc0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(floatunsidf.o)
+                0x0000000000002524                __floatunsidf
+ .text.__clzsi2
+                0x00000000000025e4       0x94 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clzsi2.o)
+                0x00000000000025e4                __clzsi2
+ *(.rodata)
+ *(.rodata*)
+ .rodata.main.str1.4
+                0x0000000000002678       0x2a ./src/main.o
+ *fill*         0x00000000000026a2        0x2 
+ .rodata.printk
+                0x00000000000026a4      0x150 ./src/uart.o
+ *fill*         0x00000000000027f4        0x4 
+ .rodata.print_flt.cst8
+                0x00000000000027f8        0x8 ./src/uart.o
+ .rodata.print_num.part.0.str1.4
+                0x0000000000002800       0x11 ./src/uart.o
+ *fill*         0x0000000000002811        0x3 
+ .rodata.serial_receive_data.str1.4
+                0x0000000000002814       0x27 ./src/uart.o
+ *fill*         0x000000000000283b        0x1 
+ .rodata.uart_handler.str1.4
+                0x000000000000283c       0x14 ./src/uart.o
+ .rodata.__muldf3
+                0x0000000000002850       0x40 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(muldf3.o)
+ .rodata.__clz_tab
+                0x0000000000002890      0x100 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clz.o)
+                0x0000000000002890                __clz_tab
+ *(.srodata)
+ *(.srodata*)
+                0x0000000000002990                . = ALIGN (0x4)
+                0x0000000000002990                _etext = .
+                0x0000000000002990                _sidata = _etext
+
+.rela.dyn       0x0000000000002990        0x0
+ .rela.text.startup.main
+                0x0000000000002990        0x0 ./src/main.o
+ .rela.text     0x0000000000002990        0x0 ./src/main.o
+ .rela.text.print_flt
+                0x0000000000002990        0x0 ./src/main.o
+ .rela.text.__muldf3
+                0x0000000000002990        0x0 ./src/main.o
+ .rela.text.__subdf3
+                0x0000000000002990        0x0 ./src/main.o
+ .rela.text.__floatunsidf
+                0x0000000000002990        0x0 ./src/main.o
+ .rela.text.__clzsi2
+                0x0000000000002990        0x0 ./src/main.o
+
+.data           0x0000000000000000        0x0 load address 0x0000000000002990
+                0x0000000000000000                . = ALIGN (0x4)
+                0x0000000000000000                _sdata = .
+                0x0000000000000000                _ram_start = .
+                0x0000000000000000                . = ALIGN (0x4)
+ *(.data)
+ .data          0x0000000000000000        0x0 ./src/main.o
+ .data          0x0000000000000000        0x0 ./src/start.o
+ .data          0x0000000000000000        0x0 ./src/uart.o
+ .data          0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(muldf3.o)
+ .data          0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(subdf3.o)
+ .data          0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(fixdfsi.o)
+ .data          0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(floatunsidf.o)
+ .data          0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clzsi2.o)
+ .data          0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clz.o)
+ *(.data*)
+ *(.sdata)
+ *(.sdata*)
+                0x0000000000000000                . = ALIGN (0x4)
+                0x0000000000000000                _edata = .
+
+.bss            0x0000000000000000        0xc load address 0x0000000000002990
+                0x0000000000000000                . = ALIGN (0x4)
+                0x0000000000000000                _sbss = .
+ *(.bss)
+ .bss           0x0000000000000000        0x0 ./src/main.o
+ .bss           0x0000000000000000        0x0 ./src/start.o
+ .bss           0x0000000000000000        0x0 ./src/uart.o
+ .bss           0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(muldf3.o)
+ .bss           0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(subdf3.o)
+ .bss           0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(fixdfsi.o)
+ .bss           0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(floatunsidf.o)
+ .bss           0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clzsi2.o)
+ .bss           0x0000000000000000        0x0 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clz.o)
+ *(.bss*)
+ *(.sbss)
+ *(.sbss*)
+ .sbss.FLAG     0x0000000000000000        0x4 ./src/uart.o
+                0x0000000000000000                FLAG
+ .sbss.package.2518
+                0x0000000000000004        0x6 ./src/uart.o
+ .sbss.package_num.2520
+                0x000000000000000a        0x1 ./src/uart.o
+ .sbss.state.2519
+                0x000000000000000b        0x1 ./src/uart.o
+ *(COMMON)
+                0x000000000000000c                . = ALIGN (0x4)
+                0x000000000000000c                _ebss = .
+
+.heap           0x000000000000000c        0x0
+                0x000000000000000c                . = ALIGN (0x4)
+                0x000000000000000c                _heap_start = .
+OUTPUT(pico_test_1.elf elf32-littleriscv)
+
+.debug_info     0x0000000000000000     0x1b5e
+ .debug_info    0x0000000000000000      0x90e ./src/main.o
+ .debug_info    0x000000000000090e       0x26 ./src/start.o
+ .debug_info    0x0000000000000934     0x122a ./src/uart.o
+
+.debug_abbrev   0x0000000000000000      0x638
+ .debug_abbrev  0x0000000000000000      0x1da ./src/main.o
+ .debug_abbrev  0x00000000000001da       0x14 ./src/start.o
+ .debug_abbrev  0x00000000000001ee      0x44a ./src/uart.o
+
+.debug_aranges  0x0000000000000000       0xc8
+ .debug_aranges
+                0x0000000000000000       0x20 ./src/main.o
+ .debug_aranges
+                0x0000000000000020       0x20 ./src/start.o
+ .debug_aranges
+                0x0000000000000040       0x88 ./src/uart.o
+
+.debug_ranges   0x0000000000000000      0x310
+ .debug_ranges  0x0000000000000000       0x10 ./src/main.o
+ .debug_ranges  0x0000000000000010      0x300 ./src/uart.o
+
+.debug_line     0x0000000000000000      0xbe0
+ .debug_line    0x0000000000000000      0x250 ./src/main.o
+ .debug_line    0x0000000000000250      0x16f ./src/start.o
+ .debug_line    0x00000000000003bf      0x821 ./src/uart.o
+
+.debug_str      0x0000000000000000      0x659
+ .debug_str     0x0000000000000000      0x52a ./src/main.o
+                                        0x58b (size before relaxing)
+ .debug_str     0x000000000000052a       0x1b ./src/start.o
+                                         0x4c (size before relaxing)
+ .debug_str     0x0000000000000545      0x114 ./src/uart.o
+                                        0x6c2 (size before relaxing)
+
+.comment        0x0000000000000000       0x3a
+ .comment       0x0000000000000000       0x3a ./src/main.o
+                                         0x3b (size before relaxing)
+ .comment       0x000000000000003a       0x3b ./src/uart.o
+
+.debug_frame    0x0000000000000000      0x324
+ .debug_frame   0x0000000000000000       0x2c ./src/main.o
+ .debug_frame   0x000000000000002c      0x1f0 ./src/uart.o
+ .debug_frame   0x000000000000021c       0x54 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(muldf3.o)
+ .debug_frame   0x0000000000000270       0x40 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(subdf3.o)
+ .debug_frame   0x00000000000002b0       0x20 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(fixdfsi.o)
+ .debug_frame   0x00000000000002d0       0x34 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(floatunsidf.o)
+ .debug_frame   0x0000000000000304       0x20 d:/hummingbird/hbird-eclipse_2018_09/gnu mcu eclipse/risc-v embedded gcc/7.2.0-4-20180606-1631/bin/../lib/gcc/riscv-none-embed/7.2.0/rv32im/ilp32\libgcc.a(_clzsi2.o)
+
+.debug_loc      0x0000000000000000      0x7d4
+ .debug_loc     0x0000000000000000      0x7d4 ./src/uart.o

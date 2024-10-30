@@ -1,0 +1,163 @@
+   1              	# 1 "../src/start.S"
+   1              		.section .text
+   0              	
+   0              	
+   0              	
+   2              	
+   3              	start:
+   4              		# zero-initialize register file
+   5 0000 93000000 		addi x1, zero, 0
+   6              		# x2 (sp) is initialized by reset
+   7 0004 93010000 		addi x3, zero, 0
+   8 0008 13020000 		addi x4, zero, 0
+   9 000c 93020000 		addi x5, zero, 0
+  10 0010 13030000 		addi x6, zero, 0
+  11 0014 93030000 		addi x7, zero, 0
+  12 0018 13040000 		addi x8, zero, 0
+  13 001c 93040000 		addi x9, zero, 0
+  14 0020 13050000 		addi x10, zero, 0
+  15 0024 93050000 		addi x11, zero, 0
+  16 0028 13060000 		addi x12, zero, 0
+  17 002c 93060000 		addi x13, zero, 0
+  18 0030 13070000 		addi x14, zero, 0
+  19 0034 93070000 		addi x15, zero, 0
+  20 0038 13080000 		addi x16, zero, 0
+  21 003c 93080000 		addi x17, zero, 0
+  22 0040 13090000 		addi x18, zero, 0
+  23 0044 93090000 		addi x19, zero, 0
+  24 0048 130A0000 		addi x20, zero, 0
+  25 004c 930A0000 		addi x21, zero, 0
+  26 0050 130B0000 		addi x22, zero, 0
+  27 0054 930B0000 		addi x23, zero, 0
+  28 0058 130C0000 		addi x24, zero, 0
+  29 005c 930C0000 		addi x25, zero, 0
+  30 0060 130D0000 		addi x26, zero, 0
+  31 0064 930D0000 		addi x27, zero, 0
+  32 0068 130E0000 		addi x28, zero, 0
+  33 006c 930E0000 		addi x29, zero, 0
+  34 0070 130F0000 		addi x30, zero, 0
+  35 0074 930F0000 		addi x31, zero, 0
+  36              	
+  37              		# zero initialize entire scratchpad memory
+  38 0078 0145     		li a0, 0x00000000
+  39              	setmemloop:
+  40 007a 08C1     		sw a0, 0(a0)
+  41 007c 1105     		addi a0, a0, 4
+  42 007e E34E25FE 		blt a0, sp, setmemloop
+  43              	
+  44              		# copy data section
+  45 0082 17050000 		la a0, _sidata
+  45      13050500 
+  46 008a 97050000 		la a1, _sdata
+  46      93850500 
+  47 0092 17060000 		la a2, _edata
+  47      13060600 
+  48 009a 63D8C500 		bge a1, a2, end_init_data
+  49              	loop_init_data:
+  50 009e 1441     		lw a3, 0(a0)
+  51 00a0 94C1     		sw a3, 0(a1)
+  52 00a2 1105     		addi a0, a0, 4
+  53 00a4 9105     		addi a1, a1, 4
+  54 00a6 E3CCC5FE 		blt a1, a2, loop_init_data
+  55              	end_init_data:
+  56              	
+  57              		# zero-init bss section
+  58 00aa 17050000 		la a0, _sbss
+  58      13050500 
+  59 00b2 97050000 		la a1, _ebss
+  59      93850500 
+  60 00ba 6357B500 		bge a0, a1, end_init_bss
+  61              	loop_init_bss:
+  62 00be 23200500 		sw zero, 0(a0)
+  63 00c2 1105     		addi a0, a0, 4
+  64 00c4 E34DB5FE 		blt a0, a1, loop_init_bss
+  65              	end_init_bss:
+  66              	
+  67              	
+  68              		/* jump to main C code */
+  69 00c8 EFF09FF3 		jal ra,main
+  70              	
+  71              	1:
+  72 00cc 01A0     		j 1b
+  73              	
+  74              		/* trap */
+  75 00ce 0290     		ebreak
+DEFINED SYMBOLS
+      ../src/start.S:3      .text:0000000000000000 start
+      ../src/start.S:5      .text:0000000000000000 .L0 
+      ../src/start.S:7      .text:0000000000000004 .L0 
+      ../src/start.S:8      .text:0000000000000008 .L0 
+      ../src/start.S:9      .text:000000000000000c .L0 
+      ../src/start.S:10     .text:0000000000000010 .L0 
+      ../src/start.S:11     .text:0000000000000014 .L0 
+      ../src/start.S:12     .text:0000000000000018 .L0 
+      ../src/start.S:13     .text:000000000000001c .L0 
+      ../src/start.S:14     .text:0000000000000020 .L0 
+      ../src/start.S:15     .text:0000000000000024 .L0 
+      ../src/start.S:16     .text:0000000000000028 .L0 
+      ../src/start.S:17     .text:000000000000002c .L0 
+      ../src/start.S:18     .text:0000000000000030 .L0 
+      ../src/start.S:19     .text:0000000000000034 .L0 
+      ../src/start.S:20     .text:0000000000000038 .L0 
+      ../src/start.S:21     .text:000000000000003c .L0 
+      ../src/start.S:22     .text:0000000000000040 .L0 
+      ../src/start.S:23     .text:0000000000000044 .L0 
+      ../src/start.S:24     .text:0000000000000048 .L0 
+      ../src/start.S:25     .text:000000000000004c .L0 
+      ../src/start.S:26     .text:0000000000000050 .L0 
+      ../src/start.S:27     .text:0000000000000054 .L0 
+      ../src/start.S:28     .text:0000000000000058 .L0 
+      ../src/start.S:29     .text:000000000000005c .L0 
+      ../src/start.S:30     .text:0000000000000060 .L0 
+      ../src/start.S:31     .text:0000000000000064 .L0 
+      ../src/start.S:32     .text:0000000000000068 .L0 
+      ../src/start.S:33     .text:000000000000006c .L0 
+      ../src/start.S:34     .text:0000000000000070 .L0 
+      ../src/start.S:35     .text:0000000000000074 .L0 
+      ../src/start.S:38     .text:0000000000000078 .L0 
+      ../src/start.S:39     .text:000000000000007a setmemloop
+      ../src/start.S:40     .text:000000000000007a .L0 
+      ../src/start.S:41     .text:000000000000007c .L0 
+      ../src/start.S:42     .text:000000000000007e .L0 
+      ../src/start.S:45     .text:0000000000000082 .L0 
+      ../src/start.S:46     .text:000000000000008a .L0 
+      ../src/start.S:47     .text:0000000000000092 .L0 
+      ../src/start.S:55     .text:00000000000000aa end_init_data
+      ../src/start.S:48     .text:000000000000009a .L0 
+      ../src/start.S:49     .text:000000000000009e loop_init_data
+      ../src/start.S:50     .text:000000000000009e .L0 
+      ../src/start.S:51     .text:00000000000000a0 .L0 
+      ../src/start.S:52     .text:00000000000000a2 .L0 
+      ../src/start.S:53     .text:00000000000000a4 .L0 
+      ../src/start.S:54     .text:00000000000000a6 .L0 
+      ../src/start.S:58     .text:00000000000000aa .L0 
+      ../src/start.S:59     .text:00000000000000b2 .L0 
+      ../src/start.S:65     .text:00000000000000c8 end_init_bss
+      ../src/start.S:60     .text:00000000000000ba .L0 
+      ../src/start.S:61     .text:00000000000000be loop_init_bss
+      ../src/start.S:62     .text:00000000000000be .L0 
+      ../src/start.S:63     .text:00000000000000c2 .L0 
+      ../src/start.S:64     .text:00000000000000c4 .L0 
+      ../src/start.S:69     .text:00000000000000c8 .L0 
+      ../src/start.S:72     .text:00000000000000cc .L0 
+      ../src/start.S:75     .text:00000000000000ce .L0 
+      ../src/start.S:75     .text:00000000000000d0 .L0 
+                            .text:0000000000000000 .L0 
+      ../src/start.S:75     .text:00000000000000d0 .L0 
+                       .debug_str:0000000000000000 .L0 
+                       .debug_str:000000000000000f .L0 
+                       .debug_str:0000000000000040 .L0 
+      ../src/start.S:45     .text:0000000000000082 .L0 
+      ../src/start.S:46     .text:000000000000008a .L0 
+      ../src/start.S:47     .text:0000000000000092 .L0 
+      ../src/start.S:58     .text:00000000000000aa .L0 
+      ../src/start.S:59     .text:00000000000000b2 .L0 
+      ../src/start.S:71     .text:00000000000000cc .L11
+
+UNDEFINED SYMBOLS
+_sidata
+_sdata
+_edata
+_sbss
+_ebss
+main

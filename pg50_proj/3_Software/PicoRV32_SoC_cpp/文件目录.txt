@@ -1,0 +1,23 @@
+﻿pico嵌入式c代码目录结构图：
+
+├─.setting                         //工程配置文件 
+├─Debug                            //调试文件夹
+│  ├─src							//编译生成的.o文件
+│  ├─hex32							//python脚本
+│  ├─makefile						//make编译文件
+│  ├─objects.mk
+│  ├─pico_test_1.bin				//编译生成的.bin文件
+│  ├─pico_test_1.elf				//编译生成的elf文件
+│  ├─pico_test_1.lst				//编译生成的lst文件
+│  ├─pico_test_1.map				//资源分布图
+│  ├─ram.hex32						//hex文件
+│  ├─sources.mk						//编译配置文件
+├─src                              	//代码原文夹
+│  ├─main.c 						//主函数
+│  ├─section.lds 					//链接脚本
+│  ├─start.S 						//系统引导文件（地址分配）
+│  ├─uart.c 						//串口打印文件
+│  ├─uart.h 						//串口打印h文件
+├─Untitled Project.si4project   	//sourceinsight工程文件（可删除）                   
+├─.cproject                      	//工程配置文件
+├─.project                       	//工程配置文件

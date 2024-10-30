@@ -1,0 +1,2808 @@
+
+pico_test_1.elf:     file format elf32-littleriscv
+pico_test_1.elf
+architecture: riscv:rv32, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x00001000
+
+Program Header:
+    LOAD off    0x00001000 vaddr 0x00001000 paddr 0x00001000 align 2**12
+         filesz 0x00001990 memsz 0x00001990 flags r-x
+    LOAD off    0x00003000 vaddr 0x00000000 paddr 0x00002990 align 2**12
+         filesz 0x00000000 memsz 0x0000000c flags rw-
+
+Sections:
+Idx Name           Size      VMA       LMA       File off  Algn  Flags
+  0 .text          00001990  00001000  00001000  00001000  2**3  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data          00000000  00000000  00002990  00003000  2**0  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss           0000000c  00000000  00002990  00003000  2**2  ALLOC
+  3 .heap          00000000  0000000c  0000000c  00003000  2**0  CONTENTS
+  4 .debug_info    00001b5e  00000000  00000000  00003000  2**0  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev  00000638  00000000  00000000  00004b5e  2**0  CONTENTS, READONLY, DEBUGGING
+  6 .debug_aranges 000000c8  00000000  00000000  00005198  2**3  CONTENTS, READONLY, DEBUGGING
+  7 .debug_ranges  00000310  00000000  00000000  00005260  2**0  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line    00000be0  00000000  00000000  00005570  2**0  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str     00000659  00000000  00000000  00006150  2**0  CONTENTS, READONLY, DEBUGGING
+ 10 .comment       0000003a  00000000  00000000  000067a9  2**0  CONTENTS, READONLY
+ 11 .debug_frame   00000324  00000000  00000000  000067e4  2**2  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_loc     000007d4  00000000  00000000  00006b08  2**0  CONTENTS, READONLY, DEBUGGING
+SYMBOL TABLE:
+00001000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+0000000c l    d  .heap	00000000 .heap
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_ranges	00000000 .debug_ranges
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .debug_frame	00000000 .debug_frame
+00000000 l    d  .debug_loc	00000000 .debug_loc
+00000000 l    df *ABS*	00000000 main.c
+00000000 l    df *ABS*	00000000 ./src/start.o
+00001000 l       .text	00000000 start
+0000107a l       .text	00000000 setmemloop
+000010a2 l       .text	00000000 end_init_data
+00001096 l       .text	00000000 loop_init_data
+000010b8 l       .text	00000000 end_init_bss
+000010ae l       .text	00000000 loop_init_bss
+00000000 l    df *ABS*	00000000 uart.c
+000010ee l     F .text	0000004c print_num.part.0
+00000004 l     O .bss	00000006 package.2518
+0000000a l     O .bss	00000001 package_num.2520
+0000000b l     O .bss	00000001 state.2519
+00000000 l    df *ABS*	00000000 muldf3.c
+00000000 l    df *ABS*	00000000 subdf3.c
+00000000 l    df *ABS*	00000000 fixdfsi.c
+00000000 l    df *ABS*	00000000 floatunsidf.c
+00000000 l    df *ABS*	00000000 libgcc2.c
+00000000 l    df *ABS*	00000000 libgcc2.c
+000011ee g     F .text	00000078 print_flt
+00002990 g       .text	00000000 _sidata
+0000139a g     F .text	0000000a read_uart
+00002990 g       .text	00000000 _etext
+00000000 g       .bss	00000000 _sbss
+000014e6 g     F .text	00000084 getchar_prompt
+0000115a g     F .text	00000028 print_str
+00000000 g       .data	00000000 _sdata
+000011de g     F .text	00000010 print_dec
+00002524 g     F .text	000000c0 .hidden __floatunsidf
+000013a4 g     F .text	000000f0 serial_receive_data
+0000000c g       .bss	00000000 _ebss
+000024a0 g     F .text	00000084 .hidden __fixdfsi
+0000000c g       .heap	00000000 _heap_start
+00000000 g       .data	00000000 _ram_start
+0000156a g     F .text	0000002a get_char
+000025e4 g     F .text	00000094 .hidden __clzsi2
+00001266 g     F .text	00000134 printk
+00001594 g     F .text	0000068c .hidden __muldf3
+000011ce g     F .text	00000010 print_hex2
+000010c0 g     F .text	00000028 main
+00001182 g     F .text	0000004c print_hex
+00002890 g     O .text	00000100 .hidden __clz_tab
+000010e8 g     F .text	00000006 print_num
+00000000 g       .data	00000000 _edata
+00001494 g     F .text	00000052 uart_handler
+00001c20 g     F .text	00000880 .hidden __subdf3
+0000113a g     F .text	00000020 put_char
+00000000 g     O .bss	00000004 FLAG
+
+
+
+Disassembly of section .text:
+
+00001000 <start>:
+start():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:5
+	.section .text
+
+start:
+	# zero-initialize register file
+	addi x1, zero, 0
+    1000:	00000093          	li	ra,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:7
+	# x2 (sp) is initialized by reset
+	addi x3, zero, 0
+    1004:	00000193          	li	gp,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:8
+	addi x4, zero, 0
+    1008:	00000213          	li	tp,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:9
+	addi x5, zero, 0
+    100c:	00000293          	li	t0,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:10
+	addi x6, zero, 0
+    1010:	00000313          	li	t1,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:11
+	addi x7, zero, 0
+    1014:	00000393          	li	t2,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:12
+	addi x8, zero, 0
+    1018:	00000413          	li	s0,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:13
+	addi x9, zero, 0
+    101c:	00000493          	li	s1,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:14
+	addi x10, zero, 0
+    1020:	00000513          	li	a0,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:15
+	addi x11, zero, 0
+    1024:	00000593          	li	a1,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:16
+	addi x12, zero, 0
+    1028:	00000613          	li	a2,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:17
+	addi x13, zero, 0
+    102c:	00000693          	li	a3,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:18
+	addi x14, zero, 0
+    1030:	00000713          	li	a4,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:19
+	addi x15, zero, 0
+    1034:	00000793          	li	a5,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:20
+	addi x16, zero, 0
+    1038:	00000813          	li	a6,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:21
+	addi x17, zero, 0
+    103c:	00000893          	li	a7,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:22
+	addi x18, zero, 0
+    1040:	00000913          	li	s2,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:23
+	addi x19, zero, 0
+    1044:	00000993          	li	s3,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:24
+	addi x20, zero, 0
+    1048:	00000a13          	li	s4,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:25
+	addi x21, zero, 0
+    104c:	00000a93          	li	s5,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:26
+	addi x22, zero, 0
+    1050:	00000b13          	li	s6,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:27
+	addi x23, zero, 0
+    1054:	00000b93          	li	s7,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:28
+	addi x24, zero, 0
+    1058:	00000c13          	li	s8,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:29
+	addi x25, zero, 0
+    105c:	00000c93          	li	s9,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:30
+	addi x26, zero, 0
+    1060:	00000d13          	li	s10,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:31
+	addi x27, zero, 0
+    1064:	00000d93          	li	s11,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:32
+	addi x28, zero, 0
+    1068:	00000e13          	li	t3,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:33
+	addi x29, zero, 0
+    106c:	00000e93          	li	t4,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:34
+	addi x30, zero, 0
+    1070:	00000f13          	li	t5,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:35
+	addi x31, zero, 0
+    1074:	00000f93          	li	t6,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:38
+
+	# zero initialize entire scratchpad memory
+	li a0, 0x00000000
+    1078:	4501                	li	a0,0
+
+0000107a <setmemloop>:
+setmemloop():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:40
+setmemloop:
+	sw a0, 0(a0)
+    107a:	c108                	sw	a0,0(a0)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:41
+	addi a0, a0, 4
+    107c:	0511                	addi	a0,a0,4
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:42
+	blt a0, sp, setmemloop
+    107e:	fe254ee3          	blt	a0,sp,107a <setmemloop>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:45
+
+	# copy data section
+	la a0, _sidata
+    1082:	00002517          	auipc	a0,0x2
+    1086:	90e50513          	addi	a0,a0,-1778 # 2990 <_etext>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:46
+	la a1, _sdata
+    108a:	00000593          	li	a1,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:47
+	la a2, _edata
+    108e:	00000613          	li	a2,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:48
+	bge a1, a2, end_init_data
+    1092:	00c5d863          	ble	a2,a1,10a2 <end_init_data>
+
+00001096 <loop_init_data>:
+loop_init_data():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:50
+loop_init_data:
+	lw a3, 0(a0)
+    1096:	4114                	lw	a3,0(a0)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:51
+	sw a3, 0(a1)
+    1098:	c194                	sw	a3,0(a1)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:52
+	addi a0, a0, 4
+    109a:	0511                	addi	a0,a0,4
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:53
+	addi a1, a1, 4
+    109c:	0591                	addi	a1,a1,4
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:54
+	blt a1, a2, loop_init_data
+    109e:	fec5cce3          	blt	a1,a2,1096 <loop_init_data>
+
+000010a2 <end_init_data>:
+end_init_data():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:58
+end_init_data:
+
+	# zero-init bss section
+	la a0, _sbss
+    10a2:	00000513          	li	a0,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:59
+	la a1, _ebss
+    10a6:	00c00593          	li	a1,12
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:60
+	bge a0, a1, end_init_bss
+    10aa:	00b55763          	ble	a1,a0,10b8 <end_init_bss>
+
+000010ae <loop_init_bss>:
+loop_init_bss():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:62
+loop_init_bss:
+	sw zero, 0(a0)
+    10ae:	00052023          	sw	zero,0(a0)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:63
+	addi a0, a0, 4
+    10b2:	0511                	addi	a0,a0,4
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:64
+	blt a0, a1, loop_init_bss
+    10b4:	feb54de3          	blt	a0,a1,10ae <loop_init_bss>
+
+000010b8 <end_init_bss>:
+end_init_bss():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:69
+end_init_bss:
+
+
+	/* jump to main C code */
+	jal ra,main
+    10b8:	008000ef          	jal	ra,10c0 <main>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:72
+
+1:
+	j 1b
+    10bc:	a001                	j	10bc <end_init_bss+0x4>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/start.S:75
+
+	/* trap */
+	ebreak
+    10be:	9002                	ebreak
+
+000010c0 <main>:
+main():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/main.c:14
+#define BAUND_115200			(SYSTEM_CLOCK/115200)
+
+
+
+int main(void)
+{
+    10c0:	1141                	addi	sp,sp,-16
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/main.c:15
+	reg_uart_clkdiv = BAUND_9600;
+    10c2:	6785                	lui	a5,0x1
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/main.c:14
+{
+    10c4:	c422                	sw	s0,8(sp)
+    10c6:	c606                	sw	ra,12(sp)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/main.c:15
+	reg_uart_clkdiv = BAUND_9600;
+    10c8:	6721                	lui	a4,0x8
+    10ca:	45878793          	addi	a5,a5,1112 # 1458 <serial_receive_data+0xb4>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/main.c:17
+
+    printk("Hello Risc-V Pango 2024\n");
+    10ce:	00002537          	lui	a0,0x2
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/main.c:15
+	reg_uart_clkdiv = BAUND_9600;
+    10d2:	c31c                	sw	a5,0(a4)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/main.c:17
+    printk("Hello Risc-V Pango 2024\n");
+    10d4:	67850513          	addi	a0,a0,1656 # 2678 <__clzsi2+0x94>
+    10d8:	2279                	jal	1266 <printk>
+    10da:	00002437          	lui	s0,0x2
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/main.c:20 (discriminator 1)
+    while(1)
+    {
+    	uart_handler();
+    10de:	2e5d                	jal	1494 <uart_handler>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/main.c:21 (discriminator 1)
+        printk("once handler\n");
+    10e0:	69440513          	addi	a0,s0,1684 # 2694 <__clzsi2+0xb0>
+    10e4:	2249                	jal	1266 <printk>
+    10e6:	bfe5                	j	10de <main+0x1e>
+
+000010e8 <print_num>:
+print_num():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:21
+ ** 输出参数：无
+ ** 返回参数：无
+ ********************************************************************/
+void print_num(uint32_t num, int base)
+{
+	if(num == 0)
+    10e8:	e111                	bnez	a0,10ec <print_num+0x4>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:27
+	{
+		return;
+	}
+	print_num(num/base, base);
+	put_char("0123456789abcdef"[num%base]);							//逆序打印结果
+}
+    10ea:	8082                	ret
+    10ec:	a009                	j	10ee <print_num.part.0>
+
+000010ee <print_num.part.0>:
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:19
+void print_num(uint32_t num, int base)
+    10ee:	1141                	addi	sp,sp,-16
+    10f0:	c422                	sw	s0,8(sp)
+    10f2:	842a                	mv	s0,a0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:25
+	print_num(num/base, base);
+    10f4:	02b55533          	divu	a0,a0,a1
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:19
+void print_num(uint32_t num, int base)
+    10f8:	c226                	sw	s1,4(sp)
+    10fa:	84ae                	mv	s1,a1
+    10fc:	c606                	sw	ra,12(sp)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:25
+	print_num(num/base, base);
+    10fe:	37ed                	jal	10e8 <print_num>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:26
+	put_char("0123456789abcdef"[num%base]);							//逆序打印结果
+    1100:	02947433          	remu	s0,s0,s1
+    1104:	000037b7          	lui	a5,0x3
+    1108:	80078793          	addi	a5,a5,-2048 # 2800 <__clzsi2+0x21c>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+ ** 输出参数：无
+ ** 返回参数：无
+ ********************************************************************/
+void put_char(char c)
+{
+	if (c == '\n')
+    110c:	4729                	li	a4,10
+print_num():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:26
+	put_char("0123456789abcdef"[num%base]);							//逆序打印结果
+    110e:	943e                	add	s0,s0,a5
+    1110:	00040783          	lb	a5,0(s0)
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    1114:	00e78963          	beq	a5,a4,1126 <print_num.part.0+0x38>
+print_num():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:27
+}
+    1118:	40b2                	lw	ra,12(sp)
+    111a:	4422                	lw	s0,8(sp)
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+		put_char('\r');
+	reg_uart_txdata = c;
+    111c:	6721                	lui	a4,0x8
+    111e:	cb1c                	sw	a5,16(a4)
+print_num():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:27
+}
+    1120:	4492                	lw	s1,4(sp)
+    1122:	0141                	addi	sp,sp,16
+    1124:	8082                	ret
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1126:	6721                	lui	a4,0x8
+print_num():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:27
+}
+    1128:	40b2                	lw	ra,12(sp)
+    112a:	4422                	lw	s0,8(sp)
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    112c:	46b5                	li	a3,13
+    112e:	cb14                	sw	a3,16(a4)
+    1130:	6721                	lui	a4,0x8
+    1132:	cb1c                	sw	a5,16(a4)
+print_num():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:27
+}
+    1134:	4492                	lw	s1,4(sp)
+    1136:	0141                	addi	sp,sp,16
+    1138:	8082                	ret
+
+0000113a <put_char>:
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:37
+{
+    113a:	1141                	addi	sp,sp,-16
+    113c:	c422                	sw	s0,8(sp)
+    113e:	c606                	sw	ra,12(sp)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    1140:	47a9                	li	a5,10
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:37
+{
+    1142:	842a                	mv	s0,a0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    1144:	00f50863          	beq	a0,a5,1154 <put_char+0x1a>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1148:	67a1                	lui	a5,0x8
+    114a:	cb80                	sw	s0,16(a5)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:41
+}
+    114c:	40b2                	lw	ra,12(sp)
+    114e:	4422                	lw	s0,8(sp)
+    1150:	0141                	addi	sp,sp,16
+    1152:	8082                	ret
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:39
+		put_char('\r');
+    1154:	4535                	li	a0,13
+    1156:	37d5                	jal	113a <put_char>
+    1158:	bfc5                	j	1148 <put_char+0xe>
+
+0000115a <print_str>:
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+ ** 输出参数：无
+ ** 返回参数：无
+ ********************************************************************/
+void print_str(const char *p)
+{
+	while (*p)
+    115a:	00050783          	lb	a5,0(a0)
+    115e:	c38d                	beqz	a5,1180 <print_str+0x26>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    1160:	46a9                	li	a3,10
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1162:	6721                	lui	a4,0x8
+    1164:	4635                	li	a2,13
+    1166:	a029                	j	1170 <print_str+0x16>
+    1168:	cb1c                	sw	a5,16(a4)
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    116a:	00050783          	lb	a5,0(a0)
+    116e:	cb89                	beqz	a5,1180 <print_str+0x26>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:53
+		put_char(*(p++));
+    1170:	0505                	addi	a0,a0,1
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    1172:	fed79be3          	bne	a5,a3,1168 <print_str+0xe>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1176:	cb10                	sw	a2,16(a4)
+    1178:	cb1c                	sw	a5,16(a4)
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    117a:	00050783          	lb	a5,0(a0)
+    117e:	fbed                	bnez	a5,1170 <print_str+0x16>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:54
+}
+    1180:	8082                	ret
+
+00001182 <print_hex>:
+print_hex():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:65
+ ** 		digits：数据类型（十进制、十六进制、八进制）
+ ** 输出参数：无
+ ** 返回参数：无
+ ********************************************************************/
+void print_hex(uint32_t v, int digits)
+{
+    1182:	000036b7          	lui	a3,0x3
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:66
+	for (int i = 7; i >= 0; i--)
+    1186:	471d                	li	a4,7
+    1188:	80068693          	addi	a3,a3,-2048 # 2800 <__clzsi2+0x21c>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:69
+	{
+		char c = "0123456789abcdef"[(v >> (4*i)) & 15];
+		if (c == '0' && i >= digits)
+    118c:	03000893          	li	a7,48
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1190:	6621                	lui	a2,0x8
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    1192:	4329                	li	t1,10
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1194:	4e35                	li	t3,13
+print_hex():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:66
+	for (int i = 7; i >= 0; i--)
+    1196:	587d                	li	a6,-1
+    1198:	a801                	j	11a8 <print_hex+0x26>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    119a:	02678763          	beq	a5,t1,11c8 <print_hex+0x46>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    119e:	85ba                	mv	a1,a4
+    11a0:	ca1c                	sw	a5,16(a2)
+print_hex():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:66
+	for (int i = 7; i >= 0; i--)
+    11a2:	177d                	addi	a4,a4,-1
+    11a4:	03070163          	beq	a4,a6,11c6 <print_hex+0x44>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:68
+		char c = "0123456789abcdef"[(v >> (4*i)) & 15];
+    11a8:	00271793          	slli	a5,a4,0x2
+    11ac:	00f557b3          	srl	a5,a0,a5
+    11b0:	8bbd                	andi	a5,a5,15
+    11b2:	97b6                	add	a5,a5,a3
+    11b4:	00078783          	lb	a5,0(a5) # 8000 <_etext+0x5670>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:69
+		if (c == '0' && i >= digits)
+    11b8:	ff1791e3          	bne	a5,a7,119a <print_hex+0x18>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:69 (discriminator 1)
+    11bc:	feb741e3          	blt	a4,a1,119e <print_hex+0x1c>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:66
+	for (int i = 7; i >= 0; i--)
+    11c0:	177d                	addi	a4,a4,-1
+    11c2:	ff0713e3          	bne	a4,a6,11a8 <print_hex+0x26>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:74
+			continue;
+		put_char(c);
+		digits = i;
+	}
+}
+    11c6:	8082                	ret
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    11c8:	01c62823          	sw	t3,16(a2) # 8010 <_etext+0x5680>
+    11cc:	bfc9                	j	119e <print_hex+0x1c>
+
+000011ce <print_hex2>:
+print_hex2():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:85
+ ** 输出参数：无
+ ** 返回参数：无
+ ********************************************************************/
+void print_hex2(uint32_t hex)
+{
+	if(0 == hex)
+    11ce:	e511                	bnez	a0,11da <print_hex2+0xc>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    11d0:	67a1                	lui	a5,0x8
+    11d2:	03000713          	li	a4,48
+    11d6:	cb98                	sw	a4,16(a5)
+print_hex2():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:94
+	}
+	else
+	{
+		print_num(hex, 16);											//打印十六进制数
+	}
+}
+    11d8:	8082                	ret
+print_num():
+    11da:	45c1                	li	a1,16
+    11dc:	bf09                	j	10ee <print_num.part.0>
+
+000011de <print_dec>:
+print_dec():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:104
+ ** 输出参数：无
+ ** 返回参数：无
+ ********************************************************************/
+void print_dec(uint32_t v)
+{
+	if(0 == v)
+    11de:	e511                	bnez	a0,11ea <print_dec+0xc>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    11e0:	67a1                	lui	a5,0x8
+    11e2:	03000713          	li	a4,48
+    11e6:	cb98                	sw	a4,16(a5)
+print_dec():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:113
+	}
+	else
+	{
+		print_num(v, 10);											//打印十进制数
+	}
+}
+    11e8:	8082                	ret
+print_num():
+    11ea:	45a9                	li	a1,10
+    11ec:	b709                	j	10ee <print_num.part.0>
+
+000011ee <print_flt>:
+print_flt():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:123
+ ** 输入参数：flt:打印的浮点数
+ ** 输出参数：无
+ ** 返回参数：无
+ ********************************************************************/
+void print_flt(double flt)
+{
+    11ee:	1101                	addi	sp,sp,-32
+    11f0:	cc22                	sw	s0,24(sp)
+    11f2:	c84a                	sw	s2,16(sp)
+    11f4:	c64e                	sw	s3,12(sp)
+    11f6:	ce06                	sw	ra,28(sp)
+    11f8:	ca26                	sw	s1,20(sp)
+    11fa:	892a                	mv	s2,a0
+    11fc:	89ae                	mv	s3,a1
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:127
+	uint32_t icnt = 0;
+	uint32_t tmpint = 0;
+
+	tmpint = (int)(flt);
+    11fe:	2a2010ef          	jal	ra,24a0 <__fixdfsi>
+    1202:	842a                	mv	s0,a0
+print_dec():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:104
+	if(0 == v)
+    1204:	ed31                	bnez	a0,1260 <print_flt+0x72>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1206:	67a1                	lui	a5,0x8
+    1208:	03000713          	li	a4,48
+    120c:	cb98                	sw	a4,16(a5)
+    120e:	02e00793          	li	a5,46
+    1212:	64a1                	lui	s1,0x8
+    1214:	c89c                	sw	a5,16(s1)
+print_flt():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:130
+	print_dec(tmpint);
+	put_char('.');
+	flt = flt - tmpint;
+    1216:	8522                	mv	a0,s0
+    1218:	30c010ef          	jal	ra,2524 <__floatunsidf>
+    121c:	862a                	mv	a2,a0
+    121e:	86ae                	mv	a3,a1
+    1220:	854a                	mv	a0,s2
+    1222:	85ce                	mv	a1,s3
+    1224:	1fd000ef          	jal	ra,1c20 <__subdf3>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:131
+	tmpint = (int)(flt * 1000000);
+    1228:	000027b7          	lui	a5,0x2
+    122c:	7f87a603          	lw	a2,2040(a5) # 27f8 <__clzsi2+0x214>
+    1230:	7fc7a683          	lw	a3,2044(a5)
+    1234:	2685                	jal	1594 <__muldf3>
+    1236:	26a010ef          	jal	ra,24a0 <__fixdfsi>
+print_dec():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:104
+	if(0 == v)
+    123a:	e919                	bnez	a0,1250 <print_flt+0x62>
+print_flt():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:133
+	print_dec(tmpint);
+}
+    123c:	40f2                	lw	ra,28(sp)
+    123e:	4462                	lw	s0,24(sp)
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1240:	03000793          	li	a5,48
+    1244:	c89c                	sw	a5,16(s1)
+print_flt():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:133
+}
+    1246:	4942                	lw	s2,16(sp)
+    1248:	44d2                	lw	s1,20(sp)
+    124a:	49b2                	lw	s3,12(sp)
+    124c:	6105                	addi	sp,sp,32
+    124e:	8082                	ret
+    1250:	4462                	lw	s0,24(sp)
+    1252:	40f2                	lw	ra,28(sp)
+    1254:	44d2                	lw	s1,20(sp)
+    1256:	4942                	lw	s2,16(sp)
+    1258:	49b2                	lw	s3,12(sp)
+print_num():
+    125a:	45a9                	li	a1,10
+print_flt():
+    125c:	6105                	addi	sp,sp,32
+print_num():
+    125e:	bd41                	j	10ee <print_num.part.0>
+    1260:	45a9                	li	a1,10
+    1262:	3571                	jal	10ee <print_num.part.0>
+    1264:	b76d                	j	120e <print_flt+0x20>
+
+00001266 <printk>:
+printk():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:143
+ ** 输入参数：fmt：打印的字符串内容
+ ** 输出参数：无
+ ** 返回参数：无
+ ********************************************************************/
+void printk(char *fmt, ...)
+{
+    1266:	715d                	addi	sp,sp,-80
+    1268:	c0ba                	sw	a4,64(sp)
+    126a:	d606                	sw	ra,44(sp)
+    126c:	d422                	sw	s0,40(sp)
+    126e:	d226                	sw	s1,36(sp)
+    1270:	d04a                	sw	s2,32(sp)
+    1272:	ce4e                	sw	s3,28(sp)
+    1274:	cc52                	sw	s4,24(sp)
+    1276:	ca56                	sw	s5,20(sp)
+    1278:	c85a                	sw	s6,16(sp)
+    127a:	da2e                	sw	a1,52(sp)
+    127c:	dc32                	sw	a2,56(sp)
+    127e:	de36                	sw	a3,60(sp)
+    1280:	c2be                	sw	a5,68(sp)
+    1282:	c4c2                	sw	a6,72(sp)
+    1284:	c6c6                	sw	a7,76(sp)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:150
+	va_list vp;
+
+	va_start(vp, fmt);
+	pfmt = fmt;
+
+	while(*pfmt)
+    1286:	00050783          	lb	a5,0(a0)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:147
+	va_start(vp, fmt);
+    128a:	1858                	addi	a4,sp,52
+    128c:	c63a                	sw	a4,12(sp)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:150
+	while(*pfmt)
+    128e:	c3b9                	beqz	a5,12d4 <printk+0x6e>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:156
+	{
+		switch(*pfmt)
+		{
+			case '%':
+			{
+				switch(*(pfmt + 1))
+    1290:	6a89                	lui	s5,0x2
+    1292:	84aa                	mv	s1,a0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:152
+		switch(*pfmt)
+    1294:	4929                	li	s2,10
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1296:	69a1                	lui	s3,0x8
+    1298:	4b35                	li	s6,13
+printk():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:152
+		switch(*pfmt)
+    129a:	02500a13          	li	s4,37
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:156
+				switch(*(pfmt + 1))
+    129e:	6a4a8a93          	addi	s5,s5,1700 # 26a4 <__clzsi2+0xc0>
+    12a2:	a819                	j	12b8 <printk+0x52>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:152
+		switch(*pfmt)
+    12a4:	05478263          	beq	a5,s4,12e8 <printk+0x82>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    12a8:	8722                	mv	a4,s0
+    12aa:	00f9a823          	sw	a5,16(s3) # 8010 <_etext+0x5680>
+    12ae:	8426                	mv	s0,s1
+    12b0:	84ba                	mv	s1,a4
+printk():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:150
+	while(*pfmt)
+    12b2:	00140783          	lb	a5,1(s0)
+    12b6:	cf99                	beqz	a5,12d4 <printk+0x6e>
+    12b8:	00148413          	addi	s0,s1,1 # 8001 <_etext+0x5671>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:152
+		switch(*pfmt)
+    12bc:	ff2794e3          	bne	a5,s2,12a4 <printk+0x3e>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    12c0:	0169a823          	sw	s6,16(s3)
+    12c4:	87a2                	mv	a5,s0
+    12c6:	0129a823          	sw	s2,16(s3)
+    12ca:	8426                	mv	s0,s1
+    12cc:	84be                	mv	s1,a5
+printk():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:150
+	while(*pfmt)
+    12ce:	00140783          	lb	a5,1(s0)
+    12d2:	f3fd                	bnez	a5,12b8 <printk+0x52>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:208
+				break;
+		}
+		pfmt++;
+	}
+	va_end(vp);
+}
+    12d4:	50b2                	lw	ra,44(sp)
+    12d6:	5422                	lw	s0,40(sp)
+    12d8:	5492                	lw	s1,36(sp)
+    12da:	5902                	lw	s2,32(sp)
+    12dc:	49f2                	lw	s3,28(sp)
+    12de:	4a62                	lw	s4,24(sp)
+    12e0:	4ad2                	lw	s5,20(sp)
+    12e2:	4b42                	lw	s6,16(sp)
+    12e4:	6161                	addi	sp,sp,80
+    12e6:	8082                	ret
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:156
+				switch(*(pfmt + 1))
+    12e8:	0014c783          	lbu	a5,1(s1)
+    12ec:	05300713          	li	a4,83
+    12f0:	fdb78793          	addi	a5,a5,-37
+    12f4:	0ff7f793          	andi	a5,a5,255
+    12f8:	00f76663          	bltu	a4,a5,1304 <printk+0x9e>
+    12fc:	078a                	slli	a5,a5,0x2
+    12fe:	97d6                	add	a5,a5,s5
+    1300:	439c                	lw	a5,0(a5)
+    1302:	8782                	jr	a5
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1304:	87a2                	mv	a5,s0
+    1306:	0149a823          	sw	s4,16(s3)
+    130a:	8426                	mv	s0,s1
+    130c:	84be                	mv	s1,a5
+    130e:	b755                	j	12b2 <printk+0x4c>
+printk():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:159
+						put_char(va_arg(vp, int));
+    1310:	47b2                	lw	a5,12(sp)
+    1312:	00078703          	lb	a4,0(a5)
+    1316:	0791                	addi	a5,a5,4
+    1318:	c63e                	sw	a5,12(sp)
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    131a:	07270d63          	beq	a4,s2,1394 <printk+0x12e>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    131e:	00e9a823          	sw	a4,16(s3)
+    1322:	0489                	addi	s1,s1,2
+printk():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:161
+						break;
+    1324:	b779                	j	12b2 <printk+0x4c>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:182
+						print_hex2(va_arg(vp, int));
+    1326:	47b2                	lw	a5,12(sp)
+    1328:	4388                	lw	a0,0(a5)
+    132a:	0791                	addi	a5,a5,4
+    132c:	c63e                	sw	a5,12(sp)
+print_hex2():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:85
+	if(0 == hex)
+    132e:	ed39                	bnez	a0,138c <printk+0x126>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1330:	03000793          	li	a5,48
+    1334:	00f9a823          	sw	a5,16(s3)
+    1338:	0489                	addi	s1,s1,2
+printk():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:184
+						break;
+    133a:	bfa5                	j	12b2 <printk+0x4c>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:165
+						print_dec(va_arg(vp, int));
+    133c:	47b2                	lw	a5,12(sp)
+    133e:	4388                	lw	a0,0(a5)
+    1340:	0791                	addi	a5,a5,4
+    1342:	c63e                	sw	a5,12(sp)
+print_dec():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:104
+	if(0 == v)
+    1344:	d575                	beqz	a0,1330 <printk+0xca>
+print_num():
+    1346:	45a9                	li	a1,10
+    1348:	335d                	jal	10ee <print_num.part.0>
+    134a:	0489                	addi	s1,s1,2
+    134c:	b79d                	j	12b2 <printk+0x4c>
+printk():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:176
+						print_str(va_arg(vp, char*));
+    134e:	47b2                	lw	a5,12(sp)
+    1350:	4398                	lw	a4,0(a5)
+    1352:	0791                	addi	a5,a5,4
+    1354:	c63e                	sw	a5,12(sp)
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    1356:	00070783          	lb	a5,0(a4) # 8000 <_etext+0x5670>
+    135a:	dff9                	beqz	a5,1338 <printk+0xd2>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:53
+		put_char(*(p++));
+    135c:	0705                	addi	a4,a4,1
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    135e:	01278a63          	beq	a5,s2,1372 <printk+0x10c>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1362:	00f9a823          	sw	a5,16(s3)
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    1366:	00070783          	lb	a5,0(a4)
+    136a:	d7f9                	beqz	a5,1338 <printk+0xd2>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:53
+		put_char(*(p++));
+    136c:	0705                	addi	a4,a4,1
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    136e:	ff279ae3          	bne	a5,s2,1362 <printk+0xfc>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1372:	0169a823          	sw	s6,16(s3)
+    1376:	b7f5                	j	1362 <printk+0xfc>
+printk():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:170
+						print_flt(va_arg(vp, double));
+    1378:	47b2                	lw	a5,12(sp)
+    137a:	0489                	addi	s1,s1,2
+    137c:	079d                	addi	a5,a5,7
+    137e:	9be1                	andi	a5,a5,-8
+    1380:	4388                	lw	a0,0(a5)
+    1382:	43cc                	lw	a1,4(a5)
+    1384:	07a1                	addi	a5,a5,8
+    1386:	c63e                	sw	a5,12(sp)
+    1388:	359d                	jal	11ee <print_flt>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:172
+						break;
+    138a:	b725                	j	12b2 <printk+0x4c>
+print_num():
+    138c:	45c1                	li	a1,16
+    138e:	3385                	jal	10ee <print_num.part.0>
+    1390:	0489                	addi	s1,s1,2
+    1392:	b705                	j	12b2 <printk+0x4c>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1394:	0169a823          	sw	s6,16(s3)
+    1398:	b759                	j	131e <printk+0xb8>
+
+0000139a <read_uart>:
+read_uart():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:215
+
+
+char read_uart(void)
+{
+    char data;
+    data = reg_uart_rxdata;
+    139a:	67a1                	lui	a5,0x8
+    139c:	5388                	lw	a0,32(a5)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:217
+    return (data);
+}
+    139e:	0562                	slli	a0,a0,0x18
+    13a0:	8561                	srai	a0,a0,0x18
+    13a2:	8082                	ret
+
+000013a4 <serial_receive_data>:
+serial_receive_data():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:245
+		printk("failed\n");
+	}
+}
+
+void serial_receive_data(char data)
+{
+    13a4:	1141                	addi	sp,sp,-16
+    13a6:	c422                	sw	s0,8(sp)
+    13a8:	c606                	sw	ra,12(sp)
+    13aa:	c226                	sw	s1,4(sp)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:251
+    int i = 0;
+    static uint8_t package[6];
+    static uint8_t state = 0;
+    static uint8_t package_num = 0;
+	//printk("State: %d, package_num: %d, data: 0x%x\n", state, package_num, data); // 调试输出
+    if(state == 0 && data == 0x0a)//
+    13ac:	00b00413          	li	s0,11
+    13b0:	00044783          	lbu	a5,0(s0)
+    13b4:	e39d                	bnez	a5,13da <serial_receive_data+0x36>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:251 (discriminator 1)
+    13b6:	47a9                	li	a5,10
+    13b8:	0af50963          	beq	a0,a5,146a <serial_receive_data+0xc6>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:294
+    {
+        state = 0;
+        package_num = 0;
+        for(i = 0; i < 6; i++)
+        {
+            package[i] = 0x00;
+    13bc:	00400793          	li	a5,4
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:290
+        state = 0;
+    13c0:	00040023          	sb	zero,0(s0)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:291
+        package_num = 0;
+    13c4:	00000523          	sb	zero,10(zero) # a <package_num.2520>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:294
+            package[i] = 0x00;
+    13c8:	0007a023          	sw	zero,0(a5) # 8000 <_etext+0x5670>
+    13cc:	00079223          	sh	zero,4(a5)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:297
+        }
+    }
+}
+    13d0:	40b2                	lw	ra,12(sp)
+    13d2:	4422                	lw	s0,8(sp)
+    13d4:	4492                	lw	s1,4(sp)
+    13d6:	0141                	addi	sp,sp,16
+    13d8:	8082                	ret
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:258
+    else if(state == 1)
+    13da:	4705                	li	a4,1
+    13dc:	02e79863          	bne	a5,a4,140c <serial_receive_data+0x68>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:260
+        package[package_num++]=data;
+    13e0:	00a00693          	li	a3,10
+    13e4:	0006c603          	lbu	a2,0(a3)
+    13e8:	00400793          	li	a5,4
+    13ec:	00160713          	addi	a4,a2,1
+    13f0:	97b2                	add	a5,a5,a2
+    13f2:	0ff77713          	andi	a4,a4,255
+    13f6:	00a78023          	sb	a0,0(a5)
+    13fa:	00e68023          	sb	a4,0(a3)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:261
+        if(package_num == 6)
+    13fe:	4799                	li	a5,6
+    1400:	fcf718e3          	bne	a4,a5,13d0 <serial_receive_data+0x2c>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:263
+            state = 2;
+    1404:	4789                	li	a5,2
+    1406:	00f40023          	sb	a5,0(s0)
+    140a:	b7d9                	j	13d0 <serial_receive_data+0x2c>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:267
+    else if(state == 2  && data == 0x0b)//&& data == 0xcd
+    140c:	4689                	li	a3,2
+    140e:	fad797e3          	bne	a5,a3,13bc <serial_receive_data+0x18>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:267 (discriminator 1)
+    1412:	47ad                	li	a5,11
+    1414:	faf514e3          	bne	a0,a5,13bc <serial_receive_data+0x18>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:276
+        parameter_id = package[1];
+    1418:	00400493          	li	s1,4
+    141c:	0014c783          	lbu	a5,1(s1)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:270
+        package_num = 0;
+    1420:	00000523          	sb	zero,10(zero) # a <package_num.2520>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:271
+        FLAG = 1;
+    1424:	000006b7          	lui	a3,0x0
+    1428:	00e6a023          	sw	a4,0(a3) # 0 <_edata>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:276
+        parameter_id = package[1];
+    142c:	6721                	lui	a4,0x8
+    142e:	db1c                	sw	a5,48(a4)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:278
+		parameter_value = (package[2]<<24) | (package[3]<<16) | (package[4]<<8) | package[5];
+    1430:	0024c783          	lbu	a5,2(s1)
+    1434:	0034c603          	lbu	a2,3(s1)
+    1438:	0054c583          	lbu	a1,5(s1)
+    143c:	0044c683          	lbu	a3,4(s1)
+    1440:	0642                	slli	a2,a2,0x10
+    1442:	07e2                	slli	a5,a5,0x18
+    1444:	8fd1                	or	a5,a5,a2
+    1446:	8fcd                	or	a5,a5,a1
+    1448:	06a2                	slli	a3,a3,0x8
+    144a:	8fd5                	or	a5,a5,a3
+    144c:	c33c                	sw	a5,64(a4)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:280
+		printk("Parameter ID: %d, Parameter Value: %d\n", parameter_id, parameter_value); // 调试输出
+    144e:	5b0c                	lw	a1,48(a4)
+    1450:	4330                	lw	a2,64(a4)
+    1452:	00003537          	lui	a0,0x3
+    1456:	81450513          	addi	a0,a0,-2028 # 2814 <__clzsi2+0x230>
+    145a:	3531                	jal	1266 <printk>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:283
+            package[i] = 0x00;
+    145c:	0004a023          	sw	zero,0(s1)
+    1460:	00049223          	sh	zero,4(s1)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:285
+		state = 0;
+    1464:	00040023          	sb	zero,0(s0)
+    1468:	b7a5                	j	13d0 <serial_receive_data+0x2c>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:255
+        package[package_num++] = data;
+    146a:	00a00713          	li	a4,10
+    146e:	00074683          	lbu	a3,0(a4) # 8000 <_etext+0x5670>
+    1472:	00400793          	li	a5,4
+    1476:	00168613          	addi	a2,a3,1
+    147a:	97b6                	add	a5,a5,a3
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:254
+        state = 1;
+    147c:	4685                	li	a3,1
+    147e:	00d40023          	sb	a3,0(s0)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:255
+        package[package_num++] = data;
+    1482:	00c70023          	sb	a2,0(a4)
+    1486:	00a78023          	sb	a0,0(a5)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:297
+}
+    148a:	40b2                	lw	ra,12(sp)
+    148c:	4422                	lw	s0,8(sp)
+    148e:	4492                	lw	s1,4(sp)
+    1490:	0141                	addi	sp,sp,16
+    1492:	8082                	ret
+
+00001494 <uart_handler>:
+uart_handler():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:220
+{
+    1494:	1141                	addi	sp,sp,-16
+    1496:	c422                	sw	s0,8(sp)
+    1498:	c226                	sw	s1,4(sp)
+    149a:	c606                	sw	ra,12(sp)
+    149c:	441d                	li	s0,7
+read_uart():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:215
+    data = reg_uart_rxdata;
+    149e:	64a1                	lui	s1,0x8
+    14a0:	5088                	lw	a0,32(s1)
+    14a2:	147d                	addi	s0,s0,-1
+uart_handler():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:226
+    	serial_receive_data(temp);
+    14a4:	0562                	slli	a0,a0,0x18
+    14a6:	8561                	srai	a0,a0,0x18
+    14a8:	3df5                	jal	13a4 <serial_receive_data>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:222
+	for(int i = 0; i < 7; i++)
+    14aa:	f87d                	bnez	s0,14a0 <uart_handler+0xc>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:231
+    if(FLAG == 1)
+    14ac:	00000437          	lui	s0,0x0
+    14b0:	00040413          	mv	s0,s0
+    14b4:	4018                	lw	a4,0(s0)
+    14b6:	4785                	li	a5,1
+    14b8:	00f70b63          	beq	a4,a5,14ce <uart_handler+0x3a>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:242
+}
+    14bc:	4422                	lw	s0,8(sp)
+    14be:	40b2                	lw	ra,12(sp)
+    14c0:	4492                	lw	s1,4(sp)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:240
+		printk("failed\n");
+    14c2:	00003537          	lui	a0,0x3
+    14c6:	84850513          	addi	a0,a0,-1976 # 2848 <__clzsi2+0x264>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:242
+}
+    14ca:	0141                	addi	sp,sp,16
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:240
+		printk("failed\n");
+    14cc:	bb69                	j	1266 <printk>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:234
+		printk("successful\n");
+    14ce:	00003537          	lui	a0,0x3
+    14d2:	83c50513          	addi	a0,a0,-1988 # 283c <__clzsi2+0x258>
+    14d6:	3b41                	jal	1266 <printk>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:242
+}
+    14d8:	40b2                	lw	ra,12(sp)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:235
+        FLAG = 0;
+    14da:	00042023          	sw	zero,0(s0) # 0 <_edata>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:242
+}
+    14de:	4422                	lw	s0,8(sp)
+    14e0:	4492                	lw	s1,4(sp)
+    14e2:	0141                	addi	sp,sp,16
+    14e4:	8082                	ret
+
+000014e6 <getchar_prompt>:
+getchar_prompt():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:303
+char getchar_prompt(char *prompt)
+{
+	int32_t c = -1;
+
+	uint32_t cycles_begin, cycles_now, cycles;
+	__asm__ volatile ("rdcycle %0" : "=r"(cycles_begin));
+    14e6:	c00025f3          	rdcycle	a1
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:305
+
+	if (prompt)
+    14ea:	c515                	beqz	a0,1516 <getchar_prompt+0x30>
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    14ec:	00050783          	lb	a5,0(a0)
+    14f0:	c39d                	beqz	a5,1516 <getchar_prompt+0x30>
+    14f2:	872a                	mv	a4,a0
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    14f4:	4629                	li	a2,10
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    14f6:	66a1                	lui	a3,0x8
+    14f8:	4835                	li	a6,13
+    14fa:	a029                	j	1504 <getchar_prompt+0x1e>
+    14fc:	ca9c                	sw	a5,16(a3)
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    14fe:	00070783          	lb	a5,0(a4)
+    1502:	cb91                	beqz	a5,1516 <getchar_prompt+0x30>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:53
+		put_char(*(p++));
+    1504:	0705                	addi	a4,a4,1
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    1506:	fec79be3          	bne	a5,a2,14fc <getchar_prompt+0x16>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    150a:	0106a823          	sw	a6,16(a3) # 8010 <_etext+0x5680>
+    150e:	ca9c                	sw	a5,16(a3)
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    1510:	00070783          	lb	a5,0(a4)
+    1514:	fbe5                	bnez	a5,1504 <getchar_prompt+0x1e>
+getchar_prompt():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:312
+
+	while (c == -1)
+	{
+		__asm__ volatile ("rdcycle %0" : "=r"(cycles_now));
+		cycles = cycles_now - cycles_begin;
+		if (cycles > 12000000)
+    1516:	00b728b7          	lui	a7,0xb72
+    151a:	b0088893          	addi	a7,a7,-1280 # b71b00 <_etext+0xb6f170>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    151e:	4829                	li	a6,10
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1520:	66a1                	lui	a3,0x8
+    1522:	4e35                	li	t3,13
+getchar_prompt():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:308
+	while (c == -1)
+    1524:	537d                	li	t1,-1
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:310
+		__asm__ volatile ("rdcycle %0" : "=r"(cycles_now));
+    1526:	c0002673          	rdcycle	a2
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:311
+		cycles = cycles_now - cycles_begin;
+    152a:	40b607b3          	sub	a5,a2,a1
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:312
+		if (cycles > 12000000)
+    152e:	02f8f763          	bleu	a5,a7,155c <getchar_prompt+0x76>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:318
+		{
+			if (prompt)
+			{
+				print_str(prompt);
+			}
+			cycles_begin = cycles_now;
+    1532:	85b2                	mv	a1,a2
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:314
+			if (prompt)
+    1534:	c505                	beqz	a0,155c <getchar_prompt+0x76>
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    1536:	00050783          	lb	a5,0(a0)
+    153a:	c38d                	beqz	a5,155c <getchar_prompt+0x76>
+    153c:	872a                	mv	a4,a0
+    153e:	a029                	j	1548 <getchar_prompt+0x62>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1540:	ca9c                	sw	a5,16(a3)
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    1542:	00070783          	lb	a5,0(a4)
+    1546:	cb91                	beqz	a5,155a <getchar_prompt+0x74>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:53
+		put_char(*(p++));
+    1548:	0705                	addi	a4,a4,1
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    154a:	ff079be3          	bne	a5,a6,1540 <getchar_prompt+0x5a>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    154e:	01c6a823          	sw	t3,16(a3) # 8010 <_etext+0x5680>
+    1552:	ca9c                	sw	a5,16(a3)
+print_str():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:52
+	while (*p)
+    1554:	00070783          	lb	a5,0(a4)
+    1558:	fbe5                	bnez	a5,1548 <getchar_prompt+0x62>
+getchar_prompt():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:318
+			cycles_begin = cycles_now;
+    155a:	85b2                	mv	a1,a2
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:320
+		}
+		c = reg_uart_rxdata;
+    155c:	529c                	lw	a5,32(a3)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:308
+	while (c == -1)
+    155e:	fc6784e3          	beq	a5,t1,1526 <getchar_prompt+0x40>
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:324
+	}
+
+	return c;
+}
+    1562:	01879513          	slli	a0,a5,0x18
+    1566:	8561                	srai	a0,a0,0x18
+    1568:	8082                	ret
+
+0000156a <get_char>:
+get_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:334
+ ** 输入参数：无
+ ** 输出参数：无
+ ** 返回参数：输出的字符
+ ********************************************************************/
+char get_char()
+{
+    156a:	1141                	addi	sp,sp,-16
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:336
+//	return getchar_prompt(0);
+	put_char(getchar_prompt(0));
+    156c:	4501                	li	a0,0
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:334
+{
+    156e:	c606                	sw	ra,12(sp)
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:336
+	put_char(getchar_prompt(0));
+    1570:	3f9d                	jal	14e6 <getchar_prompt>
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    1572:	4729                	li	a4,10
+get_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:336
+	put_char(getchar_prompt(0));
+    1574:	87aa                	mv	a5,a0
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:38
+	if (c == '\n')
+    1576:	00e50763          	beq	a0,a4,1584 <get_char+0x1a>
+get_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:337
+}
+    157a:	40b2                	lw	ra,12(sp)
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    157c:	6721                	lui	a4,0x8
+    157e:	cb1c                	sw	a5,16(a4)
+get_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:337
+}
+    1580:	0141                	addi	sp,sp,16
+    1582:	8082                	ret
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1584:	6721                	lui	a4,0x8
+get_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:337
+}
+    1586:	40b2                	lw	ra,12(sp)
+put_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:40
+	reg_uart_txdata = c;
+    1588:	46b5                	li	a3,13
+    158a:	cb14                	sw	a3,16(a4)
+    158c:	6721                	lui	a4,0x8
+    158e:	cb1c                	sw	a5,16(a4)
+get_char():
+D:\Hummingbird\HBird-workspace\pico_test_1\Debug/../src/uart.c:337
+}
+    1590:	0141                	addi	sp,sp,16
+    1592:	8082                	ret
+
+00001594 <__muldf3>:
+__muldf3():
+    1594:	fc010113          	addi	sp,sp,-64
+    1598:	02812c23          	sw	s0,56(sp)
+    159c:	0145d793          	srli	a5,a1,0x14
+    15a0:	00100437          	lui	s0,0x100
+    15a4:	02912a23          	sw	s1,52(sp)
+    15a8:	03312623          	sw	s3,44(sp)
+    15ac:	00050493          	mv	s1,a0
+    15b0:	fff40413          	addi	s0,s0,-1 # fffff <_etext+0xfd66f>
+    15b4:	02112e23          	sw	ra,60(sp)
+    15b8:	03212823          	sw	s2,48(sp)
+    15bc:	03412423          	sw	s4,40(sp)
+    15c0:	03512223          	sw	s5,36(sp)
+    15c4:	03612023          	sw	s6,32(sp)
+    15c8:	01712e23          	sw	s7,28(sp)
+    15cc:	7ff7f513          	andi	a0,a5,2047
+    15d0:	00b47433          	and	s0,s0,a1
+    15d4:	01f5d993          	srli	s3,a1,0x1f
+    15d8:	1e050e63          	beqz	a0,17d4 <__muldf3+0x240>
+    15dc:	7ff00793          	li	a5,2047
+    15e0:	0af50063          	beq	a0,a5,1680 <__muldf3+0xec>
+    15e4:	00341413          	slli	s0,s0,0x3
+    15e8:	008007b7          	lui	a5,0x800
+    15ec:	01d4db13          	srli	s6,s1,0x1d
+    15f0:	00f46433          	or	s0,s0,a5
+    15f4:	00349a13          	slli	s4,s1,0x3
+    15f8:	008b6b33          	or	s6,s6,s0
+    15fc:	c0150a93          	addi	s5,a0,-1023
+    1600:	00000493          	li	s1,0
+    1604:	00000b93          	li	s7,0
+    1608:	0146d893          	srli	a7,a3,0x14
+    160c:	00100437          	lui	s0,0x100
+    1610:	fff40413          	addi	s0,s0,-1 # fffff <_etext+0xfd66f>
+    1614:	7ff8f893          	andi	a7,a7,2047
+    1618:	00060813          	mv	a6,a2
+    161c:	00d47433          	and	s0,s0,a3
+    1620:	01f6d913          	srli	s2,a3,0x1f
+    1624:	08088a63          	beqz	a7,16b8 <__muldf3+0x124>
+    1628:	7ff00793          	li	a5,2047
+    162c:	20f88463          	beq	a7,a5,1834 <__muldf3+0x2a0>
+    1630:	00800737          	lui	a4,0x800
+    1634:	00341413          	slli	s0,s0,0x3
+    1638:	00e46433          	or	s0,s0,a4
+    163c:	c0188893          	addi	a7,a7,-1023
+    1640:	01d65713          	srli	a4,a2,0x1d
+    1644:	00876733          	or	a4,a4,s0
+    1648:	00361813          	slli	a6,a2,0x3
+    164c:	011a8ab3          	add	s5,s5,a7
+    1650:	00000513          	li	a0,0
+    1654:	00f00693          	li	a3,15
+    1658:	0129c7b3          	xor	a5,s3,s2
+    165c:	001a8593          	addi	a1,s5,1
+    1660:	1e96e863          	bltu	a3,s1,1850 <__muldf3+0x2bc>
+    1664:	00001617          	auipc	a2,0x1
+    1668:	1ec60613          	addi	a2,a2,492 # 2850 <__clzsi2+0x26c>
+    166c:	00249493          	slli	s1,s1,0x2
+    1670:	00c484b3          	add	s1,s1,a2
+    1674:	0004a683          	lw	a3,0(s1) # 8000 <_etext+0x5670>
+    1678:	00c686b3          	add	a3,a3,a2
+    167c:	00068067          	jr	a3
+    1680:	00946b33          	or	s6,s0,s1
+    1684:	400b1663          	bnez	s6,1a90 <__muldf3+0x4fc>
+    1688:	0146d893          	srli	a7,a3,0x14
+    168c:	00100437          	lui	s0,0x100
+    1690:	fff40413          	addi	s0,s0,-1 # fffff <_etext+0xfd66f>
+    1694:	7ff8f893          	andi	a7,a7,2047
+    1698:	00800493          	li	s1,8
+    169c:	00000a13          	li	s4,0
+    16a0:	7ff00a93          	li	s5,2047
+    16a4:	00200b93          	li	s7,2
+    16a8:	00060813          	mv	a6,a2
+    16ac:	00d47433          	and	s0,s0,a3
+    16b0:	01f6d913          	srli	s2,a3,0x1f
+    16b4:	f6089ae3          	bnez	a7,1628 <__muldf3+0x94>
+    16b8:	00c46733          	or	a4,s0,a2
+    16bc:	3e070663          	beqz	a4,1aa8 <__muldf3+0x514>
+    16c0:	4a040463          	beqz	s0,1b68 <__muldf3+0x5d4>
+    16c4:	00040513          	mv	a0,s0
+    16c8:	00c12423          	sw	a2,8(sp)
+    16cc:	719000ef          	jal	ra,25e4 <__clzsi2>
+    16d0:	00812603          	lw	a2,8(sp)
+    16d4:	ff550793          	addi	a5,a0,-11
+    16d8:	01c00713          	li	a4,28
+    16dc:	44f74a63          	blt	a4,a5,1b30 <__muldf3+0x59c>
+    16e0:	01d00713          	li	a4,29
+    16e4:	ff850813          	addi	a6,a0,-8
+    16e8:	40f70733          	sub	a4,a4,a5
+    16ec:	01041433          	sll	s0,s0,a6
+    16f0:	00e65733          	srl	a4,a2,a4
+    16f4:	00876733          	or	a4,a4,s0
+    16f8:	01061833          	sll	a6,a2,a6
+    16fc:	40aa8533          	sub	a0,s5,a0
+    1700:	c0d50a93          	addi	s5,a0,-1011
+    1704:	00000513          	li	a0,0
+    1708:	f4dff06f          	j	1654 <__muldf3+0xc0>
+    170c:	00000613          	li	a2,0
+    1710:	7ff00713          	li	a4,2047
+    1714:	000807b7          	lui	a5,0x80
+    1718:	00000813          	li	a6,0
+    171c:	001006b7          	lui	a3,0x100
+    1720:	fff68693          	addi	a3,a3,-1 # fffff <_etext+0xfd66f>
+    1724:	00d7f7b3          	and	a5,a5,a3
+    1728:	801006b7          	lui	a3,0x80100
+    172c:	fff68693          	addi	a3,a3,-1 # 800fffff <_etext+0x800fd66f>
+    1730:	00d7f7b3          	and	a5,a5,a3
+    1734:	03c12083          	lw	ra,60(sp)
+    1738:	03812403          	lw	s0,56(sp)
+    173c:	01471713          	slli	a4,a4,0x14
+    1740:	01f61693          	slli	a3,a2,0x1f
+    1744:	00e7e7b3          	or	a5,a5,a4
+    1748:	00d7e7b3          	or	a5,a5,a3
+    174c:	03412483          	lw	s1,52(sp)
+    1750:	03012903          	lw	s2,48(sp)
+    1754:	02c12983          	lw	s3,44(sp)
+    1758:	02812a03          	lw	s4,40(sp)
+    175c:	02412a83          	lw	s5,36(sp)
+    1760:	02012b03          	lw	s6,32(sp)
+    1764:	01c12b83          	lw	s7,28(sp)
+    1768:	00080513          	mv	a0,a6
+    176c:	00078593          	mv	a1,a5
+    1770:	04010113          	addi	sp,sp,64
+    1774:	00008067          	ret
+    1778:	00090793          	mv	a5,s2
+    177c:	00200693          	li	a3,2
+    1780:	02d51863          	bne	a0,a3,17b0 <__muldf3+0x21c>
+    1784:	00078613          	mv	a2,a5
+    1788:	7ff00713          	li	a4,2047
+    178c:	00000793          	li	a5,0
+    1790:	00000813          	li	a6,0
+    1794:	f89ff06f          	j	171c <__muldf3+0x188>
+    1798:	00098793          	mv	a5,s3
+    179c:	000b8513          	mv	a0,s7
+    17a0:	00200693          	li	a3,2
+    17a4:	000b0713          	mv	a4,s6
+    17a8:	000a0813          	mv	a6,s4
+    17ac:	fcd50ce3          	beq	a0,a3,1784 <__muldf3+0x1f0>
+    17b0:	00300693          	li	a3,3
+    17b4:	f4d50ce3          	beq	a0,a3,170c <__muldf3+0x178>
+    17b8:	00100693          	li	a3,1
+    17bc:	24d51a63          	bne	a0,a3,1a10 <__muldf3+0x47c>
+    17c0:	00078613          	mv	a2,a5
+    17c4:	00000713          	li	a4,0
+    17c8:	00000793          	li	a5,0
+    17cc:	00000813          	li	a6,0
+    17d0:	f4dff06f          	j	171c <__muldf3+0x188>
+    17d4:	00946b33          	or	s6,s0,s1
+    17d8:	2a0b0263          	beqz	s6,1a7c <__muldf3+0x4e8>
+    17dc:	00d12623          	sw	a3,12(sp)
+    17e0:	00c12423          	sw	a2,8(sp)
+    17e4:	36040663          	beqz	s0,1b50 <__muldf3+0x5bc>
+    17e8:	00040513          	mv	a0,s0
+    17ec:	5f9000ef          	jal	ra,25e4 <__clzsi2>
+    17f0:	00812603          	lw	a2,8(sp)
+    17f4:	00c12683          	lw	a3,12(sp)
+    17f8:	ff550793          	addi	a5,a0,-11
+    17fc:	01c00713          	li	a4,28
+    1800:	34f74063          	blt	a4,a5,1b40 <__muldf3+0x5ac>
+    1804:	01d00b13          	li	s6,29
+    1808:	ff850a13          	addi	s4,a0,-8
+    180c:	40fb0b33          	sub	s6,s6,a5
+    1810:	01441433          	sll	s0,s0,s4
+    1814:	0164db33          	srl	s6,s1,s6
+    1818:	008b6b33          	or	s6,s6,s0
+    181c:	01449a33          	sll	s4,s1,s4
+    1820:	c0d00a93          	li	s5,-1011
+    1824:	40aa8ab3          	sub	s5,s5,a0
+    1828:	00000493          	li	s1,0
+    182c:	00000b93          	li	s7,0
+    1830:	dd9ff06f          	j	1608 <__muldf3+0x74>
+    1834:	00c46733          	or	a4,s0,a2
+    1838:	7ffa8a93          	addi	s5,s5,2047
+    183c:	26071e63          	bnez	a4,1ab8 <__muldf3+0x524>
+    1840:	0024e493          	ori	s1,s1,2
+    1844:	00000813          	li	a6,0
+    1848:	00200513          	li	a0,2
+    184c:	e09ff06f          	j	1654 <__muldf3+0xc0>
+    1850:	00010eb7          	lui	t4,0x10
+    1854:	fffe8613          	addi	a2,t4,-1 # ffff <_etext+0xd66f>
+    1858:	010a5693          	srli	a3,s4,0x10
+    185c:	01085313          	srli	t1,a6,0x10
+    1860:	00ca7a33          	and	s4,s4,a2
+    1864:	00c87833          	and	a6,a6,a2
+    1868:	03480633          	mul	a2,a6,s4
+    186c:	03068e33          	mul	t3,a3,a6
+    1870:	01065513          	srli	a0,a2,0x10
+    1874:	034308b3          	mul	a7,t1,s4
+    1878:	01c888b3          	add	a7,a7,t3
+    187c:	01150533          	add	a0,a0,a7
+    1880:	02668f33          	mul	t5,a3,t1
+    1884:	01c57463          	bleu	t3,a0,188c <__muldf3+0x2f8>
+    1888:	01df0f33          	add	t5,t5,t4
+    188c:	00010e37          	lui	t3,0x10
+    1890:	fffe0893          	addi	a7,t3,-1 # ffff <_etext+0xd66f>
+    1894:	011773b3          	and	t2,a4,a7
+    1898:	01075293          	srli	t0,a4,0x10
+    189c:	01157733          	and	a4,a0,a7
+    18a0:	011678b3          	and	a7,a2,a7
+    18a4:	01071713          	slli	a4,a4,0x10
+    18a8:	03438633          	mul	a2,t2,s4
+    18ac:	011708b3          	add	a7,a4,a7
+    18b0:	01055513          	srli	a0,a0,0x10
+    18b4:	02768eb3          	mul	t4,a3,t2
+    18b8:	01065713          	srli	a4,a2,0x10
+    18bc:	03428a33          	mul	s4,t0,s4
+    18c0:	01da0a33          	add	s4,s4,t4
+    18c4:	01470a33          	add	s4,a4,s4
+    18c8:	025686b3          	mul	a3,a3,t0
+    18cc:	01da7463          	bleu	t4,s4,18d4 <__muldf3+0x340>
+    18d0:	01c686b3          	add	a3,a3,t3
+    18d4:	00010937          	lui	s2,0x10
+    18d8:	fff90713          	addi	a4,s2,-1 # ffff <_etext+0xd66f>
+    18dc:	010b5f93          	srli	t6,s6,0x10
+    18e0:	00eb7433          	and	s0,s6,a4
+    18e4:	00ea7eb3          	and	t4,s4,a4
+    18e8:	00e67633          	and	a2,a2,a4
+    18ec:	010e9e93          	slli	t4,t4,0x10
+    18f0:	028804b3          	mul	s1,a6,s0
+    18f4:	010a5a13          	srli	s4,s4,0x10
+    18f8:	00ce8eb3          	add	t4,t4,a2
+    18fc:	00da0a33          	add	s4,s4,a3
+    1900:	01d50533          	add	a0,a0,t4
+    1904:	02830733          	mul	a4,t1,s0
+    1908:	0104de13          	srli	t3,s1,0x10
+    190c:	030f8833          	mul	a6,t6,a6
+    1910:	01070733          	add	a4,a4,a6
+    1914:	00ee0e33          	add	t3,t3,a4
+    1918:	03f30333          	mul	t1,t1,t6
+    191c:	010e7463          	bleu	a6,t3,1924 <__muldf3+0x390>
+    1920:	01230333          	add	t1,t1,s2
+    1924:	00010937          	lui	s2,0x10
+    1928:	fff90613          	addi	a2,s2,-1 # ffff <_etext+0xd66f>
+    192c:	00ce76b3          	and	a3,t3,a2
+    1930:	010e5e13          	srli	t3,t3,0x10
+    1934:	006e0333          	add	t1,t3,t1
+    1938:	01069693          	slli	a3,a3,0x10
+    193c:	00c4f4b3          	and	s1,s1,a2
+    1940:	02838e33          	mul	t3,t2,s0
+    1944:	00968633          	add	a2,a3,s1
+    1948:	027f8833          	mul	a6,t6,t2
+    194c:	010e5713          	srli	a4,t3,0x10
+    1950:	02828433          	mul	s0,t0,s0
+    1954:	01040433          	add	s0,s0,a6
+    1958:	00870433          	add	s0,a4,s0
+    195c:	03f28fb3          	mul	t6,t0,t6
+    1960:	01047463          	bleu	a6,s0,1968 <__muldf3+0x3d4>
+    1964:	012f8fb3          	add	t6,t6,s2
+    1968:	00010737          	lui	a4,0x10
+    196c:	fff70713          	addi	a4,a4,-1 # ffff <_etext+0xd66f>
+    1970:	00e476b3          	and	a3,s0,a4
+    1974:	01069693          	slli	a3,a3,0x10
+    1978:	00ee7733          	and	a4,t3,a4
+    197c:	01e50533          	add	a0,a0,t5
+    1980:	00e686b3          	add	a3,a3,a4
+    1984:	01d53eb3          	sltu	t4,a0,t4
+    1988:	01468733          	add	a4,a3,s4
+    198c:	00c50533          	add	a0,a0,a2
+    1990:	01d70833          	add	a6,a4,t4
+    1994:	00c536b3          	sltu	a3,a0,a2
+    1998:	00680e33          	add	t3,a6,t1
+    199c:	00de0633          	add	a2,t3,a3
+    19a0:	01d83eb3          	sltu	t4,a6,t4
+    19a4:	01473733          	sltu	a4,a4,s4
+    19a8:	01d76733          	or	a4,a4,t4
+    19ac:	01045413          	srli	s0,s0,0x10
+    19b0:	006e3333          	sltu	t1,t3,t1
+    19b4:	00d636b3          	sltu	a3,a2,a3
+    19b8:	00d366b3          	or	a3,t1,a3
+    19bc:	00870733          	add	a4,a4,s0
+    19c0:	00d70733          	add	a4,a4,a3
+    19c4:	00951813          	slli	a6,a0,0x9
+    19c8:	01186833          	or	a6,a6,a7
+    19cc:	01f70733          	add	a4,a4,t6
+    19d0:	00971713          	slli	a4,a4,0x9
+    19d4:	01765893          	srli	a7,a2,0x17
+    19d8:	01003833          	snez	a6,a6
+    19dc:	01755513          	srli	a0,a0,0x17
+    19e0:	00961693          	slli	a3,a2,0x9
+    19e4:	00a86833          	or	a6,a6,a0
+    19e8:	01176733          	or	a4,a4,a7
+    19ec:	00d86833          	or	a6,a6,a3
+    19f0:	00771693          	slli	a3,a4,0x7
+    19f4:	1806d663          	bgez	a3,1b80 <__muldf3+0x5ec>
+    19f8:	00185693          	srli	a3,a6,0x1
+    19fc:	00187813          	andi	a6,a6,1
+    1a00:	01f71613          	slli	a2,a4,0x1f
+    1a04:	0106e833          	or	a6,a3,a6
+    1a08:	00c86833          	or	a6,a6,a2
+    1a0c:	00175713          	srli	a4,a4,0x1
+    1a10:	3ff58693          	addi	a3,a1,1023
+    1a14:	00078613          	mv	a2,a5
+    1a18:	0ad05863          	blez	a3,1ac8 <__muldf3+0x534>
+    1a1c:	00787793          	andi	a5,a6,7
+    1a20:	02078063          	beqz	a5,1a40 <__muldf3+0x4ac>
+    1a24:	00f87793          	andi	a5,a6,15
+    1a28:	00400513          	li	a0,4
+    1a2c:	00a78a63          	beq	a5,a0,1a40 <__muldf3+0x4ac>
+    1a30:	00480793          	addi	a5,a6,4
+    1a34:	0107b833          	sltu	a6,a5,a6
+    1a38:	01070733          	add	a4,a4,a6
+    1a3c:	00078813          	mv	a6,a5
+    1a40:	00771793          	slli	a5,a4,0x7
+    1a44:	0007da63          	bgez	a5,1a58 <__muldf3+0x4c4>
+    1a48:	ff0007b7          	lui	a5,0xff000
+    1a4c:	fff78793          	addi	a5,a5,-1 # feffffff <_etext+0xfeffd66f>
+    1a50:	00f77733          	and	a4,a4,a5
+    1a54:	40058693          	addi	a3,a1,1024
+    1a58:	7fe00793          	li	a5,2046
+    1a5c:	12d7c663          	blt	a5,a3,1b88 <__muldf3+0x5f4>
+    1a60:	00385793          	srli	a5,a6,0x3
+    1a64:	01d71813          	slli	a6,a4,0x1d
+    1a68:	00971713          	slli	a4,a4,0x9
+    1a6c:	00f86833          	or	a6,a6,a5
+    1a70:	00c75793          	srli	a5,a4,0xc
+    1a74:	7ff6f713          	andi	a4,a3,2047
+    1a78:	ca5ff06f          	j	171c <__muldf3+0x188>
+    1a7c:	00400493          	li	s1,4
+    1a80:	00000a13          	li	s4,0
+    1a84:	00000a93          	li	s5,0
+    1a88:	00100b93          	li	s7,1
+    1a8c:	b7dff06f          	j	1608 <__muldf3+0x74>
+    1a90:	00048a13          	mv	s4,s1
+    1a94:	00040b13          	mv	s6,s0
+    1a98:	00c00493          	li	s1,12
+    1a9c:	7ff00a93          	li	s5,2047
+    1aa0:	00300b93          	li	s7,3
+    1aa4:	b65ff06f          	j	1608 <__muldf3+0x74>
+    1aa8:	0014e493          	ori	s1,s1,1
+    1aac:	00000813          	li	a6,0
+    1ab0:	00100513          	li	a0,1
+    1ab4:	ba1ff06f          	j	1654 <__muldf3+0xc0>
+    1ab8:	0034e493          	ori	s1,s1,3
+    1abc:	00040713          	mv	a4,s0
+    1ac0:	00300513          	li	a0,3
+    1ac4:	b91ff06f          	j	1654 <__muldf3+0xc0>
+    1ac8:	00100793          	li	a5,1
+    1acc:	40d787b3          	sub	a5,a5,a3
+    1ad0:	0c069463          	bnez	a3,1b98 <__muldf3+0x604>
+    1ad4:	41e58593          	addi	a1,a1,1054
+    1ad8:	00b816b3          	sll	a3,a6,a1
+    1adc:	00b715b3          	sll	a1,a4,a1
+    1ae0:	00f85833          	srl	a6,a6,a5
+    1ae4:	00d036b3          	snez	a3,a3
+    1ae8:	0105e5b3          	or	a1,a1,a6
+    1aec:	00d5e5b3          	or	a1,a1,a3
+    1af0:	0075f693          	andi	a3,a1,7
+    1af4:	00f75733          	srl	a4,a4,a5
+    1af8:	02068063          	beqz	a3,1b18 <__muldf3+0x584>
+    1afc:	00f5f793          	andi	a5,a1,15
+    1b00:	00400693          	li	a3,4
+    1b04:	00d78a63          	beq	a5,a3,1b18 <__muldf3+0x584>
+    1b08:	00058813          	mv	a6,a1
+    1b0c:	00480593          	addi	a1,a6,4
+    1b10:	0105b833          	sltu	a6,a1,a6
+    1b14:	01070733          	add	a4,a4,a6
+    1b18:	00871793          	slli	a5,a4,0x8
+    1b1c:	0e07d263          	bgez	a5,1c00 <__muldf3+0x66c>
+    1b20:	00100713          	li	a4,1
+    1b24:	00000793          	li	a5,0
+    1b28:	00000813          	li	a6,0
+    1b2c:	bf1ff06f          	j	171c <__muldf3+0x188>
+    1b30:	fd850713          	addi	a4,a0,-40
+    1b34:	00e61733          	sll	a4,a2,a4
+    1b38:	00000813          	li	a6,0
+    1b3c:	bc1ff06f          	j	16fc <__muldf3+0x168>
+    1b40:	fd850413          	addi	s0,a0,-40
+    1b44:	00849b33          	sll	s6,s1,s0
+    1b48:	00000a13          	li	s4,0
+    1b4c:	cd5ff06f          	j	1820 <__muldf3+0x28c>
+    1b50:	00048513          	mv	a0,s1
+    1b54:	291000ef          	jal	ra,25e4 <__clzsi2>
+    1b58:	02050513          	addi	a0,a0,32
+    1b5c:	00c12683          	lw	a3,12(sp)
+    1b60:	00812603          	lw	a2,8(sp)
+    1b64:	c95ff06f          	j	17f8 <__muldf3+0x264>
+    1b68:	00060513          	mv	a0,a2
+    1b6c:	00c12423          	sw	a2,8(sp)
+    1b70:	275000ef          	jal	ra,25e4 <__clzsi2>
+    1b74:	02050513          	addi	a0,a0,32
+    1b78:	00812603          	lw	a2,8(sp)
+    1b7c:	b59ff06f          	j	16d4 <__muldf3+0x140>
+    1b80:	000a8593          	mv	a1,s5
+    1b84:	e8dff06f          	j	1a10 <__muldf3+0x47c>
+    1b88:	7ff00713          	li	a4,2047
+    1b8c:	00000793          	li	a5,0
+    1b90:	00000813          	li	a6,0
+    1b94:	b89ff06f          	j	171c <__muldf3+0x188>
+    1b98:	03800513          	li	a0,56
+    1b9c:	00f55a63          	ble	a5,a0,1bb0 <__muldf3+0x61c>
+    1ba0:	00000713          	li	a4,0
+    1ba4:	00000793          	li	a5,0
+    1ba8:	00000813          	li	a6,0
+    1bac:	b71ff06f          	j	171c <__muldf3+0x188>
+    1bb0:	01f00513          	li	a0,31
+    1bb4:	f2f550e3          	ble	a5,a0,1ad4 <__muldf3+0x540>
+    1bb8:	fe100513          	li	a0,-31
+    1bbc:	40d506b3          	sub	a3,a0,a3
+    1bc0:	02000513          	li	a0,32
+    1bc4:	00d756b3          	srl	a3,a4,a3
+    1bc8:	00a78863          	beq	a5,a0,1bd8 <__muldf3+0x644>
+    1bcc:	43e58593          	addi	a1,a1,1086
+    1bd0:	00b71733          	sll	a4,a4,a1
+    1bd4:	00e86833          	or	a6,a6,a4
+    1bd8:	01003833          	snez	a6,a6
+    1bdc:	00d86833          	or	a6,a6,a3
+    1be0:	00787713          	andi	a4,a6,7
+    1be4:	00000793          	li	a5,0
+    1be8:	02070463          	beqz	a4,1c10 <__muldf3+0x67c>
+    1bec:	00f87793          	andi	a5,a6,15
+    1bf0:	00400693          	li	a3,4
+    1bf4:	00000713          	li	a4,0
+    1bf8:	00080593          	mv	a1,a6
+    1bfc:	f0d798e3          	bne	a5,a3,1b0c <__muldf3+0x578>
+    1c00:	00971693          	slli	a3,a4,0x9
+    1c04:	00c6d793          	srli	a5,a3,0xc
+    1c08:	01d71713          	slli	a4,a4,0x1d
+    1c0c:	00058813          	mv	a6,a1
+    1c10:	00385813          	srli	a6,a6,0x3
+    1c14:	00e86833          	or	a6,a6,a4
+    1c18:	00000713          	li	a4,0
+    1c1c:	b01ff06f          	j	171c <__muldf3+0x188>
+
+00001c20 <__subdf3>:
+__subdf3():
+    1c20:	00100837          	lui	a6,0x100
+    1c24:	fff80813          	addi	a6,a6,-1 # fffff <_etext+0xfd66f>
+    1c28:	fe010113          	addi	sp,sp,-32
+    1c2c:	00b877b3          	and	a5,a6,a1
+    1c30:	0146d893          	srli	a7,a3,0x14
+    1c34:	00d87833          	and	a6,a6,a3
+    1c38:	00379313          	slli	t1,a5,0x3
+    1c3c:	00812c23          	sw	s0,24(sp)
+    1c40:	01d55793          	srli	a5,a0,0x1d
+    1c44:	00912a23          	sw	s1,20(sp)
+    1c48:	01212823          	sw	s2,16(sp)
+    1c4c:	0145d493          	srli	s1,a1,0x14
+    1c50:	01d65913          	srli	s2,a2,0x1d
+    1c54:	00381813          	slli	a6,a6,0x3
+    1c58:	00112e23          	sw	ra,28(sp)
+    1c5c:	01312623          	sw	s3,12(sp)
+    1c60:	7ff8f893          	andi	a7,a7,2047
+    1c64:	7ff00713          	li	a4,2047
+    1c68:	01f5d413          	srli	s0,a1,0x1f
+    1c6c:	7ff4f493          	andi	s1,s1,2047
+    1c70:	0067e7b3          	or	a5,a5,t1
+    1c74:	00351513          	slli	a0,a0,0x3
+    1c78:	01f6d693          	srli	a3,a3,0x1f
+    1c7c:	010965b3          	or	a1,s2,a6
+    1c80:	00361613          	slli	a2,a2,0x3
+    1c84:	0ae88663          	beq	a7,a4,1d30 <__subdf3+0x110>
+    1c88:	0016c693          	xori	a3,a3,1
+    1c8c:	41148833          	sub	a6,s1,a7
+    1c90:	0a868863          	beq	a3,s0,1d40 <__subdf3+0x120>
+    1c94:	0f005463          	blez	a6,1d7c <__subdf3+0x15c>
+    1c98:	12089463          	bnez	a7,1dc0 <__subdf3+0x1a0>
+    1c9c:	00c5e733          	or	a4,a1,a2
+    1ca0:	24071c63          	bnez	a4,1ef8 <__subdf3+0x2d8>
+    1ca4:	7ff00713          	li	a4,2047
+    1ca8:	38e80e63          	beq	a6,a4,2044 <__subdf3+0x424>
+    1cac:	01d79693          	slli	a3,a5,0x1d
+    1cb0:	00355513          	srli	a0,a0,0x3
+    1cb4:	00d569b3          	or	s3,a0,a3
+    1cb8:	0037d793          	srli	a5,a5,0x3
+    1cbc:	7ff00713          	li	a4,2047
+    1cc0:	56e80063          	beq	a6,a4,2220 <__subdf3+0x600>
+    1cc4:	00100737          	lui	a4,0x100
+    1cc8:	fff70713          	addi	a4,a4,-1 # fffff <_etext+0xfd66f>
+    1ccc:	00e7f7b3          	and	a5,a5,a4
+    1cd0:	7ff87813          	andi	a6,a6,2047
+    1cd4:	00147593          	andi	a1,s0,1
+    1cd8:	00100737          	lui	a4,0x100
+    1cdc:	fff70713          	addi	a4,a4,-1 # fffff <_etext+0xfd66f>
+    1ce0:	00e7f7b3          	and	a5,a5,a4
+    1ce4:	80100737          	lui	a4,0x80100
+    1ce8:	fff70713          	addi	a4,a4,-1 # 800fffff <_etext+0x800fd66f>
+    1cec:	00e7f7b3          	and	a5,a5,a4
+    1cf0:	01481813          	slli	a6,a6,0x14
+    1cf4:	80000737          	lui	a4,0x80000
+    1cf8:	01c12083          	lw	ra,28(sp)
+    1cfc:	01812403          	lw	s0,24(sp)
+    1d00:	0107e7b3          	or	a5,a5,a6
+    1d04:	fff74713          	not	a4,a4
+    1d08:	01f59593          	slli	a1,a1,0x1f
+    1d0c:	00e7f7b3          	and	a5,a5,a4
+    1d10:	00b7e7b3          	or	a5,a5,a1
+    1d14:	00098513          	mv	a0,s3
+    1d18:	01412483          	lw	s1,20(sp)
+    1d1c:	01012903          	lw	s2,16(sp)
+    1d20:	00c12983          	lw	s3,12(sp)
+    1d24:	00078593          	mv	a1,a5
+    1d28:	02010113          	addi	sp,sp,32
+    1d2c:	00008067          	ret
+    1d30:	00c5e733          	or	a4,a1,a2
+    1d34:	f4070ae3          	beqz	a4,1c88 <__subdf3+0x68>
+    1d38:	41148833          	sub	a6,s1,a7
+    1d3c:	f4869ce3          	bne	a3,s0,1c94 <__subdf3+0x74>
+    1d40:	33005063          	blez	a6,2060 <__subdf3+0x440>
+    1d44:	0c089263          	bnez	a7,1e08 <__subdf3+0x1e8>
+    1d48:	00c5e733          	or	a4,a1,a2
+    1d4c:	f4070ce3          	beqz	a4,1ca4 <__subdf3+0x84>
+    1d50:	fff80713          	addi	a4,a6,-1
+    1d54:	48071c63          	bnez	a4,21ec <__subdf3+0x5cc>
+    1d58:	00c509b3          	add	s3,a0,a2
+    1d5c:	00b78933          	add	s2,a5,a1
+    1d60:	00a9b533          	sltu	a0,s3,a0
+    1d64:	00a90333          	add	t1,s2,a0
+    1d68:	00831793          	slli	a5,t1,0x8
+    1d6c:	00100493          	li	s1,1
+    1d70:	2a07d663          	bgez	a5,201c <__subdf3+0x3fc>
+    1d74:	00200493          	li	s1,2
+    1d78:	0f80006f          	j	1e70 <__subdf3+0x250>
+    1d7c:	22081063          	bnez	a6,1f9c <__subdf3+0x37c>
+    1d80:	00148713          	addi	a4,s1,1
+    1d84:	7ff77713          	andi	a4,a4,2047
+    1d88:	00100813          	li	a6,1
+    1d8c:	36e85663          	ble	a4,a6,20f8 <__subdf3+0x4d8>
+    1d90:	40c509b3          	sub	s3,a0,a2
+    1d94:	01353733          	sltu	a4,a0,s3
+    1d98:	40b78933          	sub	s2,a5,a1
+    1d9c:	40e90933          	sub	s2,s2,a4
+    1da0:	00891713          	slli	a4,s2,0x8
+    1da4:	3a074a63          	bltz	a4,2158 <__subdf3+0x538>
+    1da8:	0129e7b3          	or	a5,s3,s2
+    1dac:	16079e63          	bnez	a5,1f28 <__subdf3+0x308>
+    1db0:	00000413          	li	s0,0
+    1db4:	00000993          	li	s3,0
+    1db8:	00040813          	mv	a6,s0
+    1dbc:	f09ff06f          	j	1cc4 <__subdf3+0xa4>
+    1dc0:	008006b7          	lui	a3,0x800
+    1dc4:	7ff00713          	li	a4,2047
+    1dc8:	00d5e5b3          	or	a1,a1,a3
+    1dcc:	22e48c63          	beq	s1,a4,2004 <__subdf3+0x3e4>
+    1dd0:	03800713          	li	a4,56
+    1dd4:	31074663          	blt	a4,a6,20e0 <__subdf3+0x4c0>
+    1dd8:	01f00713          	li	a4,31
+    1ddc:	3b075063          	ble	a6,a4,217c <__subdf3+0x55c>
+    1de0:	02000713          	li	a4,32
+    1de4:	0105d6b3          	srl	a3,a1,a6
+    1de8:	00e80a63          	beq	a6,a4,1dfc <__subdf3+0x1dc>
+    1dec:	04000913          	li	s2,64
+    1df0:	41090833          	sub	a6,s2,a6
+    1df4:	01059933          	sll	s2,a1,a6
+    1df8:	01266633          	or	a2,a2,s2
+    1dfc:	00c03633          	snez	a2,a2
+    1e00:	00d666b3          	or	a3,a2,a3
+    1e04:	2e40006f          	j	20e8 <__subdf3+0x4c8>
+    1e08:	008006b7          	lui	a3,0x800
+    1e0c:	7ff00713          	li	a4,2047
+    1e10:	00d5e5b3          	or	a1,a1,a3
+    1e14:	1ee48863          	beq	s1,a4,2004 <__subdf3+0x3e4>
+    1e18:	03800713          	li	a4,56
+    1e1c:	35074a63          	blt	a4,a6,2170 <__subdf3+0x550>
+    1e20:	01f00713          	li	a4,31
+    1e24:	4b074663          	blt	a4,a6,22d0 <__subdf3+0x6b0>
+    1e28:	02000713          	li	a4,32
+    1e2c:	41070733          	sub	a4,a4,a6
+    1e30:	010656b3          	srl	a3,a2,a6
+    1e34:	00e599b3          	sll	s3,a1,a4
+    1e38:	00e61633          	sll	a2,a2,a4
+    1e3c:	00d9e9b3          	or	s3,s3,a3
+    1e40:	0105d933          	srl	s2,a1,a6
+    1e44:	00c036b3          	snez	a3,a2
+    1e48:	00d9e6b3          	or	a3,s3,a3
+    1e4c:	012787b3          	add	a5,a5,s2
+    1e50:	00a689b3          	add	s3,a3,a0
+    1e54:	00a9b533          	sltu	a0,s3,a0
+    1e58:	00f50333          	add	t1,a0,a5
+    1e5c:	00831793          	slli	a5,t1,0x8
+    1e60:	1a07de63          	bgez	a5,201c <__subdf3+0x3fc>
+    1e64:	00148493          	addi	s1,s1,1
+    1e68:	7ff00793          	li	a5,2047
+    1e6c:	1ef48063          	beq	s1,a5,204c <__subdf3+0x42c>
+    1e70:	ff800937          	lui	s2,0xff800
+    1e74:	fff90913          	addi	s2,s2,-1 # ff7fffff <_etext+0xff7fd66f>
+    1e78:	0019d793          	srli	a5,s3,0x1
+    1e7c:	01237933          	and	s2,t1,s2
+    1e80:	0019f693          	andi	a3,s3,1
+    1e84:	00d7e6b3          	or	a3,a5,a3
+    1e88:	01f91993          	slli	s3,s2,0x1f
+    1e8c:	00d9e9b3          	or	s3,s3,a3
+    1e90:	00195313          	srli	t1,s2,0x1
+    1e94:	0079f793          	andi	a5,s3,7
+    1e98:	02078063          	beqz	a5,1eb8 <__subdf3+0x298>
+    1e9c:	00f9f593          	andi	a1,s3,15
+    1ea0:	00400793          	li	a5,4
+    1ea4:	00f58a63          	beq	a1,a5,1eb8 <__subdf3+0x298>
+    1ea8:	00498713          	addi	a4,s3,4
+    1eac:	013736b3          	sltu	a3,a4,s3
+    1eb0:	00d30333          	add	t1,t1,a3
+    1eb4:	00070993          	mv	s3,a4
+    1eb8:	00831793          	slli	a5,t1,0x8
+    1ebc:	5c07da63          	bgez	a5,2490 <__subdf3+0x870>
+    1ec0:	00148813          	addi	a6,s1,1
+    1ec4:	7ff00793          	li	a5,2047
+    1ec8:	00147593          	andi	a1,s0,1
+    1ecc:	18f80263          	beq	a6,a5,2050 <__subdf3+0x430>
+    1ed0:	ff800737          	lui	a4,0xff800
+    1ed4:	fff70713          	addi	a4,a4,-1 # ff7fffff <_etext+0xff7fd66f>
+    1ed8:	00e37733          	and	a4,t1,a4
+    1edc:	0039d693          	srli	a3,s3,0x3
+    1ee0:	00971793          	slli	a5,a4,0x9
+    1ee4:	01d71993          	slli	s3,a4,0x1d
+    1ee8:	00d9e9b3          	or	s3,s3,a3
+    1eec:	00c7d793          	srli	a5,a5,0xc
+    1ef0:	7ff87813          	andi	a6,a6,2047
+    1ef4:	de5ff06f          	j	1cd8 <__subdf3+0xb8>
+    1ef8:	fff80713          	addi	a4,a6,-1
+    1efc:	14071063          	bnez	a4,203c <__subdf3+0x41c>
+    1f00:	40c509b3          	sub	s3,a0,a2
+    1f04:	40b78933          	sub	s2,a5,a1
+    1f08:	01353533          	sltu	a0,a0,s3
+    1f0c:	40a90333          	sub	t1,s2,a0
+    1f10:	00100493          	li	s1,1
+    1f14:	00831793          	slli	a5,t1,0x8
+    1f18:	1007d263          	bgez	a5,201c <__subdf3+0x3fc>
+    1f1c:	00800937          	lui	s2,0x800
+    1f20:	fff90913          	addi	s2,s2,-1 # 7fffff <_etext+0x7fd66f>
+    1f24:	01237933          	and	s2,t1,s2
+    1f28:	1a090463          	beqz	s2,20d0 <__subdf3+0x4b0>
+    1f2c:	00090513          	mv	a0,s2
+    1f30:	6b4000ef          	jal	ra,25e4 <__clzsi2>
+    1f34:	ff850813          	addi	a6,a0,-8
+    1f38:	01f00793          	li	a5,31
+    1f3c:	1707c663          	blt	a5,a6,20a8 <__subdf3+0x488>
+    1f40:	02000313          	li	t1,32
+    1f44:	41030333          	sub	t1,t1,a6
+    1f48:	0069d333          	srl	t1,s3,t1
+    1f4c:	01091933          	sll	s2,s2,a6
+    1f50:	01236933          	or	s2,t1,s2
+    1f54:	010999b3          	sll	s3,s3,a6
+    1f58:	16984063          	blt	a6,s1,20b8 <__subdf3+0x498>
+    1f5c:	40980833          	sub	a6,a6,s1
+    1f60:	00180713          	addi	a4,a6,1
+    1f64:	01f00793          	li	a5,31
+    1f68:	1ae7cc63          	blt	a5,a4,2120 <__subdf3+0x500>
+    1f6c:	02000793          	li	a5,32
+    1f70:	40e787b3          	sub	a5,a5,a4
+    1f74:	00f996b3          	sll	a3,s3,a5
+    1f78:	00e9d633          	srl	a2,s3,a4
+    1f7c:	00f917b3          	sll	a5,s2,a5
+    1f80:	00c7e7b3          	or	a5,a5,a2
+    1f84:	00d036b3          	snez	a3,a3
+    1f88:	00d7e9b3          	or	s3,a5,a3
+    1f8c:	00e95333          	srl	t1,s2,a4
+    1f90:	0079f793          	andi	a5,s3,7
+    1f94:	00000493          	li	s1,0
+    1f98:	f01ff06f          	j	1e98 <__subdf3+0x278>
+    1f9c:	20048663          	beqz	s1,21a8 <__subdf3+0x588>
+    1fa0:	7ff00713          	li	a4,2047
+    1fa4:	30e88863          	beq	a7,a4,22b4 <__subdf3+0x694>
+    1fa8:	00800737          	lui	a4,0x800
+    1fac:	41000833          	neg	a6,a6
+    1fb0:	00e7e7b3          	or	a5,a5,a4
+    1fb4:	03800713          	li	a4,56
+    1fb8:	3b074063          	blt	a4,a6,2358 <__subdf3+0x738>
+    1fbc:	01f00713          	li	a4,31
+    1fc0:	43074e63          	blt	a4,a6,23fc <__subdf3+0x7dc>
+    1fc4:	02000713          	li	a4,32
+    1fc8:	41070733          	sub	a4,a4,a6
+    1fcc:	00e799b3          	sll	s3,a5,a4
+    1fd0:	01055333          	srl	t1,a0,a6
+    1fd4:	00e51733          	sll	a4,a0,a4
+    1fd8:	0069e9b3          	or	s3,s3,t1
+    1fdc:	00e03733          	snez	a4,a4
+    1fe0:	0107d833          	srl	a6,a5,a6
+    1fe4:	00e9e9b3          	or	s3,s3,a4
+    1fe8:	410585b3          	sub	a1,a1,a6
+    1fec:	413609b3          	sub	s3,a2,s3
+    1ff0:	01363633          	sltu	a2,a2,s3
+    1ff4:	40c58333          	sub	t1,a1,a2
+    1ff8:	00088493          	mv	s1,a7
+    1ffc:	00068413          	mv	s0,a3
+    2000:	f15ff06f          	j	1f14 <__subdf3+0x2f4>
+    2004:	00a7e733          	or	a4,a5,a0
+    2008:	04070263          	beqz	a4,204c <__subdf3+0x42c>
+    200c:	7ff00813          	li	a6,2047
+    2010:	c9dff06f          	j	1cac <__subdf3+0x8c>
+    2014:	0069e7b3          	or	a5,s3,t1
+    2018:	d8078ce3          	beqz	a5,1db0 <__subdf3+0x190>
+    201c:	0079f793          	andi	a5,s3,7
+    2020:	e6079ee3          	bnez	a5,1e9c <__subdf3+0x27c>
+    2024:	01d31793          	slli	a5,t1,0x1d
+    2028:	0039d693          	srli	a3,s3,0x3
+    202c:	00f6e9b3          	or	s3,a3,a5
+    2030:	00048813          	mv	a6,s1
+    2034:	00335793          	srli	a5,t1,0x3
+    2038:	c85ff06f          	j	1cbc <__subdf3+0x9c>
+    203c:	7ff00693          	li	a3,2047
+    2040:	18d81663          	bne	a6,a3,21cc <__subdf3+0x5ac>
+    2044:	00a7e733          	or	a4,a5,a0
+    2048:	c60712e3          	bnez	a4,1cac <__subdf3+0x8c>
+    204c:	00147593          	andi	a1,s0,1
+    2050:	7ff00813          	li	a6,2047
+    2054:	00000793          	li	a5,0
+    2058:	00000993          	li	s3,0
+    205c:	c7dff06f          	j	1cd8 <__subdf3+0xb8>
+    2060:	18081e63          	bnez	a6,21fc <__subdf3+0x5dc>
+    2064:	00148893          	addi	a7,s1,1
+    2068:	7ff8f813          	andi	a6,a7,2047
+    206c:	00100713          	li	a4,1
+    2070:	1d075663          	ble	a6,a4,223c <__subdf3+0x61c>
+    2074:	7ff00713          	li	a4,2047
+    2078:	fce88ae3          	beq	a7,a4,204c <__subdf3+0x42c>
+    207c:	00c50633          	add	a2,a0,a2
+    2080:	00b78933          	add	s2,a5,a1
+    2084:	00a63533          	sltu	a0,a2,a0
+    2088:	00a90533          	add	a0,s2,a0
+    208c:	01f51693          	slli	a3,a0,0x1f
+    2090:	00165613          	srli	a2,a2,0x1
+    2094:	00c6e9b3          	or	s3,a3,a2
+    2098:	00155313          	srli	t1,a0,0x1
+    209c:	0079f793          	andi	a5,s3,7
+    20a0:	00088493          	mv	s1,a7
+    20a4:	df5ff06f          	j	1e98 <__subdf3+0x278>
+    20a8:	fd850913          	addi	s2,a0,-40
+    20ac:	01299933          	sll	s2,s3,s2
+    20b0:	00000993          	li	s3,0
+    20b4:	ea9854e3          	ble	s1,a6,1f5c <__subdf3+0x33c>
+    20b8:	ff800737          	lui	a4,0xff800
+    20bc:	fff70713          	addi	a4,a4,-1 # ff7fffff <_etext+0xff7fd66f>
+    20c0:	410484b3          	sub	s1,s1,a6
+    20c4:	00e97333          	and	t1,s2,a4
+    20c8:	0079f793          	andi	a5,s3,7
+    20cc:	dcdff06f          	j	1e98 <__subdf3+0x278>
+    20d0:	00098513          	mv	a0,s3
+    20d4:	510000ef          	jal	ra,25e4 <__clzsi2>
+    20d8:	02050513          	addi	a0,a0,32
+    20dc:	e59ff06f          	j	1f34 <__subdf3+0x314>
+    20e0:	00c5e633          	or	a2,a1,a2
+    20e4:	00c036b3          	snez	a3,a2
+    20e8:	40d509b3          	sub	s3,a0,a3
+    20ec:	01353533          	sltu	a0,a0,s3
+    20f0:	40a78333          	sub	t1,a5,a0
+    20f4:	e21ff06f          	j	1f14 <__subdf3+0x2f4>
+    20f8:	00a7e733          	or	a4,a5,a0
+    20fc:	00c5e9b3          	or	s3,a1,a2
+    2100:	0c049a63          	bnez	s1,21d4 <__subdf3+0x5b4>
+    2104:	2a071a63          	bnez	a4,23b8 <__subdf3+0x798>
+    2108:	32098c63          	beqz	s3,2440 <__subdf3+0x820>
+    210c:	00058793          	mv	a5,a1
+    2110:	00060513          	mv	a0,a2
+    2114:	00048813          	mv	a6,s1
+    2118:	00068413          	mv	s0,a3
+    211c:	b91ff06f          	j	1cac <__subdf3+0x8c>
+    2120:	fe180813          	addi	a6,a6,-31
+    2124:	02000793          	li	a5,32
+    2128:	01095833          	srl	a6,s2,a6
+    212c:	00f70a63          	beq	a4,a5,2140 <__subdf3+0x520>
+    2130:	04000313          	li	t1,64
+    2134:	40e30333          	sub	t1,t1,a4
+    2138:	00691933          	sll	s2,s2,t1
+    213c:	0129e9b3          	or	s3,s3,s2
+    2140:	013036b3          	snez	a3,s3
+    2144:	0106e9b3          	or	s3,a3,a6
+    2148:	0079f793          	andi	a5,s3,7
+    214c:	00000313          	li	t1,0
+    2150:	00000493          	li	s1,0
+    2154:	ecdff06f          	j	2020 <__subdf3+0x400>
+    2158:	40a609b3          	sub	s3,a2,a0
+    215c:	40f58933          	sub	s2,a1,a5
+    2160:	01363633          	sltu	a2,a2,s3
+    2164:	40c90933          	sub	s2,s2,a2
+    2168:	00068413          	mv	s0,a3
+    216c:	dbdff06f          	j	1f28 <__subdf3+0x308>
+    2170:	00c5e633          	or	a2,a1,a2
+    2174:	00c036b3          	snez	a3,a2
+    2178:	cd9ff06f          	j	1e50 <__subdf3+0x230>
+    217c:	02000713          	li	a4,32
+    2180:	41070733          	sub	a4,a4,a6
+    2184:	010656b3          	srl	a3,a2,a6
+    2188:	00e599b3          	sll	s3,a1,a4
+    218c:	00e61633          	sll	a2,a2,a4
+    2190:	00d9e9b3          	or	s3,s3,a3
+    2194:	0105d933          	srl	s2,a1,a6
+    2198:	00c036b3          	snez	a3,a2
+    219c:	00d9e6b3          	or	a3,s3,a3
+    21a0:	412787b3          	sub	a5,a5,s2
+    21a4:	f45ff06f          	j	20e8 <__subdf3+0x4c8>
+    21a8:	00a7e733          	or	a4,a5,a0
+    21ac:	0e071a63          	bnez	a4,22a0 <__subdf3+0x680>
+    21b0:	7ff00793          	li	a5,2047
+    21b4:	10f88063          	beq	a7,a5,22b4 <__subdf3+0x694>
+    21b8:	00088813          	mv	a6,a7
+    21bc:	00068413          	mv	s0,a3
+    21c0:	00058793          	mv	a5,a1
+    21c4:	00060513          	mv	a0,a2
+    21c8:	ae5ff06f          	j	1cac <__subdf3+0x8c>
+    21cc:	00070813          	mv	a6,a4
+    21d0:	c01ff06f          	j	1dd0 <__subdf3+0x1b0>
+    21d4:	1a071663          	bnez	a4,2380 <__subdf3+0x760>
+    21d8:	1a099063          	bnez	s3,2378 <__subdf3+0x758>
+    21dc:	00000593          	li	a1,0
+    21e0:	7ff00813          	li	a6,2047
+    21e4:	000807b7          	lui	a5,0x80
+    21e8:	af1ff06f          	j	1cd8 <__subdf3+0xb8>
+    21ec:	7ff00693          	li	a3,2047
+    21f0:	e4d80ae3          	beq	a6,a3,2044 <__subdf3+0x424>
+    21f4:	00070813          	mv	a6,a4
+    21f8:	c21ff06f          	j	1e18 <__subdf3+0x1f8>
+    21fc:	0e049e63          	bnez	s1,22f8 <__subdf3+0x6d8>
+    2200:	00a7e733          	or	a4,a5,a0
+    2204:	18071463          	bnez	a4,238c <__subdf3+0x76c>
+    2208:	7ff00793          	li	a5,2047
+    220c:	18f88a63          	beq	a7,a5,23a0 <__subdf3+0x780>
+    2210:	00088813          	mv	a6,a7
+    2214:	00058793          	mv	a5,a1
+    2218:	00060513          	mv	a0,a2
+    221c:	a91ff06f          	j	1cac <__subdf3+0x8c>
+    2220:	0137e7b3          	or	a5,a5,s3
+    2224:	e20784e3          	beqz	a5,204c <__subdf3+0x42c>
+    2228:	00000593          	li	a1,0
+    222c:	7ff00813          	li	a6,2047
+    2230:	000807b7          	lui	a5,0x80
+    2234:	00000993          	li	s3,0
+    2238:	aa1ff06f          	j	1cd8 <__subdf3+0xb8>
+    223c:	00a7e733          	or	a4,a5,a0
+    2240:	12049263          	bnez	s1,2364 <__subdf3+0x744>
+    2244:	04070463          	beqz	a4,228c <__subdf3+0x66c>
+    2248:	00c5e733          	or	a4,a1,a2
+    224c:	02070c63          	beqz	a4,2284 <__subdf3+0x664>
+    2250:	00c509b3          	add	s3,a0,a2
+    2254:	00b78933          	add	s2,a5,a1
+    2258:	00a9b533          	sltu	a0,s3,a0
+    225c:	00a90333          	add	t1,s2,a0
+    2260:	00831713          	slli	a4,t1,0x8
+    2264:	0079f793          	andi	a5,s3,7
+    2268:	da075ce3          	bgez	a4,2020 <__subdf3+0x400>
+    226c:	ff800737          	lui	a4,0xff800
+    2270:	fff70713          	addi	a4,a4,-1 # ff7fffff <_etext+0xff7fd66f>
+    2274:	00e37333          	and	t1,t1,a4
+    2278:	00100493          	li	s1,1
+    227c:	c1dff06f          	j	1e98 <__subdf3+0x278>
+    2280:	00040693          	mv	a3,s0
+    2284:	00078593          	mv	a1,a5
+    2288:	00050613          	mv	a2,a0
+    228c:	00048813          	mv	a6,s1
+    2290:	00068413          	mv	s0,a3
+    2294:	00058793          	mv	a5,a1
+    2298:	00060513          	mv	a0,a2
+    229c:	a11ff06f          	j	1cac <__subdf3+0x8c>
+    22a0:	fff00713          	li	a4,-1
+    22a4:	18e80063          	beq	a6,a4,2424 <__subdf3+0x804>
+    22a8:	7ff00713          	li	a4,2047
+    22ac:	fff84813          	not	a6,a6
+    22b0:	d0e892e3          	bne	a7,a4,1fb4 <__subdf3+0x394>
+    22b4:	00c5e7b3          	or	a5,a1,a2
+    22b8:	00068413          	mv	s0,a3
+    22bc:	d80788e3          	beqz	a5,204c <__subdf3+0x42c>
+    22c0:	00058793          	mv	a5,a1
+    22c4:	00060513          	mv	a0,a2
+    22c8:	7ff00813          	li	a6,2047
+    22cc:	9e1ff06f          	j	1cac <__subdf3+0x8c>
+    22d0:	02000713          	li	a4,32
+    22d4:	0105d6b3          	srl	a3,a1,a6
+    22d8:	00e80a63          	beq	a6,a4,22ec <__subdf3+0x6cc>
+    22dc:	04000913          	li	s2,64
+    22e0:	41090833          	sub	a6,s2,a6
+    22e4:	01059933          	sll	s2,a1,a6
+    22e8:	01266633          	or	a2,a2,s2
+    22ec:	00c03633          	snez	a2,a2
+    22f0:	00d666b3          	or	a3,a2,a3
+    22f4:	b5dff06f          	j	1e50 <__subdf3+0x230>
+    22f8:	7ff00713          	li	a4,2047
+    22fc:	0ae88263          	beq	a7,a4,23a0 <__subdf3+0x780>
+    2300:	00800737          	lui	a4,0x800
+    2304:	41000833          	neg	a6,a6
+    2308:	00e7e7b3          	or	a5,a5,a4
+    230c:	03800713          	li	a4,56
+    2310:	0f074063          	blt	a4,a6,23f0 <__subdf3+0x7d0>
+    2314:	01f00713          	li	a4,31
+    2318:	13074c63          	blt	a4,a6,2450 <__subdf3+0x830>
+    231c:	02000713          	li	a4,32
+    2320:	41070733          	sub	a4,a4,a6
+    2324:	01055333          	srl	t1,a0,a6
+    2328:	00e796b3          	sll	a3,a5,a4
+    232c:	00e51533          	sll	a0,a0,a4
+    2330:	0066e6b3          	or	a3,a3,t1
+    2334:	00a039b3          	snez	s3,a0
+    2338:	0107d833          	srl	a6,a5,a6
+    233c:	0136e6b3          	or	a3,a3,s3
+    2340:	010585b3          	add	a1,a1,a6
+    2344:	00c689b3          	add	s3,a3,a2
+    2348:	00c9b633          	sltu	a2,s3,a2
+    234c:	00b60333          	add	t1,a2,a1
+    2350:	00088493          	mv	s1,a7
+    2354:	b09ff06f          	j	1e5c <__subdf3+0x23c>
+    2358:	00a7e533          	or	a0,a5,a0
+    235c:	00a039b3          	snez	s3,a0
+    2360:	c8dff06f          	j	1fec <__subdf3+0x3cc>
+    2364:	00070a63          	beqz	a4,2378 <__subdf3+0x758>
+    2368:	00c5e633          	or	a2,a1,a2
+    236c:	ea061ee3          	bnez	a2,2228 <__subdf3+0x608>
+    2370:	7ff00813          	li	a6,2047
+    2374:	939ff06f          	j	1cac <__subdf3+0x8c>
+    2378:	7ff00493          	li	s1,2047
+    237c:	f11ff06f          	j	228c <__subdf3+0x66c>
+    2380:	ea0994e3          	bnez	s3,2228 <__subdf3+0x608>
+    2384:	7ff00813          	li	a6,2047
+    2388:	925ff06f          	j	1cac <__subdf3+0x8c>
+    238c:	fff00713          	li	a4,-1
+    2390:	0ee80463          	beq	a6,a4,2478 <__subdf3+0x858>
+    2394:	7ff00713          	li	a4,2047
+    2398:	fff84813          	not	a6,a6
+    239c:	f6e898e3          	bne	a7,a4,230c <__subdf3+0x6ec>
+    23a0:	00c5e7b3          	or	a5,a1,a2
+    23a4:	ca0784e3          	beqz	a5,204c <__subdf3+0x42c>
+    23a8:	00058793          	mv	a5,a1
+    23ac:	00060513          	mv	a0,a2
+    23b0:	7ff00813          	li	a6,2047
+    23b4:	8f9ff06f          	j	1cac <__subdf3+0x8c>
+    23b8:	ec0984e3          	beqz	s3,2280 <__subdf3+0x660>
+    23bc:	40c509b3          	sub	s3,a0,a2
+    23c0:	40b78333          	sub	t1,a5,a1
+    23c4:	01353933          	sltu	s2,a0,s3
+    23c8:	41230333          	sub	t1,t1,s2
+    23cc:	00831713          	slli	a4,t1,0x8
+    23d0:	c40752e3          	bgez	a4,2014 <__subdf3+0x3f4>
+    23d4:	40a609b3          	sub	s3,a2,a0
+    23d8:	40f58933          	sub	s2,a1,a5
+    23dc:	01363633          	sltu	a2,a2,s3
+    23e0:	40c90333          	sub	t1,s2,a2
+    23e4:	0079f793          	andi	a5,s3,7
+    23e8:	00068413          	mv	s0,a3
+    23ec:	aadff06f          	j	1e98 <__subdf3+0x278>
+    23f0:	00a7e533          	or	a0,a5,a0
+    23f4:	00a036b3          	snez	a3,a0
+    23f8:	f4dff06f          	j	2344 <__subdf3+0x724>
+    23fc:	02000713          	li	a4,32
+    2400:	0107d9b3          	srl	s3,a5,a6
+    2404:	00e80a63          	beq	a6,a4,2418 <__subdf3+0x7f8>
+    2408:	04000713          	li	a4,64
+    240c:	41070833          	sub	a6,a4,a6
+    2410:	010797b3          	sll	a5,a5,a6
+    2414:	00f56533          	or	a0,a0,a5
+    2418:	00a03533          	snez	a0,a0
+    241c:	013569b3          	or	s3,a0,s3
+    2420:	bcdff06f          	j	1fec <__subdf3+0x3cc>
+    2424:	40a609b3          	sub	s3,a2,a0
+    2428:	40f58933          	sub	s2,a1,a5
+    242c:	01363633          	sltu	a2,a2,s3
+    2430:	40c90333          	sub	t1,s2,a2
+    2434:	00088493          	mv	s1,a7
+    2438:	00068413          	mv	s0,a3
+    243c:	ad9ff06f          	j	1f14 <__subdf3+0x2f4>
+    2440:	00000413          	li	s0,0
+    2444:	00040813          	mv	a6,s0
+    2448:	00000793          	li	a5,0
+    244c:	879ff06f          	j	1cc4 <__subdf3+0xa4>
+    2450:	02000713          	li	a4,32
+    2454:	0107d6b3          	srl	a3,a5,a6
+    2458:	00e80a63          	beq	a6,a4,246c <__subdf3+0x84c>
+    245c:	04000713          	li	a4,64
+    2460:	41070833          	sub	a6,a4,a6
+    2464:	010797b3          	sll	a5,a5,a6
+    2468:	00f56533          	or	a0,a0,a5
+    246c:	00a03533          	snez	a0,a0
+    2470:	00d566b3          	or	a3,a0,a3
+    2474:	ed1ff06f          	j	2344 <__subdf3+0x724>
+    2478:	00c509b3          	add	s3,a0,a2
+    247c:	00b78933          	add	s2,a5,a1
+    2480:	00c9b633          	sltu	a2,s3,a2
+    2484:	00c90333          	add	t1,s2,a2
+    2488:	00088493          	mv	s1,a7
+    248c:	9d1ff06f          	j	1e5c <__subdf3+0x23c>
+    2490:	00048813          	mv	a6,s1
+    2494:	00030793          	mv	a5,t1
+    2498:	00098513          	mv	a0,s3
+    249c:	811ff06f          	j	1cac <__subdf3+0x8c>
+
+000024a0 <__fixdfsi>:
+__fixdfsi():
+    24a0:	0145d793          	srli	a5,a1,0x14
+    24a4:	001006b7          	lui	a3,0x100
+    24a8:	fff68713          	addi	a4,a3,-1 # fffff <_etext+0xfd66f>
+    24ac:	7ff7f793          	andi	a5,a5,2047
+    24b0:	3fe00613          	li	a2,1022
+    24b4:	00b77733          	and	a4,a4,a1
+    24b8:	01f5d593          	srli	a1,a1,0x1f
+    24bc:	04f65663          	ble	a5,a2,2508 <__fixdfsi+0x68>
+    24c0:	41d00613          	li	a2,1053
+    24c4:	02f64a63          	blt	a2,a5,24f8 <__fixdfsi+0x58>
+    24c8:	43300613          	li	a2,1075
+    24cc:	40f60633          	sub	a2,a2,a5
+    24d0:	01f00813          	li	a6,31
+    24d4:	00d76733          	or	a4,a4,a3
+    24d8:	02c85c63          	ble	a2,a6,2510 <__fixdfsi+0x70>
+    24dc:	41300693          	li	a3,1043
+    24e0:	40f687b3          	sub	a5,a3,a5
+    24e4:	00f757b3          	srl	a5,a4,a5
+    24e8:	40f00533          	neg	a0,a5
+    24ec:	02059063          	bnez	a1,250c <__fixdfsi+0x6c>
+    24f0:	00078513          	mv	a0,a5
+    24f4:	00008067          	ret
+    24f8:	80000537          	lui	a0,0x80000
+    24fc:	fff54513          	not	a0,a0
+    2500:	00a58533          	add	a0,a1,a0
+    2504:	00008067          	ret
+    2508:	00000513          	li	a0,0
+    250c:	00008067          	ret
+    2510:	bed78793          	addi	a5,a5,-1043 # 7fbed <_etext+0x7d25d>
+    2514:	00f717b3          	sll	a5,a4,a5
+    2518:	00c55533          	srl	a0,a0,a2
+    251c:	00a7e7b3          	or	a5,a5,a0
+    2520:	fc9ff06f          	j	24e8 <__fixdfsi+0x48>
+
+00002524 <__floatunsidf>:
+__floatunsidf():
+    2524:	ff010113          	addi	sp,sp,-16
+    2528:	00112623          	sw	ra,12(sp)
+    252c:	00812423          	sw	s0,8(sp)
+    2530:	0a050263          	beqz	a0,25d4 <__floatunsidf+0xb0>
+    2534:	00050413          	mv	s0,a0
+    2538:	0ac000ef          	jal	ra,25e4 <__clzsi2>
+    253c:	41e00693          	li	a3,1054
+    2540:	40a686b3          	sub	a3,a3,a0
+    2544:	00a00793          	li	a5,10
+    2548:	7ff6f693          	andi	a3,a3,2047
+    254c:	06a7d263          	ble	a0,a5,25b0 <__floatunsidf+0x8c>
+    2550:	ff550793          	addi	a5,a0,-11 # 7ffffff5 <_etext+0x7fffd665>
+    2554:	00100737          	lui	a4,0x100
+    2558:	00f417b3          	sll	a5,s0,a5
+    255c:	fff70713          	addi	a4,a4,-1 # fffff <_etext+0xfd66f>
+    2560:	00e7f7b3          	and	a5,a5,a4
+    2564:	00000513          	li	a0,0
+    2568:	00100737          	lui	a4,0x100
+    256c:	fff70713          	addi	a4,a4,-1 # fffff <_etext+0xfd66f>
+    2570:	00e7f7b3          	and	a5,a5,a4
+    2574:	80100737          	lui	a4,0x80100
+    2578:	fff70713          	addi	a4,a4,-1 # 800fffff <_etext+0x800fd66f>
+    257c:	01469693          	slli	a3,a3,0x14
+    2580:	00e7f733          	and	a4,a5,a4
+    2584:	00d76733          	or	a4,a4,a3
+    2588:	00c12083          	lw	ra,12(sp)
+    258c:	00812403          	lw	s0,8(sp)
+    2590:	800006b7          	lui	a3,0x80000
+    2594:	fff6c693          	not	a3,a3
+    2598:	00050793          	mv	a5,a0
+    259c:	00d77733          	and	a4,a4,a3
+    25a0:	00078513          	mv	a0,a5
+    25a4:	00070593          	mv	a1,a4
+    25a8:	01010113          	addi	sp,sp,16
+    25ac:	00008067          	ret
+    25b0:	00b00793          	li	a5,11
+    25b4:	40a787b3          	sub	a5,a5,a0
+    25b8:	00100737          	lui	a4,0x100
+    25bc:	01550513          	addi	a0,a0,21
+    25c0:	00f457b3          	srl	a5,s0,a5
+    25c4:	fff70713          	addi	a4,a4,-1 # fffff <_etext+0xfd66f>
+    25c8:	00a41533          	sll	a0,s0,a0
+    25cc:	00e7f7b3          	and	a5,a5,a4
+    25d0:	f99ff06f          	j	2568 <__floatunsidf+0x44>
+    25d4:	00000693          	li	a3,0
+    25d8:	00000793          	li	a5,0
+    25dc:	00000513          	li	a0,0
+    25e0:	f89ff06f          	j	2568 <__floatunsidf+0x44>
+
+000025e4 <__clzsi2>:
+__clzsi2():
+    25e4:	000107b7          	lui	a5,0x10
+    25e8:	02f57463          	bleu	a5,a0,2610 <__clzsi2+0x2c>
+    25ec:	0ff00793          	li	a5,255
+    25f0:	02000713          	li	a4,32
+    25f4:	04a7e263          	bltu	a5,a0,2638 <__clzsi2+0x54>
+    25f8:	00000797          	auipc	a5,0x0
+    25fc:	29878793          	addi	a5,a5,664 # 2890 <__clz_tab>
+    2600:	00a78533          	add	a0,a5,a0
+    2604:	00054503          	lbu	a0,0(a0)
+    2608:	40a70533          	sub	a0,a4,a0
+    260c:	00008067          	ret
+    2610:	010007b7          	lui	a5,0x1000
+    2614:	04f56263          	bltu	a0,a5,2658 <__clzsi2+0x74>
+    2618:	00000797          	auipc	a5,0x0
+    261c:	27878793          	addi	a5,a5,632 # 2890 <__clz_tab>
+    2620:	01855513          	srli	a0,a0,0x18
+    2624:	00a78533          	add	a0,a5,a0
+    2628:	00054503          	lbu	a0,0(a0)
+    262c:	00800713          	li	a4,8
+    2630:	40a70533          	sub	a0,a4,a0
+    2634:	00008067          	ret
+    2638:	00000797          	auipc	a5,0x0
+    263c:	25878793          	addi	a5,a5,600 # 2890 <__clz_tab>
+    2640:	00855513          	srli	a0,a0,0x8
+    2644:	00a78533          	add	a0,a5,a0
+    2648:	00054503          	lbu	a0,0(a0)
+    264c:	01800713          	li	a4,24
+    2650:	40a70533          	sub	a0,a4,a0
+    2654:	00008067          	ret
+    2658:	00000797          	auipc	a5,0x0
+    265c:	23878793          	addi	a5,a5,568 # 2890 <__clz_tab>
+    2660:	01055513          	srli	a0,a0,0x10
+    2664:	00a78533          	add	a0,a5,a0
+    2668:	00054503          	lbu	a0,0(a0)
+    266c:	01000713          	li	a4,16
+    2670:	40a70533          	sub	a0,a4,a0
+    2674:	00008067          	ret
+    2678:	6548                	flw	fa0,12(a0)
+    267a:	6c6c                	flw	fa1,92(s0)
+    267c:	6952206f          	j	25510 <_etext+0x22b80>
+    2680:	562d6373          	csrrsi	t1,0x562,26
+    2684:	5020                	lw	s0,96(s0)
+    2686:	6e61                	lui	t3,0x18
+    2688:	32206f67          	0x32206f67
+    268c:	3230                	fld	fa2,96(a2)
+    268e:	0a34                	addi	a3,sp,280
+    2690:	0000                	unimp
+    2692:	0000                	unimp
+    2694:	65636e6f          	jal	t3,38cea <_etext+0x3635a>
+    2698:	6820                	flw	fs0,80(s0)
+    269a:	6e61                	lui	t3,0x18
+    269c:	6c64                	flw	fs1,92(s0)
+    269e:	7265                	lui	tp,0xffff9
+    26a0:	000a                	c.slli	zero,0x2
+    26a2:	0000                	unimp
+    26a4:	1304                	addi	s1,sp,416
+    26a6:	0000                	unimp
+    26a8:	1304                	addi	s1,sp,416
+    26aa:	0000                	unimp
+    26ac:	1304                	addi	s1,sp,416
+    26ae:	0000                	unimp
+    26b0:	1304                	addi	s1,sp,416
+    26b2:	0000                	unimp
+    26b4:	1304                	addi	s1,sp,416
+    26b6:	0000                	unimp
+    26b8:	1304                	addi	s1,sp,416
+    26ba:	0000                	unimp
+    26bc:	1304                	addi	s1,sp,416
+    26be:	0000                	unimp
+    26c0:	1304                	addi	s1,sp,416
+    26c2:	0000                	unimp
+    26c4:	1304                	addi	s1,sp,416
+    26c6:	0000                	unimp
+    26c8:	1304                	addi	s1,sp,416
+    26ca:	0000                	unimp
+    26cc:	1304                	addi	s1,sp,416
+    26ce:	0000                	unimp
+    26d0:	1304                	addi	s1,sp,416
+    26d2:	0000                	unimp
+    26d4:	1304                	addi	s1,sp,416
+    26d6:	0000                	unimp
+    26d8:	1304                	addi	s1,sp,416
+    26da:	0000                	unimp
+    26dc:	1304                	addi	s1,sp,416
+    26de:	0000                	unimp
+    26e0:	1304                	addi	s1,sp,416
+    26e2:	0000                	unimp
+    26e4:	1304                	addi	s1,sp,416
+    26e6:	0000                	unimp
+    26e8:	1304                	addi	s1,sp,416
+    26ea:	0000                	unimp
+    26ec:	1304                	addi	s1,sp,416
+    26ee:	0000                	unimp
+    26f0:	1304                	addi	s1,sp,416
+    26f2:	0000                	unimp
+    26f4:	1304                	addi	s1,sp,416
+    26f6:	0000                	unimp
+    26f8:	1304                	addi	s1,sp,416
+    26fa:	0000                	unimp
+    26fc:	1304                	addi	s1,sp,416
+    26fe:	0000                	unimp
+    2700:	1304                	addi	s1,sp,416
+    2702:	0000                	unimp
+    2704:	1304                	addi	s1,sp,416
+    2706:	0000                	unimp
+    2708:	1304                	addi	s1,sp,416
+    270a:	0000                	unimp
+    270c:	1304                	addi	s1,sp,416
+    270e:	0000                	unimp
+    2710:	1304                	addi	s1,sp,416
+    2712:	0000                	unimp
+    2714:	1304                	addi	s1,sp,416
+    2716:	0000                	unimp
+    2718:	1304                	addi	s1,sp,416
+    271a:	0000                	unimp
+    271c:	1304                	addi	s1,sp,416
+    271e:	0000                	unimp
+    2720:	133c                	addi	a5,sp,424
+    2722:	0000                	unimp
+    2724:	1304                	addi	s1,sp,416
+    2726:	0000                	unimp
+    2728:	1304                	addi	s1,sp,416
+    272a:	0000                	unimp
+    272c:	1304                	addi	s1,sp,416
+    272e:	0000                	unimp
+    2730:	1304                	addi	s1,sp,416
+    2732:	0000                	unimp
+    2734:	1304                	addi	s1,sp,416
+    2736:	0000                	unimp
+    2738:	1304                	addi	s1,sp,416
+    273a:	0000                	unimp
+    273c:	1304                	addi	s1,sp,416
+    273e:	0000                	unimp
+    2740:	1304                	addi	s1,sp,416
+    2742:	0000                	unimp
+    2744:	1304                	addi	s1,sp,416
+    2746:	0000                	unimp
+    2748:	1304                	addi	s1,sp,416
+    274a:	0000                	unimp
+    274c:	1304                	addi	s1,sp,416
+    274e:	0000                	unimp
+    2750:	1304                	addi	s1,sp,416
+    2752:	0000                	unimp
+    2754:	1304                	addi	s1,sp,416
+    2756:	0000                	unimp
+    2758:	1304                	addi	s1,sp,416
+    275a:	0000                	unimp
+    275c:	134e                	slli	t1,t1,0x33
+    275e:	0000                	unimp
+    2760:	1304                	addi	s1,sp,416
+    2762:	0000                	unimp
+    2764:	1304                	addi	s1,sp,416
+    2766:	0000                	unimp
+    2768:	1304                	addi	s1,sp,416
+    276a:	0000                	unimp
+    276c:	1304                	addi	s1,sp,416
+    276e:	0000                	unimp
+    2770:	1326                	slli	t1,t1,0x29
+    2772:	0000                	unimp
+    2774:	1304                	addi	s1,sp,416
+    2776:	0000                	unimp
+    2778:	1304                	addi	s1,sp,416
+    277a:	0000                	unimp
+    277c:	1304                	addi	s1,sp,416
+    277e:	0000                	unimp
+    2780:	1304                	addi	s1,sp,416
+    2782:	0000                	unimp
+    2784:	1304                	addi	s1,sp,416
+    2786:	0000                	unimp
+    2788:	1304                	addi	s1,sp,416
+    278a:	0000                	unimp
+    278c:	1304                	addi	s1,sp,416
+    278e:	0000                	unimp
+    2790:	1304                	addi	s1,sp,416
+    2792:	0000                	unimp
+    2794:	1304                	addi	s1,sp,416
+    2796:	0000                	unimp
+    2798:	1304                	addi	s1,sp,416
+    279a:	0000                	unimp
+    279c:	1310                	addi	a2,sp,416
+    279e:	0000                	unimp
+    27a0:	133c                	addi	a5,sp,424
+    27a2:	0000                	unimp
+    27a4:	1304                	addi	s1,sp,416
+    27a6:	0000                	unimp
+    27a8:	1378                	addi	a4,sp,428
+    27aa:	0000                	unimp
+    27ac:	1304                	addi	s1,sp,416
+    27ae:	0000                	unimp
+    27b0:	1304                	addi	s1,sp,416
+    27b2:	0000                	unimp
+    27b4:	133c                	addi	a5,sp,424
+    27b6:	0000                	unimp
+    27b8:	1304                	addi	s1,sp,416
+    27ba:	0000                	unimp
+    27bc:	1304                	addi	s1,sp,416
+    27be:	0000                	unimp
+    27c0:	1304                	addi	s1,sp,416
+    27c2:	0000                	unimp
+    27c4:	1304                	addi	s1,sp,416
+    27c6:	0000                	unimp
+    27c8:	1304                	addi	s1,sp,416
+    27ca:	0000                	unimp
+    27cc:	1304                	addi	s1,sp,416
+    27ce:	0000                	unimp
+    27d0:	1304                	addi	s1,sp,416
+    27d2:	0000                	unimp
+    27d4:	1304                	addi	s1,sp,416
+    27d6:	0000                	unimp
+    27d8:	1304                	addi	s1,sp,416
+    27da:	0000                	unimp
+    27dc:	134e                	slli	t1,t1,0x33
+    27de:	0000                	unimp
+    27e0:	1304                	addi	s1,sp,416
+    27e2:	0000                	unimp
+    27e4:	1304                	addi	s1,sp,416
+    27e6:	0000                	unimp
+    27e8:	1304                	addi	s1,sp,416
+    27ea:	0000                	unimp
+    27ec:	1304                	addi	s1,sp,416
+    27ee:	0000                	unimp
+    27f0:	1326                	slli	t1,t1,0x29
+	...
+    27fa:	0000                	unimp
+    27fc:	8480                	0x8480
+    27fe:	412e                	lw	sp,200(sp)
+    2800:	3130                	fld	fa2,96(a0)
+    2802:	3332                	fld	ft6,296(sp)
+    2804:	3534                	fld	fa3,104(a0)
+    2806:	3736                	fld	fa4,360(sp)
+    2808:	3938                	fld	fa4,112(a0)
+    280a:	6261                	lui	tp,0x18
+    280c:	66656463          	bltu	a0,t1,2e74 <_etext+0x4e4>
+    2810:	0000                	unimp
+    2812:	0000                	unimp
+    2814:	6150                	flw	fa2,4(a0)
+    2816:	6172                	flw	ft2,28(sp)
+    2818:	656d                	lui	a0,0x1b
+    281a:	6574                	flw	fa3,76(a0)
+    281c:	2072                	fld	ft0,280(sp)
+    281e:	4449                	li	s0,18
+    2820:	203a                	fld	ft0,392(sp)
+    2822:	6425                	lui	s0,0x9
+    2824:	202c                	fld	fa1,64(s0)
+    2826:	6150                	flw	fa2,4(a0)
+    2828:	6172                	flw	ft2,28(sp)
+    282a:	656d                	lui	a0,0x1b
+    282c:	6574                	flw	fa3,76(a0)
+    282e:	2072                	fld	ft0,280(sp)
+    2830:	6156                	flw	ft2,84(sp)
+    2832:	756c                	flw	fa1,108(a0)
+    2834:	3a65                	jal	21ec <__subdf3+0x5cc>
+    2836:	2520                	fld	fs0,72(a0)
+    2838:	0a64                	addi	s1,sp,284
+    283a:	0000                	unimp
+    283c:	63637573          	csrrci	a0,0x636,6
+    2840:	7365                	lui	t1,0xffff9
+    2842:	6c756673          	csrrsi	a2,0x6c7,10
+    2846:	000a                	c.slli	zero,0x2
+    2848:	6166                	flw	ft2,88(sp)
+    284a:	6c69                	lui	s8,0x1a
+    284c:	6465                	lui	s0,0x19
+    284e:	000a                	c.slli	zero,0x2
+    2850:	f000                	fsw	fs0,32(s0)
+    2852:	ffff                	0xffff
+    2854:	ef2c                	fsw	fa1,88(a4)
+    2856:	ffff                	0xffff
+    2858:	ef2c                	fsw	fa1,88(a4)
+    285a:	ffff                	0xffff
+    285c:	ef28                	fsw	fa0,88(a4)
+    285e:	ffff                	0xffff
+    2860:	ef4c                	fsw	fa1,28(a4)
+    2862:	ffff                	0xffff
+    2864:	ef4c                	fsw	fa1,28(a4)
+    2866:	ffff                	0xffff
+    2868:	eebc                	fsw	fa5,88(a3)
+    286a:	ffff                	0xffff
+    286c:	ef28                	fsw	fa0,88(a4)
+    286e:	ffff                	0xffff
+    2870:	ef4c                	fsw	fa1,28(a4)
+    2872:	ffff                	0xffff
+    2874:	eebc                	fsw	fa5,88(a3)
+    2876:	ffff                	0xffff
+    2878:	ef4c                	fsw	fa1,28(a4)
+    287a:	ffff                	0xffff
+    287c:	ef28                	fsw	fa0,88(a4)
+    287e:	ffff                	0xffff
+    2880:	ef48                	fsw	fa0,28(a4)
+    2882:	ffff                	0xffff
+    2884:	ef48                	fsw	fa0,28(a4)
+    2886:	ffff                	0xffff
+    2888:	ef48                	fsw	fa0,28(a4)
+    288a:	ffff                	0xffff
+    288c:	eebc                	fsw	fa5,88(a3)
+    288e:	ffff                	0xffff
+
+00002890 <__clz_tab>:
+    2890:	0100 0202 0303 0303 0404 0404 0404 0404     ................
+    28a0:	0505 0505 0505 0505 0505 0505 0505 0505     ................
+    28b0:	0606 0606 0606 0606 0606 0606 0606 0606     ................
+    28c0:	0606 0606 0606 0606 0606 0606 0606 0606     ................
+    28d0:	0707 0707 0707 0707 0707 0707 0707 0707     ................
+    28e0:	0707 0707 0707 0707 0707 0707 0707 0707     ................
+    28f0:	0707 0707 0707 0707 0707 0707 0707 0707     ................
+    2900:	0707 0707 0707 0707 0707 0707 0707 0707     ................
+    2910:	0808 0808 0808 0808 0808 0808 0808 0808     ................
+    2920:	0808 0808 0808 0808 0808 0808 0808 0808     ................
+    2930:	0808 0808 0808 0808 0808 0808 0808 0808     ................
+    2940:	0808 0808 0808 0808 0808 0808 0808 0808     ................
+    2950:	0808 0808 0808 0808 0808 0808 0808 0808     ................
+    2960:	0808 0808 0808 0808 0808 0808 0808 0808     ................
+    2970:	0808 0808 0808 0808 0808 0808 0808 0808     ................
+    2980:	0808 0808 0808 0808 0808 0808 0808 0808     ................

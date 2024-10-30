@@ -1,0 +1,258 @@
+   1              		.file	"main.c"
+   2              		.option nopic
+   3              		.text
+   4              	.Ltext0:
+   5              		.cfi_sections	.debug_frame
+   6              		.section	.text.startup.main,"ax",@progbits
+   7              		.align	1
+   8              		.globl	main
+  10              	main:
+  11              	.LFB1:
+  12              		.file 1 "../src/main.c"
+   1:../src/main.c **** #include "uart.h"
+   2:../src/main.c **** 
+   3:../src/main.c **** 
+   4:../src/main.c **** #define SYSTEM_CNT_M			125										//系统时钟单位：MHz
+   5:../src/main.c **** #define system_clk				50
+   6:../src/main.c **** #define SYSTEM_CLOCK			SYSTEM_CNT_M*1000000UL
+   7:../src/main.c **** #define system_CLOCK 			system_clk*1000000UL
+   8:../src/main.c **** #define BAUND_9600				((system_CLOCK)/9600)
+   9:../src/main.c **** #define BAUND_115200			(SYSTEM_CLOCK/115200)
+  10:../src/main.c **** 
+  11:../src/main.c **** 
+  12:../src/main.c **** 
+  13:../src/main.c **** int main(void)
+  14:../src/main.c **** {
+  13              		.loc 1 14 0
+  14              		.cfi_startproc
+  15 0000 4111     		addi	sp,sp,-16
+  16              		.cfi_def_cfa_offset 16
+  15:../src/main.c **** 	reg_uart_clkdiv = BAUND_9600;
+  17              		.loc 1 15 0
+  18 0002 8567     		li	a5,4096
+  14:../src/main.c **** 	reg_uart_clkdiv = BAUND_9600;
+  19              		.loc 1 14 0
+  20 0004 22C4     		sw	s0,8(sp)
+  21 0006 06C6     		sw	ra,12(sp)
+  22              		.cfi_offset 8, -8
+  23              		.cfi_offset 1, -4
+  24              		.loc 1 15 0
+  25 0008 2167     		li	a4,32768
+  26 000a 93878745 		addi	a5,a5,1112
+  16:../src/main.c **** 
+  17:../src/main.c ****     printk("Hello Risc-V Pango 2024\n");
+  27              		.loc 1 17 0
+  28 000e 37050000 		lui	a0,%hi(.LC0)
+  15:../src/main.c **** 
+  29              		.loc 1 15 0
+  30 0012 1CC3     		sw	a5,0(a4)
+  31              		.loc 1 17 0
+  32 0014 13050500 		addi	a0,a0,%lo(.LC0)
+  33 0018 97000000 		call	printk
+  33      E7800000 
+  34              	.LVL0:
+  35 0020 37040000 		lui	s0,%hi(.LC1)
+  36              	.L2:
+  18:../src/main.c ****     while(1)
+  19:../src/main.c ****     {
+  20:../src/main.c ****     	uart_handler();
+  37              		.loc 1 20 0 discriminator 1
+  38 0024 97000000 		call	uart_handler
+  38      E7800000 
+  39              	.LVL1:
+  21:../src/main.c ****         printk("once handler\n");
+  40              		.loc 1 21 0 discriminator 1
+  41 002c 13050400 		addi	a0,s0,%lo(.LC1)
+  42 0030 97000000 		call	printk
+  42      E7800000 
+  43              	.LVL2:
+  44 0038 F5B7     		j	.L2
+  45              		.cfi_endproc
+  46              	.LFE1:
+  48              		.section	.rodata.main.str1.4,"aMS",@progbits,1
+  49              		.align	2
+  50              	.LC0:
+  51 0000 48656C6C 		.string	"Hello Risc-V Pango 2024\n"
+  51      6F205269 
+  51      73632D56 
+  51      2050616E 
+  51      676F2032 
+  52 0019 000000   		.zero	3
+  53              	.LC1:
+  54 001c 6F6E6365 		.string	"once handler\n"
+  54      2068616E 
+  54      646C6572 
+  54      0A00
+  55              		.text
+  56              	.Letext0:
+  57              		.file 2 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+  58              		.file 3 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+  59              		.file 4 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+  60              		.file 5 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+  61              		.file 6 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+  62              		.file 7 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+  63              		.file 8 "../src/uart.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:10     .text.startup.main:0000000000000000 main
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:14     .text.startup.main:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:15     .text.startup.main:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:16     .text.startup.main:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:18     .text.startup.main:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:20     .text.startup.main:0000000000000004 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:22     .text.startup.main:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:23     .text.startup.main:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:25     .text.startup.main:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:28     .text.startup.main:000000000000000e .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:30     .text.startup.main:0000000000000012 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:32     .text.startup.main:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:38     .text.startup.main:0000000000000024 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:41     .text.startup.main:000000000000002c .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:45     .text.startup.main:000000000000003a .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:48     .text.startup.main:000000000000003a .L0 
+                     .debug_frame:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:50     .rodata.main.str1.4:0000000000000000 .LC0
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:53     .rodata.main.str1.4:000000000000001c .LC1
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:36     .text.startup.main:0000000000000024 .L2
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1166   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1770   .debug_str:000000000000027a .LASF124
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1742   .debug_str:00000000000001e6 .LASF125
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1654   .debug_str:000000000000000c .LASF126
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1644   .debug_ranges:0000000000000000 .Ldebug_ranges0
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1650   .debug_line:0000000000000000 .Ldebug_line0
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1686   .debug_str:00000000000000ef .LASF0
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1800   .debug_str:000000000000039d .LASF1
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1806   .debug_str:00000000000003b9 .LASF2
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1758   .debug_str:0000000000000237 .LASF3
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1702   .debug_str:0000000000000134 .LASF4
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1724   .debug_str:0000000000000198 .LASF9
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1752   .debug_str:0000000000000218 .LASF5
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1684   .debug_str:00000000000000e1 .LASF6
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1672   .debug_str:0000000000000090 .LASF7
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1744   .debug_str:00000000000001f4 .LASF8
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1844   .debug_str:0000000000000467 .LASF10
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1784   .debug_str:000000000000034b .LASF11
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1798   .debug_str:000000000000038b .LASF12
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1794   .debug_str:000000000000037a .LASF13
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1850   .debug_str:0000000000000482 .LASF14
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1884   .debug_str:0000000000000518 .LASF15
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1772   .debug_str:000000000000031c .LASF16
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1768   .debug_str:0000000000000274 .LASF17
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1746   .debug_str:0000000000000201 .LASF18
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1842   .debug_str:000000000000045f .LASF19
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1864   .debug_str:00000000000004b8 .LASF20
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1816   .debug_str:00000000000003e1 .LASF21
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1728   .debug_str:00000000000001a9 .LASF22
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1870   .debug_str:00000000000004ce .LASF23
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1732   .debug_str:00000000000001ba .LASF28
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1860   .debug_str:00000000000004a5 .LASF24
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1836   .debug_str:000000000000044a .LASF25
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1726   .debug_str:00000000000001a3 .LASF26
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1878   .debug_str:0000000000000503 .LASF27
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1740   .debug_str:00000000000001e1 .LASF29
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1682   .debug_str:00000000000000d8 .LASF30
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1856   .debug_str:0000000000000496 .LASF31
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1692   .debug_str:0000000000000107 .LASF32
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1908   .debug_str:0000000000000581 .LASF33
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1788   .debug_str:000000000000035e .LASF34
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1780   .debug_str:0000000000000338 .LASF35
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1880   .debug_str:0000000000000508 .LASF36
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1808   .debug_str:00000000000003c3 .LASF37
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1894   .debug_str:0000000000000543 .LASF38
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1696   .debug_str:0000000000000116 .LASF39
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1720   .debug_str:000000000000018b .LASF40
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1652   .debug_str:0000000000000000 .LASF41
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1866   .debug_str:00000000000004c0 .LASF42
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1706   .debug_str:0000000000000144 .LASF43
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1790   .debug_str:0000000000000367 .LASF44
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1828   .debug_str:000000000000041a .LASF45
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1722   .debug_str:0000000000000193 .LASF46
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1810   .debug_str:00000000000003cd .LASF47
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1690   .debug_str:0000000000000101 .LASF48
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1660   .debug_str:0000000000000051 .LASF49
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1818   .debug_str:00000000000003ec .LASF50
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1704   .debug_str:000000000000013d .LASF51
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1754   .debug_str:000000000000022a .LASF52
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1674   .debug_str:00000000000000a7 .LASF53
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1698   .debug_str:0000000000000124 .LASF54
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1736   .debug_str:00000000000001d1 .LASF55
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1778   .debug_str:0000000000000331 .LASF56
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1846   .debug_str:0000000000000470 .LASF57
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1898   .debug_str:000000000000055d .LASF58
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1688   .debug_str:00000000000000fb .LASF59
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1890   .debug_str:0000000000000535 .LASF60
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1710   .debug_str:0000000000000153 .LASF61
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1714   .debug_str:0000000000000164 .LASF62
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1666   .debug_str:000000000000006a .LASF63
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1774   .debug_str:0000000000000323 .LASF64
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1820   .debug_str:00000000000003f4 .LASF65
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1776   .debug_str:0000000000000329 .LASF66
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1838   .debug_str:0000000000000452 .LASF67
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1852   .debug_str:000000000000048a .LASF68
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1708   .debug_str:000000000000014c .LASF69
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1748   .debug_str:0000000000000208 .LASF70
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1730   .debug_str:00000000000001b2 .LASF71
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1826   .debug_str:0000000000000415 .LASF72
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1664   .debug_str:000000000000005f .LASF73
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1834   .debug_str:0000000000000431 .LASF74
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1830   .debug_str:000000000000041f .LASF75
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1792   .debug_str:000000000000036f .LASF76
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1832   .debug_str:0000000000000427 .LASF77
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1766   .debug_str:000000000000026c .LASF78
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1738   .debug_str:00000000000001d7 .LASF79
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1904   .debug_str:0000000000000577 .LASF80
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1796   .debug_str:0000000000000381 .LASF81
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1750   .debug_str:0000000000000210 .LASF82
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1712   .debug_str:000000000000015c .LASF83
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1802   .debug_str:00000000000003ab .LASF84
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1760   .debug_str:000000000000024a .LASF85
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1888   .debug_str:000000000000052b .LASF86
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1700   .debug_str:000000000000012c .LASF87
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1694   .debug_str:0000000000000111 .LASF88
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1854   .debug_str:0000000000000491 .LASF89
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1814   .debug_str:00000000000003da .LASF90
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1882   .debug_str:0000000000000512 .LASF91
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1756   .debug_str:0000000000000230 .LASF92
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1812   .debug_str:00000000000003d4 .LASF93
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1662   .debug_str:0000000000000057 .LASF94
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1840   .debug_str:0000000000000459 .LASF95
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1858   .debug_str:000000000000049f .LASF96
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1868   .debug_str:00000000000004c9 .LASF97
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1876   .debug_str:00000000000004f6 .LASF98
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1862   .debug_str:00000000000004ab .LASF99
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1764   .debug_str:000000000000025f .LASF100
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1896   .debug_str:000000000000054e .LASF101
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1734   .debug_str:00000000000001c2 .LASF102
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1822   .debug_str:00000000000003fd .LASF103
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1900   .debug_str:0000000000000564 .LASF104
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1824   .debug_str:0000000000000408 .LASF105
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1902   .debug_str:0000000000000569 .LASF106
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1680   .debug_str:00000000000000ca .LASF107
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1886   .debug_str:0000000000000521 .LASF108
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1762   .debug_str:0000000000000253 .LASF109
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1872   .debug_str:00000000000004d6 .LASF110
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1718   .debug_str:000000000000017d .LASF111
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1678   .debug_str:00000000000000bb .LASF112
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1716   .debug_str:000000000000016c .LASF113
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1668   .debug_str:0000000000000070 .LASF114
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1670   .debug_str:000000000000007f .LASF115
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1804   .debug_str:00000000000003b0 .LASF116
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1786   .debug_str:0000000000000357 .LASF117
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1782   .debug_str:0000000000000342 .LASF118
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1892   .debug_str:000000000000053b .LASF119
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1676   .debug_str:00000000000000b0 .LASF127
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1848   .debug_str:0000000000000476 .LASF120
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1874   .debug_str:00000000000004e3 .LASF121
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1906   .debug_str:000000000000057c .LASF128
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:11     .text.startup.main:0000000000000000 .LFB1
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:46     .text.startup.main:000000000000003a .LFE1
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:34     .text.startup.main:0000000000000020 .LVL0
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:39     .text.startup.main:000000000000002c .LVL1
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:43     .text.startup.main:0000000000000038 .LVL2
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1656   .debug_str:000000000000003d .LASF122
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:1658   .debug_str:0000000000000044 .LASF123
+C:\Users\lpc01\AppData\Local\Temp\cc4HfR7f.s:65     .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+printk
+uart_handler

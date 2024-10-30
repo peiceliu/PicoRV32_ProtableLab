@@ -1,0 +1,3033 @@
+   1              		.file	"uart.c"
+   2              		.option nopic
+   3              		.text
+   4              	.Ltext0:
+   5              		.cfi_sections	.debug_frame
+   6              		.section	.text.print_num,"ax",@progbits
+   7              		.align	1
+   8              		.globl	print_num
+  10              	print_num:
+  11              	.LFB1:
+  12              		.file 1 "../src/uart.c"
+   1:../src/uart.c **** #include <stdint.h>
+   2:../src/uart.c **** #include <stdbool.h>
+   3:../src/uart.c **** #include <stdio.h>
+   4:../src/uart.c **** #include <stddef.h>
+   5:../src/uart.c **** #include <stdarg.h>
+   6:../src/uart.c **** #include "uart.h"
+   7:../src/uart.c **** 
+   8:../src/uart.c **** 
+   9:../src/uart.c **** 
+  10:../src/uart.c **** int FLAG ;
+  11:../src/uart.c **** /********************************************************************
+  12:../src/uart.c ****  ** 函数名称：print_num
+  13:../src/uart.c ****  ** 函数功能：打印成十进制数
+  14:../src/uart.c ****  ** 输入参数：num:需要打印的数字信息
+  15:../src/uart.c ****  ** 		base：数据类型（十进制、十六进制、8进制等）
+  16:../src/uart.c ****  ** 输出参数：无
+  17:../src/uart.c ****  ** 返回参数：无
+  18:../src/uart.c ****  ********************************************************************/
+  19:../src/uart.c **** void print_num(uint32_t num, int base)
+  20:../src/uart.c **** {
+  13              		.loc 1 20 0
+  14              		.cfi_startproc
+  15              	.LVL0:
+  21:../src/uart.c **** 	if(num == 0)
+  16              		.loc 1 21 0
+  17 0000 11E1     		bnez	a0,.L4
+  22:../src/uart.c **** 	{
+  23:../src/uart.c **** 		return;
+  24:../src/uart.c **** 	}
+  25:../src/uart.c **** 	print_num(num/base, base);
+  26:../src/uart.c **** 	put_char("0123456789abcdef"[num%base]);							//逆序打印结果
+  27:../src/uart.c **** }
+  18              		.loc 1 27 0
+  19 0002 8280     		ret
+  20              	.L4:
+  21 0004 17030000 		tail	print_num.part.0
+  21      67000300 
+  22              	.LVL1:
+  23              		.cfi_endproc
+  24              	.LFE1:
+  26              		.section	.text.print_num.part.0,"ax",@progbits
+  27              		.align	1
+  29              	print_num.part.0:
+  30              	.LFB14:
+  19:../src/uart.c **** {
+  31              		.loc 1 19 0
+  32              		.cfi_startproc
+  33              	.LVL2:
+  34 0000 4111     		addi	sp,sp,-16
+  35              		.cfi_def_cfa_offset 16
+  36 0002 22C4     		sw	s0,8(sp)
+  37              		.cfi_offset 8, -8
+  38 0004 2A84     		mv	s0,a0
+  25:../src/uart.c **** 	put_char("0123456789abcdef"[num%base]);							//逆序打印结果
+  39              		.loc 1 25 0
+  40 0006 3355B502 		divu	a0,a0,a1
+  41              	.LVL3:
+  19:../src/uart.c **** {
+  42              		.loc 1 19 0
+  43 000a 26C2     		sw	s1,4(sp)
+  44              		.cfi_offset 9, -12
+  45 000c AE84     		mv	s1,a1
+  46 000e 06C6     		sw	ra,12(sp)
+  47              		.cfi_offset 1, -4
+  25:../src/uart.c **** 	put_char("0123456789abcdef"[num%base]);							//逆序打印结果
+  48              		.loc 1 25 0
+  49 0010 97000000 		call	print_num
+  49      E7800000 
+  50              	.LVL4:
+  26:../src/uart.c **** }
+  51              		.loc 1 26 0
+  52 0018 33749402 		remu	s0,s0,s1
+  53              	.LVL5:
+  54 001c B7070000 		lui	a5,%hi(.LC0)
+  55 0020 93870700 		addi	a5,a5,%lo(.LC0)
+  56              	.LBB80:
+  57              	.LBB81:
+  28:../src/uart.c **** 
+  29:../src/uart.c **** /********************************************************************
+  30:../src/uart.c ****  ** 函数名称：put_char
+  31:../src/uart.c ****  ** 函数功能：打印单个字符
+  32:../src/uart.c ****  ** 输入参数：c:需要打印的字符信息
+  33:../src/uart.c ****  ** 输出参数：无
+  34:../src/uart.c ****  ** 返回参数：无
+  35:../src/uart.c ****  ********************************************************************/
+  36:../src/uart.c **** void put_char(char c)
+  37:../src/uart.c **** {
+  38:../src/uart.c **** 	if (c == '\n')
+  58              		.loc 1 38 0
+  59 0024 2947     		li	a4,10
+  60              	.LBE81:
+  61              	.LBE80:
+  26:../src/uart.c **** }
+  62              		.loc 1 26 0
+  63 0026 3E94     		add	s0,s0,a5
+  64 0028 83070400 		lb	a5,0(s0)
+  65              	.LVL6:
+  66              	.LBB90:
+  67              	.LBB86:
+  68              		.loc 1 38 0
+  69 002c 6389E700 		beq	a5,a4,.L8
+  70              	.LBE86:
+  71              	.LBE90:
+  27:../src/uart.c **** 
+  72              		.loc 1 27 0
+  73 0030 B240     		lw	ra,12(sp)
+  74              		.cfi_remember_state
+  75              		.cfi_restore 1
+  76 0032 2244     		lw	s0,8(sp)
+  77              		.cfi_restore 8
+  78              	.LBB91:
+  79              	.LBB87:
+  39:../src/uart.c **** 		put_char('\r');
+  40:../src/uart.c **** 	reg_uart_txdata = c;
+  80              		.loc 1 40 0
+  81 0034 2167     		li	a4,32768
+  82 0036 1CCB     		sw	a5,16(a4)
+  83              	.LBE87:
+  84              	.LBE91:
+  27:../src/uart.c **** 
+  85              		.loc 1 27 0
+  86 0038 9244     		lw	s1,4(sp)
+  87              		.cfi_restore 9
+  88              	.LVL7:
+  89 003a 4101     		addi	sp,sp,16
+  90              		.cfi_def_cfa_offset 0
+  91 003c 8280     		jr	ra
+  92              	.LVL8:
+  93              	.L8:
+  94              		.cfi_restore_state
+  95              	.LBB92:
+  96              	.LBB88:
+  97              	.LBB82:
+  98              	.LBB83:
+  99              		.loc 1 40 0
+ 100 003e 2167     		li	a4,32768
+ 101              	.LBE83:
+ 102              	.LBE82:
+ 103              	.LBE88:
+ 104              	.LBE92:
+  27:../src/uart.c **** 
+ 105              		.loc 1 27 0
+ 106 0040 B240     		lw	ra,12(sp)
+ 107              		.cfi_restore 1
+ 108 0042 2244     		lw	s0,8(sp)
+ 109              		.cfi_restore 8
+ 110              	.LBB93:
+ 111              	.LBB89:
+ 112              	.LBB85:
+ 113              	.LBB84:
+ 114              		.loc 1 40 0
+ 115 0044 B546     		li	a3,13
+ 116 0046 14CB     		sw	a3,16(a4)
+ 117              	.LBE84:
+ 118              	.LBE85:
+ 119 0048 2167     		li	a4,32768
+ 120 004a 1CCB     		sw	a5,16(a4)
+ 121              	.LBE89:
+ 122              	.LBE93:
+  27:../src/uart.c **** 
+ 123              		.loc 1 27 0
+ 124 004c 9244     		lw	s1,4(sp)
+ 125              		.cfi_restore 9
+ 126              	.LVL9:
+ 127 004e 4101     		addi	sp,sp,16
+ 128              		.cfi_def_cfa_offset 0
+ 129 0050 8280     		jr	ra
+ 130              		.cfi_endproc
+ 131              	.LFE14:
+ 133              		.section	.text.put_char,"ax",@progbits
+ 134              		.align	1
+ 135              		.globl	put_char
+ 137              	put_char:
+ 138              	.LFB2:
+  37:../src/uart.c **** 	if (c == '\n')
+ 139              		.loc 1 37 0
+ 140              		.cfi_startproc
+ 141              	.LVL10:
+ 142 0000 4111     		addi	sp,sp,-16
+ 143              		.cfi_def_cfa_offset 16
+ 144 0002 22C4     		sw	s0,8(sp)
+ 145 0004 06C6     		sw	ra,12(sp)
+ 146              		.cfi_offset 8, -8
+ 147              		.cfi_offset 1, -4
+  38:../src/uart.c **** 		put_char('\r');
+ 148              		.loc 1 38 0
+ 149 0006 A947     		li	a5,10
+  37:../src/uart.c **** 	if (c == '\n')
+ 150              		.loc 1 37 0
+ 151 0008 2A84     		mv	s0,a0
+  38:../src/uart.c **** 		put_char('\r');
+ 152              		.loc 1 38 0
+ 153 000a 6308F500 		beq	a0,a5,.L12
+ 154              	.LVL11:
+ 155              	.L10:
+ 156              		.loc 1 40 0
+ 157 000e A167     		li	a5,32768
+ 158 0010 80CB     		sw	s0,16(a5)
+  41:../src/uart.c **** }
+ 159              		.loc 1 41 0
+ 160 0012 B240     		lw	ra,12(sp)
+ 161              		.cfi_remember_state
+ 162              		.cfi_restore 1
+ 163 0014 2244     		lw	s0,8(sp)
+ 164              		.cfi_restore 8
+ 165 0016 4101     		addi	sp,sp,16
+ 166              		.cfi_def_cfa_offset 0
+ 167 0018 8280     		jr	ra
+ 168              	.LVL12:
+ 169              	.L12:
+ 170              		.cfi_restore_state
+  39:../src/uart.c **** 	reg_uart_txdata = c;
+ 171              		.loc 1 39 0
+ 172 001a 3545     		li	a0,13
+ 173              	.LVL13:
+ 174 001c 97000000 		call	put_char
+ 174      E7800000 
+ 175              	.LVL14:
+ 176 0024 EDB7     		j	.L10
+ 177              		.cfi_endproc
+ 178              	.LFE2:
+ 180              		.section	.text.print_str,"ax",@progbits
+ 181              		.align	1
+ 182              		.globl	print_str
+ 184              	print_str:
+ 185              	.LFB3:
+  42:../src/uart.c **** 
+  43:../src/uart.c **** /********************************************************************
+  44:../src/uart.c ****  ** 函数名称：print_str
+  45:../src/uart.c ****  ** 函数功能：打印字符串
+  46:../src/uart.c ****  ** 输入参数：*p:需要打印的字符串信息
+  47:../src/uart.c ****  ** 输出参数：无
+  48:../src/uart.c ****  ** 返回参数：无
+  49:../src/uart.c ****  ********************************************************************/
+  50:../src/uart.c **** void print_str(const char *p)
+  51:../src/uart.c **** {
+ 186              		.loc 1 51 0
+ 187              		.cfi_startproc
+ 188              	.LVL15:
+  52:../src/uart.c **** 	while (*p)
+ 189              		.loc 1 52 0
+ 190 0000 83070500 		lb	a5,0(a0)
+ 191 0004 8DC3     		beqz	a5,.L13
+ 192              	.LBB98:
+ 193              	.LBB99:
+  38:../src/uart.c **** 		put_char('\r');
+ 194              		.loc 1 38 0
+ 195 0006 A946     		li	a3,10
+ 196              	.LBB100:
+ 197              	.LBB101:
+  40:../src/uart.c **** }
+ 198              		.loc 1 40 0
+ 199 0008 2167     		li	a4,32768
+ 200 000a 3546     		li	a2,13
+ 201 000c 29A0     		j	.L16
+ 202              	.LVL16:
+ 203              	.L15:
+ 204              	.LBE101:
+ 205              	.LBE100:
+ 206 000e 1CCB     		sw	a5,16(a4)
+ 207              	.LBE99:
+ 208              	.LBE98:
+ 209              		.loc 1 52 0
+ 210 0010 83070500 		lb	a5,0(a0)
+ 211              	.LVL17:
+ 212 0014 89CB     		beqz	a5,.L13
+ 213              	.L16:
+  53:../src/uart.c **** 		put_char(*(p++));
+ 214              		.loc 1 53 0
+ 215 0016 0505     		addi	a0,a0,1
+ 216              	.LVL18:
+ 217              	.LBB105:
+ 218              	.LBB104:
+  38:../src/uart.c **** 		put_char('\r');
+ 219              		.loc 1 38 0
+ 220 0018 E39BD7FE 		bne	a5,a3,.L15
+ 221              	.LVL19:
+ 222              	.LBB103:
+ 223              	.LBB102:
+  40:../src/uart.c **** }
+ 224              		.loc 1 40 0
+ 225 001c 10CB     		sw	a2,16(a4)
+ 226              	.LBE102:
+ 227              	.LBE103:
+ 228 001e 1CCB     		sw	a5,16(a4)
+ 229              	.LBE104:
+ 230              	.LBE105:
+  52:../src/uart.c **** 		put_char(*(p++));
+ 231              		.loc 1 52 0
+ 232 0020 83070500 		lb	a5,0(a0)
+ 233              	.LVL20:
+ 234 0024 EDFB     		bnez	a5,.L16
+ 235              	.LVL21:
+ 236              	.L13:
+  54:../src/uart.c **** }
+ 237              		.loc 1 54 0
+ 238 0026 8280     		ret
+ 239              		.cfi_endproc
+ 240              	.LFE3:
+ 242              		.section	.text.print_hex,"ax",@progbits
+ 243              		.align	1
+ 244              		.globl	print_hex
+ 246              	print_hex:
+ 247              	.LFB4:
+  55:../src/uart.c **** 
+  56:../src/uart.c **** /********************************************************************
+  57:../src/uart.c ****  ** 函数名称：print_hex
+  58:../src/uart.c ****  ** 函数功能：十进制转换为16进制
+  59:../src/uart.c ****  ** 输入参数：v:需要转换的十进制数据
+  60:../src/uart.c ****  ** 		digits：数据类型（十进制、十六进制、八进制）
+  61:../src/uart.c ****  ** 输出参数：无
+  62:../src/uart.c ****  ** 返回参数：无
+  63:../src/uart.c ****  ********************************************************************/
+  64:../src/uart.c **** void print_hex(uint32_t v, int digits)
+  65:../src/uart.c **** {
+ 248              		.loc 1 65 0
+ 249              		.cfi_startproc
+ 250              	.LVL22:
+ 251 0000 B7060000 		lui	a3,%hi(.LC0)
+ 252              	.LBB112:
+  66:../src/uart.c **** 	for (int i = 7; i >= 0; i--)
+ 253              		.loc 1 66 0
+ 254 0004 1D47     		li	a4,7
+ 255 0006 93860600 		addi	a3,a3,%lo(.LC0)
+ 256              	.LBB113:
+  67:../src/uart.c **** 	{
+  68:../src/uart.c **** 		char c = "0123456789abcdef"[(v >> (4*i)) & 15];
+  69:../src/uart.c **** 		if (c == '0' && i >= digits)
+ 257              		.loc 1 69 0
+ 258 000a 93080003 		li	a7,48
+ 259              	.LBB114:
+ 260              	.LBB115:
+  40:../src/uart.c **** }
+ 261              		.loc 1 40 0
+ 262 000e 2166     		li	a2,32768
+  38:../src/uart.c **** 		put_char('\r');
+ 263              		.loc 1 38 0
+ 264 0010 2943     		li	t1,10
+ 265              	.LBB116:
+ 266              	.LBB117:
+  40:../src/uart.c **** }
+ 267              		.loc 1 40 0
+ 268 0012 354E     		li	t3,13
+ 269              	.LBE117:
+ 270              	.LBE116:
+ 271              	.LBE115:
+ 272              	.LBE114:
+ 273              	.LBE113:
+  66:../src/uart.c **** 	{
+ 274              		.loc 1 66 0
+ 275 0014 7D58     		li	a6,-1
+ 276 0016 01A8     		j	.L25
+ 277              	.LVL23:
+ 278              	.L22:
+ 279              	.LBB124:
+ 280              	.LBB122:
+ 281              	.LBB120:
+  38:../src/uart.c **** 		put_char('\r');
+ 282              		.loc 1 38 0
+ 283 0018 63876702 		beq	a5,t1,.L27
+ 284              	.L24:
+  40:../src/uart.c **** }
+ 285              		.loc 1 40 0
+ 286 001c BA85     		mv	a1,a4
+ 287              	.LVL24:
+ 288 001e 1CCA     		sw	a5,16(a2)
+ 289              	.LVL25:
+ 290              	.LBE120:
+ 291              	.LBE122:
+ 292              	.LBE124:
+  66:../src/uart.c **** 	{
+ 293              		.loc 1 66 0
+ 294 0020 7D17     		addi	a4,a4,-1
+ 295              	.LVL26:
+ 296 0022 63010703 		beq	a4,a6,.L28
+ 297              	.LVL27:
+ 298              	.L25:
+ 299              	.LBB125:
+  68:../src/uart.c **** 		if (c == '0' && i >= digits)
+ 300              		.loc 1 68 0
+ 301 0026 93172700 		slli	a5,a4,2
+ 302 002a B357F500 		srl	a5,a0,a5
+ 303 002e BD8B     		andi	a5,a5,15
+ 304 0030 B697     		add	a5,a3,a5
+ 305 0032 83870700 		lb	a5,0(a5)
+ 306              	.LVL28:
+ 307              		.loc 1 69 0
+ 308 0036 E39117FF 		bne	a5,a7,.L22
+ 309              		.loc 1 69 0 is_stmt 0 discriminator 1
+ 310 003a E341B7FE 		bgt	a1,a4,.L24
+ 311              	.LBE125:
+  66:../src/uart.c **** 	{
+ 312              		.loc 1 66 0 is_stmt 1
+ 313 003e 7D17     		addi	a4,a4,-1
+ 314              	.LVL29:
+ 315 0040 E31307FF 		bne	a4,a6,.L25
+ 316              	.LVL30:
+ 317              	.L28:
+ 318              	.LBE112:
+  70:../src/uart.c **** 			continue;
+  71:../src/uart.c **** 		put_char(c);
+  72:../src/uart.c **** 		digits = i;
+  73:../src/uart.c **** 	}
+  74:../src/uart.c **** }
+ 319              		.loc 1 74 0
+ 320 0044 8280     		ret
+ 321              	.LVL31:
+ 322              	.L27:
+ 323              	.LBB127:
+ 324              	.LBB126:
+ 325              	.LBB123:
+ 326              	.LBB121:
+ 327              	.LBB119:
+ 328              	.LBB118:
+  40:../src/uart.c **** }
+ 329              		.loc 1 40 0
+ 330 0046 2328C601 		sw	t3,16(a2)
+ 331 004a C9BF     		j	.L24
+ 332              	.LBE118:
+ 333              	.LBE119:
+ 334              	.LBE121:
+ 335              	.LBE123:
+ 336              	.LBE126:
+ 337              	.LBE127:
+ 338              		.cfi_endproc
+ 339              	.LFE4:
+ 341              		.section	.text.print_hex2,"ax",@progbits
+ 342              		.align	1
+ 343              		.globl	print_hex2
+ 345              	print_hex2:
+ 346              	.LFB5:
+  75:../src/uart.c **** 
+  76:../src/uart.c **** /********************************************************************
+  77:../src/uart.c ****  ** 函数名称：print_hex2
+  78:../src/uart.c ****  ** 函数功能：十进制转换为16进制
+  79:../src/uart.c ****  ** 输入参数：hex:需要转换的十进制数据
+  80:../src/uart.c ****  ** 输出参数：无
+  81:../src/uart.c ****  ** 返回参数：无
+  82:../src/uart.c ****  ********************************************************************/
+  83:../src/uart.c **** void print_hex2(uint32_t hex)
+  84:../src/uart.c **** {
+ 347              		.loc 1 84 0
+ 348              		.cfi_startproc
+ 349              	.LVL32:
+  85:../src/uart.c **** 	if(0 == hex)
+ 350              		.loc 1 85 0
+ 351 0000 11E5     		bnez	a0,.L30
+ 352              	.LVL33:
+ 353              	.LBB128:
+ 354              	.LBB129:
+  40:../src/uart.c **** }
+ 355              		.loc 1 40 0
+ 356 0002 A167     		li	a5,32768
+ 357 0004 13070003 		li	a4,48
+ 358 0008 98CB     		sw	a4,16(a5)
+ 359              	.LBE129:
+ 360              	.LBE128:
+  86:../src/uart.c **** 	{
+  87:../src/uart.c **** 		put_char('0');
+  88:../src/uart.c **** 		return;
+  89:../src/uart.c **** 	}
+  90:../src/uart.c **** 	else
+  91:../src/uart.c **** 	{
+  92:../src/uart.c **** 		print_num(hex, 16);											//打印十六进制数
+  93:../src/uart.c **** 	}
+  94:../src/uart.c **** }
+ 361              		.loc 1 94 0
+ 362 000a 8280     		ret
+ 363              	.LVL34:
+ 364              	.L30:
+ 365              	.LBB130:
+ 366              	.LBB131:
+ 367 000c C145     		li	a1,16
+ 368 000e 17030000 		tail	print_num.part.0
+ 368      67000300 
+ 369              	.LVL35:
+ 370              	.LBE131:
+ 371              	.LBE130:
+ 372              		.cfi_endproc
+ 373              	.LFE5:
+ 375              		.section	.text.print_dec,"ax",@progbits
+ 376              		.align	1
+ 377              		.globl	print_dec
+ 379              	print_dec:
+ 380              	.LFB6:
+  95:../src/uart.c **** /********************************************************************
+  96:../src/uart.c ****  ** 函数名称：print_dec
+  97:../src/uart.c ****  ** 函数功能：转换成十进制打印输出
+  98:../src/uart.c ****  ** 输入参数：v:打印的十进制数
+  99:../src/uart.c ****  ** 输出参数：无
+ 100:../src/uart.c ****  ** 返回参数：无
+ 101:../src/uart.c ****  ********************************************************************/
+ 102:../src/uart.c **** void print_dec(uint32_t v)
+ 103:../src/uart.c **** {
+ 381              		.loc 1 103 0
+ 382              		.cfi_startproc
+ 383              	.LVL36:
+ 104:../src/uart.c **** 	if(0 == v)
+ 384              		.loc 1 104 0
+ 385 0000 11E5     		bnez	a0,.L34
+ 386              	.LVL37:
+ 387              	.LBB132:
+ 388              	.LBB133:
+  40:../src/uart.c **** }
+ 389              		.loc 1 40 0
+ 390 0002 A167     		li	a5,32768
+ 391 0004 13070003 		li	a4,48
+ 392 0008 98CB     		sw	a4,16(a5)
+ 393              	.LBE133:
+ 394              	.LBE132:
+ 105:../src/uart.c **** 	{
+ 106:../src/uart.c **** 		put_char('0');
+ 107:../src/uart.c **** 		return;
+ 108:../src/uart.c **** 	}
+ 109:../src/uart.c **** 	else
+ 110:../src/uart.c **** 	{
+ 111:../src/uart.c **** 		print_num(v, 10);											//打印十进制数
+ 112:../src/uart.c **** 	}
+ 113:../src/uart.c **** }
+ 395              		.loc 1 113 0
+ 396 000a 8280     		ret
+ 397              	.LVL38:
+ 398              	.L34:
+ 399              	.LBB134:
+ 400              	.LBB135:
+ 401 000c A945     		li	a1,10
+ 402 000e 17030000 		tail	print_num.part.0
+ 402      67000300 
+ 403              	.LVL39:
+ 404              	.LBE135:
+ 405              	.LBE134:
+ 406              		.cfi_endproc
+ 407              	.LFE6:
+ 409              		.globl	__fixdfsi
+ 410              		.globl	__floatunsidf
+ 411              		.globl	__subdf3
+ 412              		.globl	__muldf3
+ 413              		.section	.text.print_flt,"ax",@progbits
+ 414              		.align	1
+ 415              		.globl	print_flt
+ 417              	print_flt:
+ 418              	.LFB7:
+ 114:../src/uart.c **** 
+ 115:../src/uart.c **** /********************************************************************
+ 116:../src/uart.c ****  ** 函数名称：print_flt
+ 117:../src/uart.c ****  ** 函数功能：打印浮点型数据（最多显示小数点后6）
+ 118:../src/uart.c ****  ** 输入参数：flt:打印的浮点数
+ 119:../src/uart.c ****  ** 输出参数：无
+ 120:../src/uart.c ****  ** 返回参数：无
+ 121:../src/uart.c ****  ********************************************************************/
+ 122:../src/uart.c **** void print_flt(double flt)
+ 123:../src/uart.c **** {
+ 419              		.loc 1 123 0
+ 420              		.cfi_startproc
+ 421              	.LVL40:
+ 422 0000 0111     		addi	sp,sp,-32
+ 423              		.cfi_def_cfa_offset 32
+ 424 0002 22CC     		sw	s0,24(sp)
+ 425 0004 4AC8     		sw	s2,16(sp)
+ 426 0006 4EC6     		sw	s3,12(sp)
+ 427 0008 06CE     		sw	ra,28(sp)
+ 428 000a 26CA     		sw	s1,20(sp)
+ 429              		.cfi_offset 8, -8
+ 430              		.cfi_offset 18, -16
+ 431              		.cfi_offset 19, -20
+ 432              		.cfi_offset 1, -4
+ 433              		.cfi_offset 9, -12
+ 434              		.loc 1 123 0
+ 435 000c 2A89     		mv	s2,a0
+ 436 000e AE89     		mv	s3,a1
+ 124:../src/uart.c **** 	uint32_t icnt = 0;
+ 125:../src/uart.c **** 	uint32_t tmpint = 0;
+ 126:../src/uart.c **** 
+ 127:../src/uart.c **** 	tmpint = (int)(flt);
+ 437              		.loc 1 127 0
+ 438 0010 97000000 		call	__fixdfsi
+ 438      E7800000 
+ 439              	.LVL41:
+ 440 0018 2A84     		mv	s0,a0
+ 441              	.LVL42:
+ 442              	.LBB136:
+ 443              	.LBB137:
+ 104:../src/uart.c **** 	{
+ 444              		.loc 1 104 0
+ 445 001a 35E9     		bnez	a0,.L38
+ 446              	.LVL43:
+ 447              	.LBB138:
+ 448              	.LBB139:
+  40:../src/uart.c **** }
+ 449              		.loc 1 40 0
+ 450 001c A167     		li	a5,32768
+ 451 001e 13070003 		li	a4,48
+ 452 0022 98CB     		sw	a4,16(a5)
+ 453              	.LVL44:
+ 454              	.L39:
+ 455              	.LBE139:
+ 456              	.LBE138:
+ 457              	.LBE137:
+ 458              	.LBE136:
+ 459              	.LBB143:
+ 460              	.LBB144:
+ 461 0024 9307E002 		li	a5,46
+ 462 0028 A164     		li	s1,32768
+ 463 002a 9CC8     		sw	a5,16(s1)
+ 464              	.LVL45:
+ 465              	.LBE144:
+ 466              	.LBE143:
+ 128:../src/uart.c **** 	print_dec(tmpint);
+ 129:../src/uart.c **** 	put_char('.');
+ 130:../src/uart.c **** 	flt = flt - tmpint;
+ 467              		.loc 1 130 0
+ 468 002c 2285     		mv	a0,s0
+ 469 002e 97000000 		call	__floatunsidf
+ 469      E7800000 
+ 470              	.LVL46:
+ 471 0036 2A86     		mv	a2,a0
+ 472 0038 AE86     		mv	a3,a1
+ 473 003a 4A85     		mv	a0,s2
+ 474 003c CE85     		mv	a1,s3
+ 475 003e 97000000 		call	__subdf3
+ 475      E7800000 
+ 476              	.LVL47:
+ 131:../src/uart.c **** 	tmpint = (int)(flt * 1000000);
+ 477              		.loc 1 131 0
+ 478 0046 B7070000 		lui	a5,%hi(.LC1)
+ 479 004a 03A60700 		lw	a2,%lo(.LC1)(a5)
+ 480 004e 83A64700 		lw	a3,%lo(.LC1+4)(a5)
+ 481 0052 97000000 		call	__muldf3
+ 481      E7800000 
+ 482              	.LVL48:
+ 483 005a 97000000 		call	__fixdfsi
+ 483      E7800000 
+ 484              	.LVL49:
+ 485              	.LBB145:
+ 486              	.LBB146:
+ 104:../src/uart.c **** 	{
+ 487              		.loc 1 104 0
+ 488 0062 19E9     		bnez	a0,.L40
+ 489              	.LVL50:
+ 490              	.LBE146:
+ 491              	.LBE145:
+ 132:../src/uart.c **** 	print_dec(tmpint);
+ 133:../src/uart.c **** }
+ 492              		.loc 1 133 0
+ 493 0064 F240     		lw	ra,28(sp)
+ 494              		.cfi_remember_state
+ 495              		.cfi_restore 1
+ 496 0066 6244     		lw	s0,24(sp)
+ 497              		.cfi_restore 8
+ 498              	.LVL51:
+ 499              	.LBB156:
+ 500              	.LBB153:
+ 501              	.LBB147:
+ 502              	.LBB148:
+  40:../src/uart.c **** }
+ 503              		.loc 1 40 0
+ 504 0068 93070003 		li	a5,48
+ 505 006c 9CC8     		sw	a5,16(s1)
+ 506              	.LBE148:
+ 507              	.LBE147:
+ 508              	.LBE153:
+ 509              	.LBE156:
+ 510              		.loc 1 133 0
+ 511 006e 4249     		lw	s2,16(sp)
+ 512              		.cfi_restore 18
+ 513 0070 D244     		lw	s1,20(sp)
+ 514              		.cfi_restore 9
+ 515 0072 B249     		lw	s3,12(sp)
+ 516              		.cfi_restore 19
+ 517 0074 0561     		addi	sp,sp,32
+ 518              		.cfi_def_cfa_offset 0
+ 519 0076 8280     		jr	ra
+ 520              	.LVL52:
+ 521              	.L40:
+ 522              		.cfi_restore_state
+ 523 0078 6244     		lw	s0,24(sp)
+ 524              		.cfi_remember_state
+ 525              		.cfi_restore 8
+ 526              	.LVL53:
+ 527 007a F240     		lw	ra,28(sp)
+ 528              		.cfi_restore 1
+ 529 007c D244     		lw	s1,20(sp)
+ 530              		.cfi_restore 9
+ 531 007e 4249     		lw	s2,16(sp)
+ 532              		.cfi_restore 18
+ 533 0080 B249     		lw	s3,12(sp)
+ 534              		.cfi_restore 19
+ 535              	.LBB157:
+ 536              	.LBB154:
+ 537              	.LBB149:
+ 538              	.LBB150:
+ 539 0082 A945     		li	a1,10
+ 540              	.LBE150:
+ 541              	.LBE149:
+ 542              	.LBE154:
+ 543              	.LBE157:
+ 544 0084 0561     		addi	sp,sp,32
+ 545              		.cfi_def_cfa_offset 0
+ 546              	.LBB158:
+ 547              	.LBB155:
+ 548              	.LBB152:
+ 549              	.LBB151:
+ 550 0086 17030000 		tail	print_num.part.0
+ 550      67000300 
+ 551              	.LVL54:
+ 552              	.L38:
+ 553              		.cfi_restore_state
+ 554              	.LBE151:
+ 555              	.LBE152:
+ 556              	.LBE155:
+ 557              	.LBE158:
+ 558              	.LBB159:
+ 559              	.LBB142:
+ 560              	.LBB140:
+ 561              	.LBB141:
+ 562 008e A945     		li	a1,10
+ 563 0090 97000000 		call	print_num.part.0
+ 563      E7800000 
+ 564              	.LVL55:
+ 565 0098 71B7     		j	.L39
+ 566              	.LBE141:
+ 567              	.LBE140:
+ 568              	.LBE142:
+ 569              	.LBE159:
+ 570              		.cfi_endproc
+ 571              	.LFE7:
+ 573              		.section	.text.printk,"ax",@progbits
+ 574              		.align	1
+ 575              		.globl	printk
+ 577              	printk:
+ 578              	.LFB8:
+ 134:../src/uart.c **** 
+ 135:../src/uart.c **** /********************************************************************
+ 136:../src/uart.c ****  ** 函数名称：printk
+ 137:../src/uart.c ****  ** 函数功能：自定义打印函数
+ 138:../src/uart.c ****  ** 输入参数：fmt：打印的字符串内容
+ 139:../src/uart.c ****  ** 输出参数：无
+ 140:../src/uart.c ****  ** 返回参数：无
+ 141:../src/uart.c ****  ********************************************************************/
+ 142:../src/uart.c **** void printk(char *fmt, ...)
+ 143:../src/uart.c **** {
+ 579              		.loc 1 143 0
+ 580              		.cfi_startproc
+ 581              	.LVL56:
+ 582 0000 5D71     		addi	sp,sp,-80
+ 583              		.cfi_def_cfa_offset 80
+ 584 0002 BAC0     		sw	a4,64(sp)
+ 585 0004 06D6     		sw	ra,44(sp)
+ 586 0006 22D4     		sw	s0,40(sp)
+ 587 0008 26D2     		sw	s1,36(sp)
+ 588 000a 4AD0     		sw	s2,32(sp)
+ 589 000c 4ECE     		sw	s3,28(sp)
+ 590 000e 52CC     		sw	s4,24(sp)
+ 591 0010 56CA     		sw	s5,20(sp)
+ 592 0012 5AC8     		sw	s6,16(sp)
+ 593              		.cfi_offset 1, -36
+ 594              		.cfi_offset 8, -40
+ 595              		.cfi_offset 9, -44
+ 596              		.cfi_offset 18, -48
+ 597              		.cfi_offset 19, -52
+ 598              		.cfi_offset 20, -56
+ 599              		.cfi_offset 21, -60
+ 600              		.cfi_offset 22, -64
+ 601              		.loc 1 143 0
+ 602 0014 2EDA     		sw	a1,52(sp)
+ 603 0016 32DC     		sw	a2,56(sp)
+ 604 0018 36DE     		sw	a3,60(sp)
+ 605 001a BEC2     		sw	a5,68(sp)
+ 606 001c C2C4     		sw	a6,72(sp)
+ 607 001e C6C6     		sw	a7,76(sp)
+ 144:../src/uart.c **** 	char *pfmt = NULL;
+ 145:../src/uart.c **** 	va_list vp;
+ 146:../src/uart.c **** 
+ 147:../src/uart.c **** 	va_start(vp, fmt);
+ 148:../src/uart.c **** 	pfmt = fmt;
+ 149:../src/uart.c **** 
+ 150:../src/uart.c **** 	while(*pfmt)
+ 608              		.loc 1 150 0
+ 609 0020 83070500 		lb	a5,0(a0)
+ 147:../src/uart.c **** 	pfmt = fmt;
+ 610              		.loc 1 147 0
+ 611 0024 5818     		addi	a4,sp,52
+ 612 0026 3AC6     		sw	a4,12(sp)
+ 613              	.LVL57:
+ 614              		.loc 1 150 0
+ 615 0028 A1C7     		beqz	a5,.L44
+ 151:../src/uart.c **** 	{
+ 152:../src/uart.c **** 		switch(*pfmt)
+ 153:../src/uart.c **** 		{
+ 154:../src/uart.c **** 			case '%':
+ 155:../src/uart.c **** 			{
+ 156:../src/uart.c **** 				switch(*(pfmt + 1))
+ 616              		.loc 1 156 0
+ 617 002a B70A0000 		lui	s5,%hi(.L52)
+ 618 002e AA84     		mv	s1,a0
+ 152:../src/uart.c **** 		{
+ 619              		.loc 1 152 0
+ 620 0030 2949     		li	s2,10
+ 621              	.LBB198:
+ 622              	.LBB199:
+ 623              	.LBB200:
+ 624              	.LBB201:
+  40:../src/uart.c **** }
+ 625              		.loc 1 40 0
+ 626 0032 A169     		li	s3,32768
+ 627 0034 354B     		li	s6,13
+ 628              	.LBE201:
+ 629              	.LBE200:
+ 630              	.LBE199:
+ 631              	.LBE198:
+ 152:../src/uart.c **** 		{
+ 632              		.loc 1 152 0
+ 633 0036 130A5002 		li	s4,37
+ 634              		.loc 1 156 0
+ 635 003a 938A0A00 		addi	s5,s5,%lo(.L52)
+ 636 003e 19A8     		j	.L67
+ 637              	.LVL58:
+ 638              	.L79:
+ 152:../src/uart.c **** 		{
+ 639              		.loc 1 152 0
+ 640 0040 63824705 		beq	a5,s4,.L48
+ 641              	.LVL59:
+ 642              	.LBB205:
+ 643              	.LBB206:
+  40:../src/uart.c **** }
+ 644              		.loc 1 40 0
+ 645 0044 2287     		mv	a4,s0
+ 646 0046 23A8F900 		sw	a5,16(s3)
+ 647 004a 2684     		mv	s0,s1
+ 648 004c BA84     		mv	s1,a4
+ 649              	.LVL60:
+ 650              	.L59:
+ 651              	.LBE206:
+ 652              	.LBE205:
+ 150:../src/uart.c **** 	{
+ 653              		.loc 1 150 0
+ 654 004e 83071400 		lb	a5,1(s0)
+ 655 0052 99CF     		beqz	a5,.L44
+ 656              	.LVL61:
+ 657              	.L67:
+ 658 0054 13841400 		addi	s0,s1,1
+ 152:../src/uart.c **** 		{
+ 659              		.loc 1 152 0
+ 660 0058 E39427FF 		bne	a5,s2,.L79
+ 661              	.LVL62:
+ 662              	.LBB207:
+ 663              	.LBB204:
+ 664              	.LBB203:
+ 665              	.LBB202:
+  40:../src/uart.c **** }
+ 666              		.loc 1 40 0
+ 667 005c 23A86901 		sw	s6,16(s3)
+ 668              	.LVL63:
+ 669              	.LBE202:
+ 670              	.LBE203:
+ 671 0060 A287     		mv	a5,s0
+ 672 0062 23A82901 		sw	s2,16(s3)
+ 673 0066 2684     		mv	s0,s1
+ 674 0068 BE84     		mv	s1,a5
+ 675              	.LVL64:
+ 676              	.LBE204:
+ 677              	.LBE207:
+ 150:../src/uart.c **** 	{
+ 678              		.loc 1 150 0
+ 679 006a 83071400 		lb	a5,1(s0)
+ 680 006e FDF3     		bnez	a5,.L67
+ 681              	.LVL65:
+ 682              	.L44:
+ 157:../src/uart.c **** 				{
+ 158:../src/uart.c **** 					case 'c':
+ 159:../src/uart.c **** 						put_char(va_arg(vp, int));
+ 160:../src/uart.c **** 						pfmt++;
+ 161:../src/uart.c **** 						break;
+ 162:../src/uart.c **** 					case 'd':
+ 163:../src/uart.c **** 					case 'D':
+ 164:../src/uart.c **** 					case 'i':
+ 165:../src/uart.c **** 						print_dec(va_arg(vp, int));
+ 166:../src/uart.c **** 						pfmt++;
+ 167:../src/uart.c **** 						break;
+ 168:../src/uart.c **** 
+ 169:../src/uart.c **** 					case 'f':
+ 170:../src/uart.c **** 						print_flt(va_arg(vp, double));
+ 171:../src/uart.c **** 						pfmt++;
+ 172:../src/uart.c **** 						break;
+ 173:../src/uart.c **** 
+ 174:../src/uart.c **** 					case 's':
+ 175:../src/uart.c **** 					case 'S':
+ 176:../src/uart.c **** 						print_str(va_arg(vp, char*));
+ 177:../src/uart.c **** 						pfmt++;
+ 178:../src/uart.c **** 						break;
+ 179:../src/uart.c **** 
+ 180:../src/uart.c **** 					case 'x':
+ 181:../src/uart.c **** 					case 'X':
+ 182:../src/uart.c **** 						print_hex2(va_arg(vp, int));
+ 183:../src/uart.c **** 						pfmt++;
+ 184:../src/uart.c **** 						break;
+ 185:../src/uart.c **** 					case '%':
+ 186:../src/uart.c **** 						put_char('%');
+ 187:../src/uart.c **** 						break;
+ 188:../src/uart.c **** 
+ 189:../src/uart.c **** 					default:
+ 190:../src/uart.c **** 						put_char(*pfmt);
+ 191:../src/uart.c **** 						break;
+ 192:../src/uart.c **** 				}
+ 193:../src/uart.c **** 				break;
+ 194:../src/uart.c **** 			}
+ 195:../src/uart.c **** 			case '\n':
+ 196:../src/uart.c **** 				put_char('\n');
+ 197:../src/uart.c **** 				break;
+ 198:../src/uart.c **** 			case '\t':
+ 199:../src/uart.c **** 				put_char('\t');
+ 200:../src/uart.c **** 				break;
+ 201:../src/uart.c **** 			default:
+ 202:../src/uart.c **** 				put_char(*pfmt);
+ 203:../src/uart.c **** 				break;
+ 204:../src/uart.c **** 		}
+ 205:../src/uart.c **** 		pfmt++;
+ 206:../src/uart.c **** 	}
+ 207:../src/uart.c **** 	va_end(vp);
+ 208:../src/uart.c **** }
+ 683              		.loc 1 208 0
+ 684 0070 B250     		lw	ra,44(sp)
+ 685              		.cfi_remember_state
+ 686              		.cfi_restore 1
+ 687 0072 2254     		lw	s0,40(sp)
+ 688              		.cfi_restore 8
+ 689 0074 9254     		lw	s1,36(sp)
+ 690              		.cfi_restore 9
+ 691 0076 0259     		lw	s2,32(sp)
+ 692              		.cfi_restore 18
+ 693 0078 F249     		lw	s3,28(sp)
+ 694              		.cfi_restore 19
+ 695 007a 624A     		lw	s4,24(sp)
+ 696              		.cfi_restore 20
+ 697 007c D24A     		lw	s5,20(sp)
+ 698              		.cfi_restore 21
+ 699 007e 424B     		lw	s6,16(sp)
+ 700              		.cfi_restore 22
+ 701 0080 6161     		addi	sp,sp,80
+ 702              		.cfi_def_cfa_offset 0
+ 703 0082 8280     		jr	ra
+ 704              	.LVL66:
+ 705              	.L48:
+ 706              		.cfi_restore_state
+ 156:../src/uart.c **** 				{
+ 707              		.loc 1 156 0
+ 708 0084 83C71400 		lbu	a5,1(s1)
+ 709 0088 13073005 		li	a4,83
+ 710 008c 9387B7FD 		addi	a5,a5,-37
+ 711 0090 93F7F70F 		andi	a5,a5,0xff
+ 712 0094 6366F700 		bgtu	a5,a4,.L50
+ 713 0098 8A07     		slli	a5,a5,2
+ 714 009a D697     		add	a5,a5,s5
+ 715 009c 9C43     		lw	a5,0(a5)
+ 716 009e 8287     		jr	a5
+ 717              		.section	.rodata.printk,"a",@progbits
+ 718              		.align	2
+ 719              		.align	2
+ 720              	.L52:
+ 721 0000 00000000 		.word	.L50
+ 722 0004 00000000 		.word	.L50
+ 723 0008 00000000 		.word	.L50
+ 724 000c 00000000 		.word	.L50
+ 725 0010 00000000 		.word	.L50
+ 726 0014 00000000 		.word	.L50
+ 727 0018 00000000 		.word	.L50
+ 728 001c 00000000 		.word	.L50
+ 729 0020 00000000 		.word	.L50
+ 730 0024 00000000 		.word	.L50
+ 731 0028 00000000 		.word	.L50
+ 732 002c 00000000 		.word	.L50
+ 733 0030 00000000 		.word	.L50
+ 734 0034 00000000 		.word	.L50
+ 735 0038 00000000 		.word	.L50
+ 736 003c 00000000 		.word	.L50
+ 737 0040 00000000 		.word	.L50
+ 738 0044 00000000 		.word	.L50
+ 739 0048 00000000 		.word	.L50
+ 740 004c 00000000 		.word	.L50
+ 741 0050 00000000 		.word	.L50
+ 742 0054 00000000 		.word	.L50
+ 743 0058 00000000 		.word	.L50
+ 744 005c 00000000 		.word	.L50
+ 745 0060 00000000 		.word	.L50
+ 746 0064 00000000 		.word	.L50
+ 747 0068 00000000 		.word	.L50
+ 748 006c 00000000 		.word	.L50
+ 749 0070 00000000 		.word	.L50
+ 750 0074 00000000 		.word	.L50
+ 751 0078 00000000 		.word	.L50
+ 752 007c 00000000 		.word	.L53
+ 753 0080 00000000 		.word	.L50
+ 754 0084 00000000 		.word	.L50
+ 755 0088 00000000 		.word	.L50
+ 756 008c 00000000 		.word	.L50
+ 757 0090 00000000 		.word	.L50
+ 758 0094 00000000 		.word	.L50
+ 759 0098 00000000 		.word	.L50
+ 760 009c 00000000 		.word	.L50
+ 761 00a0 00000000 		.word	.L50
+ 762 00a4 00000000 		.word	.L50
+ 763 00a8 00000000 		.word	.L50
+ 764 00ac 00000000 		.word	.L50
+ 765 00b0 00000000 		.word	.L50
+ 766 00b4 00000000 		.word	.L50
+ 767 00b8 00000000 		.word	.L54
+ 768 00bc 00000000 		.word	.L50
+ 769 00c0 00000000 		.word	.L50
+ 770 00c4 00000000 		.word	.L50
+ 771 00c8 00000000 		.word	.L50
+ 772 00cc 00000000 		.word	.L55
+ 773 00d0 00000000 		.word	.L50
+ 774 00d4 00000000 		.word	.L50
+ 775 00d8 00000000 		.word	.L50
+ 776 00dc 00000000 		.word	.L50
+ 777 00e0 00000000 		.word	.L50
+ 778 00e4 00000000 		.word	.L50
+ 779 00e8 00000000 		.word	.L50
+ 780 00ec 00000000 		.word	.L50
+ 781 00f0 00000000 		.word	.L50
+ 782 00f4 00000000 		.word	.L50
+ 783 00f8 00000000 		.word	.L56
+ 784 00fc 00000000 		.word	.L53
+ 785 0100 00000000 		.word	.L50
+ 786 0104 00000000 		.word	.L57
+ 787 0108 00000000 		.word	.L50
+ 788 010c 00000000 		.word	.L50
+ 789 0110 00000000 		.word	.L53
+ 790 0114 00000000 		.word	.L50
+ 791 0118 00000000 		.word	.L50
+ 792 011c 00000000 		.word	.L50
+ 793 0120 00000000 		.word	.L50
+ 794 0124 00000000 		.word	.L50
+ 795 0128 00000000 		.word	.L50
+ 796 012c 00000000 		.word	.L50
+ 797 0130 00000000 		.word	.L50
+ 798 0134 00000000 		.word	.L50
+ 799 0138 00000000 		.word	.L54
+ 800 013c 00000000 		.word	.L50
+ 801 0140 00000000 		.word	.L50
+ 802 0144 00000000 		.word	.L50
+ 803 0148 00000000 		.word	.L50
+ 804 014c 00000000 		.word	.L55
+ 805              		.section	.text.printk
+ 806              	.L50:
+ 807              	.LVL67:
+ 808              	.LBB208:
+ 809              	.LBB209:
+  40:../src/uart.c **** }
+ 810              		.loc 1 40 0
+ 811 00a0 A287     		mv	a5,s0
+ 812 00a2 23A84901 		sw	s4,16(s3)
+ 813 00a6 2684     		mv	s0,s1
+ 814 00a8 BE84     		mv	s1,a5
+ 815              	.LVL68:
+ 816 00aa 55B7     		j	.L59
+ 817              	.LVL69:
+ 818              	.L56:
+ 819              	.LBE209:
+ 820              	.LBE208:
+ 159:../src/uart.c **** 						pfmt++;
+ 821              		.loc 1 159 0
+ 822 00ac B247     		lw	a5,12(sp)
+ 823 00ae 03870700 		lb	a4,0(a5)
+ 824              	.LVL70:
+ 825 00b2 9107     		addi	a5,a5,4
+ 826 00b4 3EC6     		sw	a5,12(sp)
+ 827              	.LBB210:
+ 828              	.LBB211:
+  38:../src/uart.c **** 		put_char('\r');
+ 829              		.loc 1 38 0
+ 830 00b6 63062709 		beq	a4,s2,.L80
+ 831              	.L58:
+  40:../src/uart.c **** }
+ 832              		.loc 1 40 0
+ 833 00ba 23A8E900 		sw	a4,16(s3)
+ 834              	.LVL71:
+ 835 00be 8904     		addi	s1,s1,2
+ 836              	.LVL72:
+ 837              	.LBE211:
+ 838              	.LBE210:
+ 161:../src/uart.c **** 					case 'd':
+ 839              		.loc 1 161 0
+ 840 00c0 79B7     		j	.L59
+ 841              	.LVL73:
+ 842              	.L55:
+ 182:../src/uart.c **** 						pfmt++;
+ 843              		.loc 1 182 0
+ 844 00c2 B247     		lw	a5,12(sp)
+ 845 00c4 8843     		lw	a0,0(a5)
+ 846              	.LVL74:
+ 847 00c6 9107     		addi	a5,a5,4
+ 848 00c8 3EC6     		sw	a5,12(sp)
+ 849              	.LBB215:
+ 850              	.LBB216:
+  85:../src/uart.c **** 	{
+ 851              		.loc 1 85 0
+ 852 00ca 2DE5     		bnez	a0,.L65
+ 853              	.LVL75:
+ 854              	.L78:
+ 855              	.LBB217:
+ 856              	.LBB218:
+  40:../src/uart.c **** }
+ 857              		.loc 1 40 0
+ 858 00cc 93070003 		li	a5,48
+ 859 00d0 23A8F900 		sw	a5,16(s3)
+ 860              	.LVL76:
+ 861              	.L66:
+ 862 00d4 8904     		addi	s1,s1,2
+ 863              	.LVL77:
+ 864              	.LBE218:
+ 865              	.LBE217:
+ 866              	.LBE216:
+ 867              	.LBE215:
+ 184:../src/uart.c **** 					case '%':
+ 868              		.loc 1 184 0
+ 869 00d6 A5BF     		j	.L59
+ 870              	.LVL78:
+ 871              	.L53:
+ 165:../src/uart.c **** 						pfmt++;
+ 872              		.loc 1 165 0
+ 873 00d8 B247     		lw	a5,12(sp)
+ 874 00da 8843     		lw	a0,0(a5)
+ 875              	.LVL79:
+ 876 00dc 9107     		addi	a5,a5,4
+ 877 00de 3EC6     		sw	a5,12(sp)
+ 878              	.LBB222:
+ 879              	.LBB223:
+ 104:../src/uart.c **** 	{
+ 880              		.loc 1 104 0
+ 881 00e0 75D5     		beqz	a0,.L78
+ 882              	.LVL80:
+ 883              	.LBB224:
+ 884              	.LBB225:
+ 885 00e2 A945     		li	a1,10
+ 886 00e4 97000000 		call	print_num.part.0
+ 886      E7800000 
+ 887              	.LVL81:
+ 888 00ec 8904     		addi	s1,s1,2
+ 889              	.LVL82:
+ 890 00ee 85B7     		j	.L59
+ 891              	.LVL83:
+ 892              	.L54:
+ 893              	.LBE225:
+ 894              	.LBE224:
+ 895              	.LBE223:
+ 896              	.LBE222:
+ 176:../src/uart.c **** 						pfmt++;
+ 897              		.loc 1 176 0
+ 898 00f0 B247     		lw	a5,12(sp)
+ 899 00f2 9843     		lw	a4,0(a5)
+ 900              	.LVL84:
+ 901 00f4 9107     		addi	a5,a5,4
+ 902 00f6 3EC6     		sw	a5,12(sp)
+ 903              	.LBB226:
+ 904              	.LBB227:
+  52:../src/uart.c **** 		put_char(*(p++));
+ 905              		.loc 1 52 0
+ 906 00f8 83070700 		lb	a5,0(a4)
+ 907 00fc E1DF     		beqz	a5,.L66
+  53:../src/uart.c **** }
+ 908              		.loc 1 53 0
+ 909 00fe 0507     		addi	a4,a4,1
+ 910              	.LVL85:
+ 911              	.LBB228:
+ 912              	.LBB229:
+  38:../src/uart.c **** 		put_char('\r');
+ 913              		.loc 1 38 0
+ 914 0100 638A2701 		beq	a5,s2,.L81
+ 915              	.L63:
+  40:../src/uart.c **** }
+ 916              		.loc 1 40 0
+ 917 0104 23A8F900 		sw	a5,16(s3)
+ 918              	.LBE229:
+ 919              	.LBE228:
+  52:../src/uart.c **** 		put_char(*(p++));
+ 920              		.loc 1 52 0
+ 921 0108 83070700 		lb	a5,0(a4)
+ 922              	.LVL86:
+ 923 010c E1D7     		beqz	a5,.L66
+  53:../src/uart.c **** }
+ 924              		.loc 1 53 0
+ 925 010e 0507     		addi	a4,a4,1
+ 926              	.LVL87:
+ 927              	.LBB233:
+ 928              	.LBB232:
+  38:../src/uart.c **** 		put_char('\r');
+ 929              		.loc 1 38 0
+ 930 0110 E39A27FF 		bne	a5,s2,.L63
+ 931              	.L81:
+ 932              	.LVL88:
+ 933              	.LBB230:
+ 934              	.LBB231:
+  40:../src/uart.c **** }
+ 935              		.loc 1 40 0
+ 936 0114 23A86901 		sw	s6,16(s3)
+ 937 0118 F5B7     		j	.L63
+ 938              	.LVL89:
+ 939              	.L57:
+ 940              	.LBE231:
+ 941              	.LBE230:
+ 942              	.LBE232:
+ 943              	.LBE233:
+ 944              	.LBE227:
+ 945              	.LBE226:
+ 170:../src/uart.c **** 						pfmt++;
+ 946              		.loc 1 170 0
+ 947 011a B247     		lw	a5,12(sp)
+ 948 011c 8904     		addi	s1,s1,2
+ 949              	.LVL90:
+ 950 011e 9D07     		addi	a5,a5,7
+ 951 0120 E19B     		andi	a5,a5,-8
+ 952 0122 8843     		lw	a0,0(a5)
+ 953 0124 CC43     		lw	a1,4(a5)
+ 954 0126 A107     		addi	a5,a5,8
+ 955 0128 3EC6     		sw	a5,12(sp)
+ 956 012a 97000000 		call	print_flt
+ 956      E7800000 
+ 957              	.LVL91:
+ 172:../src/uart.c **** 
+ 958              		.loc 1 172 0
+ 959 0132 31BF     		j	.L59
+ 960              	.LVL92:
+ 961              	.L65:
+ 962              	.LBB234:
+ 963              	.LBB221:
+ 964              	.LBB219:
+ 965              	.LBB220:
+ 966 0134 C145     		li	a1,16
+ 967 0136 97000000 		call	print_num.part.0
+ 967      E7800000 
+ 968              	.LVL93:
+ 969 013e 8904     		addi	s1,s1,2
+ 970              	.LVL94:
+ 971 0140 39B7     		j	.L59
+ 972              	.LVL95:
+ 973              	.L80:
+ 974              	.LBE220:
+ 975              	.LBE219:
+ 976              	.LBE221:
+ 977              	.LBE234:
+ 978              	.LBB235:
+ 979              	.LBB214:
+ 980              	.LBB212:
+ 981              	.LBB213:
+  40:../src/uart.c **** }
+ 982              		.loc 1 40 0
+ 983 0142 23A86901 		sw	s6,16(s3)
+ 984 0146 95BF     		j	.L58
+ 985              	.LBE213:
+ 986              	.LBE212:
+ 987              	.LBE214:
+ 988              	.LBE235:
+ 989              		.cfi_endproc
+ 990              	.LFE8:
+ 992              		.section	.text.read_uart,"ax",@progbits
+ 993              		.align	1
+ 994              		.globl	read_uart
+ 996              	read_uart:
+ 997              	.LFB9:
+ 209:../src/uart.c **** 
+ 210:../src/uart.c **** 
+ 211:../src/uart.c **** 
+ 212:../src/uart.c **** char read_uart(void)
+ 213:../src/uart.c **** {
+ 998              		.loc 1 213 0
+ 999              		.cfi_startproc
+ 214:../src/uart.c ****     char data;
+ 215:../src/uart.c ****     data = reg_uart_rxdata;
+ 1000              		.loc 1 215 0
+ 1001 0000 A167     		li	a5,32768
+ 1002 0002 8853     		lw	a0,32(a5)
+ 1003              	.LVL96:
+ 216:../src/uart.c ****     return (data);
+ 217:../src/uart.c **** }
+ 1004              		.loc 1 217 0
+ 1005 0004 6205     		slli	a0,a0,24
+ 1006              	.LVL97:
+ 1007 0006 6185     		srai	a0,a0,24
+ 1008 0008 8280     		ret
+ 1009              		.cfi_endproc
+ 1010              	.LFE9:
+ 1012              		.section	.text.serial_receive_data,"ax",@progbits
+ 1013              		.align	1
+ 1014              		.globl	serial_receive_data
+ 1016              	serial_receive_data:
+ 1017              	.LFB11:
+ 218:../src/uart.c **** 
+ 219:../src/uart.c **** void uart_handler(void)
+ 220:../src/uart.c **** {
+ 221:../src/uart.c ****     
+ 222:../src/uart.c **** 	for(int i = 0; i < 7; i++)
+ 223:../src/uart.c **** 	{
+ 224:../src/uart.c **** 		uint8_t temp;
+ 225:../src/uart.c ****     	temp = read_uart();
+ 226:../src/uart.c ****     	serial_receive_data(temp);
+ 227:../src/uart.c **** 
+ 228:../src/uart.c **** 	}
+ 229:../src/uart.c **** 
+ 230:../src/uart.c **** 
+ 231:../src/uart.c ****     if(FLAG == 1)
+ 232:../src/uart.c ****     {
+ 233:../src/uart.c ****         //write_uart(temp);
+ 234:../src/uart.c **** 		printk("successful\n");
+ 235:../src/uart.c ****         FLAG = 0;
+ 236:../src/uart.c ****     }
+ 237:../src/uart.c **** 
+ 238:../src/uart.c **** 	else
+ 239:../src/uart.c **** 	{
+ 240:../src/uart.c **** 		printk("failed\n");
+ 241:../src/uart.c **** 	}
+ 242:../src/uart.c **** }
+ 243:../src/uart.c **** 
+ 244:../src/uart.c **** void serial_receive_data(char data)
+ 245:../src/uart.c **** {
+ 1018              		.loc 1 245 0
+ 1019              		.cfi_startproc
+ 1020              	.LVL98:
+ 1021 0000 4111     		addi	sp,sp,-16
+ 1022              		.cfi_def_cfa_offset 16
+ 1023 0002 22C4     		sw	s0,8(sp)
+ 1024              		.cfi_offset 8, -8
+ 246:../src/uart.c ****     int i = 0;
+ 247:../src/uart.c ****     static uint8_t package[6];
+ 248:../src/uart.c ****     static uint8_t state = 0;
+ 249:../src/uart.c ****     static uint8_t package_num = 0;
+ 250:../src/uart.c **** 	//printk("State: %d, package_num: %d, data: 0x%x\n", state, package_num, data); // 调试输出
+ 251:../src/uart.c ****     if(state == 0 && data == 0x0a)//
+ 1025              		.loc 1 251 0
+ 1026 0004 37040000 		lui	s0,%hi(.LANCHOR0)
+ 245:../src/uart.c ****     int i = 0;
+ 1027              		.loc 1 245 0
+ 1028 0008 06C6     		sw	ra,12(sp)
+ 1029 000a 26C2     		sw	s1,4(sp)
+ 1030              		.cfi_offset 1, -4
+ 1031              		.cfi_offset 9, -12
+ 1032              		.loc 1 251 0
+ 1033 000c 13040400 		addi	s0,s0,%lo(.LANCHOR0)
+ 1034 0010 83470400 		lbu	a5,0(s0)
+ 1035 0014 9DE7     		bnez	a5,.L84
+ 1036              		.loc 1 251 0 is_stmt 0 discriminator 1
+ 1037 0016 A947     		li	a5,10
+ 1038 0018 6308F50C 		beq	a0,a5,.L89
+ 1039              	.L85:
+ 252:../src/uart.c ****     {
+ 253:../src/uart.c **** 		//printk("picorv32 has recieved 0a\n");
+ 254:../src/uart.c ****         state = 1;
+ 255:../src/uart.c ****         package[package_num++] = data;
+ 256:../src/uart.c ****     }
+ 257:../src/uart.c **** 
+ 258:../src/uart.c ****     else if(state == 1)
+ 259:../src/uart.c ****     {
+ 260:../src/uart.c ****         package[package_num++]=data;
+ 261:../src/uart.c ****         if(package_num == 6)
+ 262:../src/uart.c ****         {
+ 263:../src/uart.c ****             state = 2;
+ 264:../src/uart.c ****         }
+ 265:../src/uart.c ****     }
+ 266:../src/uart.c **** 
+ 267:../src/uart.c ****     else if(state == 2  && data == 0x0b)//&& data == 0xcd
+ 268:../src/uart.c ****     {
+ 269:../src/uart.c **** 		//printk("picorv32 has recieved 0b\n");
+ 270:../src/uart.c ****         package_num = 0;
+ 271:../src/uart.c ****         FLAG = 1;
+ 272:../src/uart.c **** 		 // 调试输出
+ 273:../src/uart.c **** 		//  for (int i = 0; i < 6; i++) {
+ 274:../src/uart.c ****     	//  printk("package[%d] = 0x%x\n", i, package[i]);
+ 275:../src/uart.c **** 		//  }
+ 276:../src/uart.c ****         parameter_id = package[1];
+ 277:../src/uart.c ****         //parameter_value = (package[5]<<24) | (package[4]<<16) | (package[3]<<8) | package[2];
+ 278:../src/uart.c **** 		parameter_value = (package[2]<<24) | (package[3]<<16) | (package[4]<<8) | package[5];
+ 279:../src/uart.c **** 		//
+ 280:../src/uart.c **** 		printk("Parameter ID: %d, Parameter Value: %d\n", parameter_id, parameter_value); // 调试输出
+ 281:../src/uart.c ****         for(i = 0; i < 6; i++)
+ 282:../src/uart.c ****         {
+ 283:../src/uart.c ****             package[i] = 0x00;
+ 284:../src/uart.c ****         }
+ 285:../src/uart.c **** 		state = 0;
+ 286:../src/uart.c ****     }
+ 287:../src/uart.c **** 
+ 288:../src/uart.c ****     else
+ 289:../src/uart.c ****     {
+ 290:../src/uart.c ****         state = 0;
+ 291:../src/uart.c ****         package_num = 0;
+ 292:../src/uart.c ****         for(i = 0; i < 6; i++)
+ 293:../src/uart.c ****         {
+ 294:../src/uart.c ****             package[i] = 0x00;
+ 1040              		.loc 1 294 0 is_stmt 1
+ 1041 001c B7070000 		lui	a5,%hi(.LANCHOR2)
+ 1042 0020 93870700 		addi	a5,a5,%lo(.LANCHOR2)
+ 291:../src/uart.c ****         for(i = 0; i < 6; i++)
+ 1043              		.loc 1 291 0
+ 1044 0024 37070000 		lui	a4,%hi(.LANCHOR1)
+ 290:../src/uart.c ****         package_num = 0;
+ 1045              		.loc 1 290 0
+ 1046 0028 23000400 		sb	zero,0(s0)
+ 291:../src/uart.c ****         for(i = 0; i < 6; i++)
+ 1047              		.loc 1 291 0
+ 1048 002c 23000700 		sb	zero,%lo(.LANCHOR1)(a4)
+ 1049              	.LVL99:
+ 1050              		.loc 1 294 0
+ 1051 0030 23A00700 		sw	zero,0(a5)
+ 1052 0034 23920700 		sh	zero,4(a5)
+ 1053              	.LVL100:
+ 1054              	.L83:
+ 295:../src/uart.c ****         }
+ 296:../src/uart.c ****     }
+ 297:../src/uart.c **** }
+ 1055              		.loc 1 297 0
+ 1056 0038 B240     		lw	ra,12(sp)
+ 1057              		.cfi_remember_state
+ 1058              		.cfi_restore 1
+ 1059 003a 2244     		lw	s0,8(sp)
+ 1060              		.cfi_restore 8
+ 1061 003c 9244     		lw	s1,4(sp)
+ 1062              		.cfi_restore 9
+ 1063 003e 4101     		addi	sp,sp,16
+ 1064              		.cfi_def_cfa_offset 0
+ 1065 0040 8280     		jr	ra
+ 1066              	.LVL101:
+ 1067              	.L84:
+ 1068              		.cfi_restore_state
+ 258:../src/uart.c ****     {
+ 1069              		.loc 1 258 0
+ 1070 0042 0547     		li	a4,1
+ 1071 0044 639CE702 		bne	a5,a4,.L87
+ 260:../src/uart.c ****         if(package_num == 6)
+ 1072              		.loc 1 260 0
+ 1073 0048 B7060000 		lui	a3,%hi(.LANCHOR1)
+ 1074 004c 93860600 		addi	a3,a3,%lo(.LANCHOR1)
+ 1075 0050 03C60600 		lbu	a2,0(a3)
+ 1076 0054 B7070000 		lui	a5,%hi(.LANCHOR2)
+ 1077 0058 93870700 		addi	a5,a5,%lo(.LANCHOR2)
+ 1078 005c 13071600 		addi	a4,a2,1
+ 1079 0060 B297     		add	a5,a5,a2
+ 1080 0062 1377F70F 		andi	a4,a4,0xff
+ 1081 0066 2380A700 		sb	a0,0(a5)
+ 1082 006a 2380E600 		sb	a4,0(a3)
+ 261:../src/uart.c ****         {
+ 1083              		.loc 1 261 0
+ 1084 006e 9947     		li	a5,6
+ 1085 0070 E314F7FC 		bne	a4,a5,.L83
+ 263:../src/uart.c ****         }
+ 1086              		.loc 1 263 0
+ 1087 0074 8947     		li	a5,2
+ 1088 0076 2300F400 		sb	a5,0(s0)
+ 1089 007a 7DBF     		j	.L83
+ 1090              	.L87:
+ 267:../src/uart.c ****     {
+ 1091              		.loc 1 267 0
+ 1092 007c 8946     		li	a3,2
+ 1093 007e E39FD7F8 		bne	a5,a3,.L85
+ 267:../src/uart.c ****     {
+ 1094              		.loc 1 267 0 is_stmt 0 discriminator 1
+ 1095 0082 AD47     		li	a5,11
+ 1096 0084 E31CF5F8 		bne	a0,a5,.L85
+ 1097              	.LVL102:
+ 1098              	.LBB238:
+ 1099              	.LBB239:
+ 276:../src/uart.c ****         //parameter_value = (package[5]<<24) | (package[4]<<16) | (package[3]<<8) | package[2];
+ 1100              		.loc 1 276 0 is_stmt 1
+ 1101 0088 B7040000 		lui	s1,%hi(.LANCHOR2)
+ 1102 008c 93840400 		addi	s1,s1,%lo(.LANCHOR2)
+ 1103 0090 83C71400 		lbu	a5,1(s1)
+ 270:../src/uart.c ****         FLAG = 1;
+ 1104              		.loc 1 270 0
+ 1105 0094 B7060000 		lui	a3,%hi(.LANCHOR1)
+ 1106 0098 23800600 		sb	zero,%lo(.LANCHOR1)(a3)
+ 271:../src/uart.c **** 		 // 调试输出
+ 1107              		.loc 1 271 0
+ 1108 009c B7060000 		lui	a3,%hi(.LANCHOR3)
+ 1109 00a0 23A0E600 		sw	a4,%lo(.LANCHOR3)(a3)
+ 276:../src/uart.c ****         //parameter_value = (package[5]<<24) | (package[4]<<16) | (package[3]<<8) | package[2];
+ 1110              		.loc 1 276 0
+ 1111 00a4 2167     		li	a4,32768
+ 1112 00a6 1CDB     		sw	a5,48(a4)
+ 278:../src/uart.c **** 		//
+ 1113              		.loc 1 278 0
+ 1114 00a8 83C72400 		lbu	a5,2(s1)
+ 1115 00ac 03C63400 		lbu	a2,3(s1)
+ 1116 00b0 83C55400 		lbu	a1,5(s1)
+ 1117 00b4 83C64400 		lbu	a3,4(s1)
+ 1118 00b8 4206     		slli	a2,a2,16
+ 1119 00ba E207     		slli	a5,a5,24
+ 1120 00bc D18F     		or	a5,a5,a2
+ 1121 00be CD8F     		or	a5,a5,a1
+ 1122 00c0 A206     		slli	a3,a3,8
+ 1123 00c2 D58F     		or	a5,a5,a3
+ 1124 00c4 3CC3     		sw	a5,64(a4)
+ 280:../src/uart.c ****         for(i = 0; i < 6; i++)
+ 1125              		.loc 1 280 0
+ 1126 00c6 0C5B     		lw	a1,48(a4)
+ 1127 00c8 3043     		lw	a2,64(a4)
+ 1128 00ca 37050000 		lui	a0,%hi(.LC2)
+ 1129              	.LVL103:
+ 1130 00ce 13050500 		addi	a0,a0,%lo(.LC2)
+ 1131 00d2 97000000 		call	printk
+ 1131      E7800000 
+ 1132              	.LVL104:
+ 283:../src/uart.c ****         }
+ 1133              		.loc 1 283 0
+ 1134 00da 23A00400 		sw	zero,0(s1)
+ 1135 00de 23920400 		sh	zero,4(s1)
+ 1136              	.LVL105:
+ 285:../src/uart.c ****     }
+ 1137              		.loc 1 285 0
+ 1138 00e2 23000400 		sb	zero,0(s0)
+ 1139 00e6 89BF     		j	.L83
+ 1140              	.LVL106:
+ 1141              	.L89:
+ 1142              	.LBE239:
+ 1143              	.LBE238:
+ 255:../src/uart.c ****     }
+ 1144              		.loc 1 255 0
+ 1145 00e8 37070000 		lui	a4,%hi(.LANCHOR1)
+ 1146 00ec 13070700 		addi	a4,a4,%lo(.LANCHOR1)
+ 1147 00f0 83460700 		lbu	a3,0(a4)
+ 1148 00f4 B7070000 		lui	a5,%hi(.LANCHOR2)
+ 1149 00f8 93870700 		addi	a5,a5,%lo(.LANCHOR2)
+ 1150 00fc 13861600 		addi	a2,a3,1
+ 1151 0100 B697     		add	a5,a5,a3
+ 254:../src/uart.c ****         package[package_num++] = data;
+ 1152              		.loc 1 254 0
+ 1153 0102 8546     		li	a3,1
+ 1154 0104 2300D400 		sb	a3,0(s0)
+ 255:../src/uart.c ****     }
+ 1155              		.loc 1 255 0
+ 1156 0108 2300C700 		sb	a2,0(a4)
+ 1157 010c 2380A700 		sb	a0,0(a5)
+ 1158              		.loc 1 297 0
+ 1159 0110 B240     		lw	ra,12(sp)
+ 1160              		.cfi_restore 1
+ 1161 0112 2244     		lw	s0,8(sp)
+ 1162              		.cfi_restore 8
+ 1163 0114 9244     		lw	s1,4(sp)
+ 1164              		.cfi_restore 9
+ 1165 0116 4101     		addi	sp,sp,16
+ 1166              		.cfi_def_cfa_offset 0
+ 1167 0118 8280     		jr	ra
+ 1168              		.cfi_endproc
+ 1169              	.LFE11:
+ 1171              		.section	.text.uart_handler,"ax",@progbits
+ 1172              		.align	1
+ 1173              		.globl	uart_handler
+ 1175              	uart_handler:
+ 1176              	.LFB10:
+ 220:../src/uart.c ****     
+ 1177              		.loc 1 220 0
+ 1178              		.cfi_startproc
+ 1179              	.LVL107:
+ 1180 0000 4111     		addi	sp,sp,-16
+ 1181              		.cfi_def_cfa_offset 16
+ 1182 0002 22C4     		sw	s0,8(sp)
+ 1183 0004 26C2     		sw	s1,4(sp)
+ 1184 0006 06C6     		sw	ra,12(sp)
+ 1185              		.cfi_offset 8, -8
+ 1186              		.cfi_offset 9, -12
+ 1187              		.cfi_offset 1, -4
+ 220:../src/uart.c ****     
+ 1188              		.loc 1 220 0
+ 1189 0008 1D44     		li	s0,7
+ 1190              	.LBB240:
+ 1191              	.LBB241:
+ 1192              	.LBB242:
+ 1193              	.LBB243:
+ 215:../src/uart.c ****     return (data);
+ 1194              		.loc 1 215 0
+ 1195 000a A164     		li	s1,32768
+ 1196              	.LVL108:
+ 1197              	.L91:
+ 1198 000c 8850     		lw	a0,32(s1)
+ 1199              	.LVL109:
+ 1200 000e 7D14     		addi	s0,s0,-1
+ 1201              	.LVL110:
+ 1202              	.LBE243:
+ 1203              	.LBE242:
+ 226:../src/uart.c **** 
+ 1204              		.loc 1 226 0
+ 1205 0010 6205     		slli	a0,a0,24
+ 1206              	.LVL111:
+ 1207 0012 6185     		srai	a0,a0,24
+ 1208 0014 97000000 		call	serial_receive_data
+ 1208      E7800000 
+ 1209              	.LVL112:
+ 1210              	.LBE241:
+ 222:../src/uart.c **** 	{
+ 1211              		.loc 1 222 0
+ 1212 001c 65F8     		bnez	s0,.L91
+ 1213              	.LBE240:
+ 231:../src/uart.c ****     {
+ 1214              		.loc 1 231 0
+ 1215 001e 37040000 		lui	s0,%hi(.LANCHOR3)
+ 1216 0022 13040400 		addi	s0,s0,%lo(.LANCHOR3)
+ 1217 0026 1840     		lw	a4,0(s0)
+ 1218 0028 8547     		li	a5,1
+ 1219 002a 630EF700 		beq	a4,a5,.L97
+ 242:../src/uart.c **** 
+ 1220              		.loc 1 242 0
+ 1221 002e 2244     		lw	s0,8(sp)
+ 1222              		.cfi_remember_state
+ 1223              		.cfi_restore 8
+ 1224 0030 B240     		lw	ra,12(sp)
+ 1225              		.cfi_restore 1
+ 1226 0032 9244     		lw	s1,4(sp)
+ 1227              		.cfi_restore 9
+ 240:../src/uart.c **** 	}
+ 1228              		.loc 1 240 0
+ 1229 0034 37050000 		lui	a0,%hi(.LC4)
+ 242:../src/uart.c **** 
+ 1230              		.loc 1 242 0
+ 240:../src/uart.c **** 	}
+ 1231              		.loc 1 240 0
+ 1232 0038 13050500 		addi	a0,a0,%lo(.LC4)
+ 242:../src/uart.c **** 
+ 1233              		.loc 1 242 0
+ 1234 003c 4101     		addi	sp,sp,16
+ 1235              		.cfi_def_cfa_offset 0
+ 240:../src/uart.c **** 	}
+ 1236              		.loc 1 240 0
+ 1237 003e 17030000 		tail	printk
+ 1237      67000300 
+ 1238              	.LVL113:
+ 1239              	.L97:
+ 1240              		.cfi_restore_state
+ 234:../src/uart.c ****         FLAG = 0;
+ 1241              		.loc 1 234 0
+ 1242 0046 37050000 		lui	a0,%hi(.LC3)
+ 1243 004a 13050500 		addi	a0,a0,%lo(.LC3)
+ 1244 004e 97000000 		call	printk
+ 1244      E7800000 
+ 1245              	.LVL114:
+ 242:../src/uart.c **** 
+ 1246              		.loc 1 242 0
+ 1247 0056 B240     		lw	ra,12(sp)
+ 1248              		.cfi_restore 1
+ 235:../src/uart.c ****     }
+ 1249              		.loc 1 235 0
+ 1250 0058 23200400 		sw	zero,0(s0)
+ 242:../src/uart.c **** 
+ 1251              		.loc 1 242 0
+ 1252 005c 2244     		lw	s0,8(sp)
+ 1253              		.cfi_restore 8
+ 1254 005e 9244     		lw	s1,4(sp)
+ 1255              		.cfi_restore 9
+ 1256 0060 4101     		addi	sp,sp,16
+ 1257              		.cfi_def_cfa_offset 0
+ 1258 0062 8280     		jr	ra
+ 1259              		.cfi_endproc
+ 1260              	.LFE10:
+ 1262              		.section	.text.getchar_prompt,"ax",@progbits
+ 1263              		.align	1
+ 1264              		.globl	getchar_prompt
+ 1266              	getchar_prompt:
+ 1267              	.LFB12:
+ 298:../src/uart.c **** char getchar_prompt(char *prompt)
+ 299:../src/uart.c **** {
+ 1268              		.loc 1 299 0
+ 1269              		.cfi_startproc
+ 1270              	.LVL115:
+ 300:../src/uart.c **** 	int32_t c = -1;
+ 301:../src/uart.c **** 
+ 302:../src/uart.c **** 	uint32_t cycles_begin, cycles_now, cycles;
+ 303:../src/uart.c **** 	__asm__ volatile ("rdcycle %0" : "=r"(cycles_begin));
+ 1271              		.loc 1 303 0
+ 1272              	 #APP
+ 1273              	# 303 "../src/uart.c" 1
+ 304              	
+ 1274              		rdcycle a1
+ 1275              	# 0 "" 2
+ 1276              	.LVL116:
+ 305:../src/uart.c **** 	if (prompt)
+ 1277              		.loc 1 305 0
+ 1278              	 #NO_APP
+ 1279 0004 15C5     		beqz	a0,.L99
+ 1280              	.LVL117:
+ 1281              	.LBB256:
+ 1282              	.LBB257:
+  52:../src/uart.c **** 		put_char(*(p++));
+ 1283              		.loc 1 52 0
+ 1284 0006 83070500 		lb	a5,0(a0)
+ 1285 000a 9DC3     		beqz	a5,.L99
+ 1286 000c 2A87     		mv	a4,a0
+ 1287              	.LBB258:
+ 1288              	.LBB259:
+  38:../src/uart.c **** 		put_char('\r');
+ 1289              		.loc 1 38 0
+ 1290 000e 2946     		li	a2,10
+ 1291              	.LBB260:
+ 1292              	.LBB261:
+  40:../src/uart.c **** }
+ 1293              		.loc 1 40 0
+ 1294 0010 A166     		li	a3,32768
+ 1295 0012 3548     		li	a6,13
+ 1296 0014 29A0     		j	.L101
+ 1297              	.LVL118:
+ 1298              	.L100:
+ 1299              	.LBE261:
+ 1300              	.LBE260:
+ 1301 0016 9CCA     		sw	a5,16(a3)
+ 1302              	.LBE259:
+ 1303              	.LBE258:
+  52:../src/uart.c **** 		put_char(*(p++));
+ 1304              		.loc 1 52 0
+ 1305 0018 83070700 		lb	a5,0(a4)
+ 1306              	.LVL119:
+ 1307 001c 91CB     		beqz	a5,.L99
+ 1308              	.L101:
+  53:../src/uart.c **** }
+ 1309              		.loc 1 53 0
+ 1310 001e 0507     		addi	a4,a4,1
+ 1311              	.LVL120:
+ 1312              	.LBB265:
+ 1313              	.LBB264:
+  38:../src/uart.c **** 		put_char('\r');
+ 1314              		.loc 1 38 0
+ 1315 0020 E39BC7FE 		bne	a5,a2,.L100
+ 1316              	.LVL121:
+ 1317              	.LBB263:
+ 1318              	.LBB262:
+  40:../src/uart.c **** }
+ 1319              		.loc 1 40 0
+ 1320 0024 23A80601 		sw	a6,16(a3)
+ 1321              	.LBE262:
+ 1322              	.LBE263:
+ 1323 0028 9CCA     		sw	a5,16(a3)
+ 1324              	.LBE264:
+ 1325              	.LBE265:
+  52:../src/uart.c **** 		put_char(*(p++));
+ 1326              		.loc 1 52 0
+ 1327 002a 83070700 		lb	a5,0(a4)
+ 1328              	.LVL122:
+ 1329 002e E5FB     		bnez	a5,.L101
+ 1330              	.LVL123:
+ 1331              	.L99:
+ 1332              	.LBE257:
+ 1333              	.LBE256:
+ 306:../src/uart.c **** 		print_str(prompt);
+ 307:../src/uart.c **** 
+ 308:../src/uart.c **** 	while (c == -1)
+ 309:../src/uart.c **** 	{
+ 310:../src/uart.c **** 		__asm__ volatile ("rdcycle %0" : "=r"(cycles_now));
+ 311:../src/uart.c **** 		cycles = cycles_now - cycles_begin;
+ 312:../src/uart.c **** 		if (cycles > 12000000)
+ 1334              		.loc 1 312 0
+ 1335 0030 B728B700 		li	a7,12001280
+ 1336 0034 938808B0 		addi	a7,a7,-1280
+ 1337              	.LBB266:
+ 1338              	.LBB267:
+ 1339              	.LBB268:
+ 1340              	.LBB269:
+  38:../src/uart.c **** 		put_char('\r');
+ 1341              		.loc 1 38 0
+ 1342 0038 2948     		li	a6,10
+ 1343              	.LBB270:
+ 1344              	.LBB271:
+  40:../src/uart.c **** }
+ 1345              		.loc 1 40 0
+ 1346 003a A166     		li	a3,32768
+ 1347 003c 354E     		li	t3,13
+ 1348              	.LBE271:
+ 1349              	.LBE270:
+ 1350              	.LBE269:
+ 1351              	.LBE268:
+ 1352              	.LBE267:
+ 1353              	.LBE266:
+ 308:../src/uart.c **** 	{
+ 1354              		.loc 1 308 0
+ 1355 003e 7D53     		li	t1,-1
+ 1356              	.LVL124:
+ 1357              	.L105:
+ 310:../src/uart.c **** 		cycles = cycles_now - cycles_begin;
+ 1358              		.loc 1 310 0
+ 1359              	 #APP
+ 1360              	# 310 "../src/uart.c" 1
+ 1361              		rdcycle a2
+ 1362              	# 0 "" 2
+ 1363              	.LVL125:
+ 311:../src/uart.c **** 		if (cycles > 12000000)
+ 1364              		.loc 1 311 0
+ 1365              	 #NO_APP
+ 1366 0044 B307B640 		sub	a5,a2,a1
+ 1367              	.LVL126:
+ 1368              		.loc 1 312 0
+ 1369 0048 63F7F802 		bleu	a5,a7,.L102
+ 313:../src/uart.c **** 		{
+ 314:../src/uart.c **** 			if (prompt)
+ 315:../src/uart.c **** 			{
+ 316:../src/uart.c **** 				print_str(prompt);
+ 317:../src/uart.c **** 			}
+ 318:../src/uart.c **** 			cycles_begin = cycles_now;
+ 1370              		.loc 1 318 0
+ 1371 004c B285     		mv	a1,a2
+ 1372              	.LVL127:
+ 314:../src/uart.c **** 			{
+ 1373              		.loc 1 314 0
+ 1374 004e 05C5     		beqz	a0,.L102
+ 1375              	.LVL128:
+ 1376              	.LBB279:
+ 1377              	.LBB278:
+  52:../src/uart.c **** 		put_char(*(p++));
+ 1378              		.loc 1 52 0
+ 1379 0050 83070500 		lb	a5,0(a0)
+ 1380              	.LVL129:
+ 1381 0054 8DC3     		beqz	a5,.L102
+ 1382 0056 2A87     		mv	a4,a0
+ 1383 0058 29A0     		j	.L104
+ 1384              	.LVL130:
+ 1385              	.L103:
+ 1386              	.LBB276:
+ 1387              	.LBB274:
+  40:../src/uart.c **** }
+ 1388              		.loc 1 40 0
+ 1389 005a 9CCA     		sw	a5,16(a3)
+ 1390              	.LBE274:
+ 1391              	.LBE276:
+  52:../src/uart.c **** 		put_char(*(p++));
+ 1392              		.loc 1 52 0
+ 1393 005c 83070700 		lb	a5,0(a4)
+ 1394              	.LVL131:
+ 1395 0060 91CB     		beqz	a5,.L118
+ 1396              	.L104:
+  53:../src/uart.c **** }
+ 1397              		.loc 1 53 0
+ 1398 0062 0507     		addi	a4,a4,1
+ 1399              	.LVL132:
+ 1400              	.LBB277:
+ 1401              	.LBB275:
+  38:../src/uart.c **** 		put_char('\r');
+ 1402              		.loc 1 38 0
+ 1403 0064 E39B07FF 		bne	a5,a6,.L103
+ 1404              	.LVL133:
+ 1405              	.LBB273:
+ 1406              	.LBB272:
+  40:../src/uart.c **** }
+ 1407              		.loc 1 40 0
+ 1408 0068 23A8C601 		sw	t3,16(a3)
+ 1409              	.LBE272:
+ 1410              	.LBE273:
+ 1411 006c 9CCA     		sw	a5,16(a3)
+ 1412              	.LBE275:
+ 1413              	.LBE277:
+  52:../src/uart.c **** 		put_char(*(p++));
+ 1414              		.loc 1 52 0
+ 1415 006e 83070700 		lb	a5,0(a4)
+ 1416              	.LVL134:
+ 1417 0072 E5FB     		bnez	a5,.L104
+ 1418              	.LVL135:
+ 1419              	.L118:
+ 1420              	.LBE278:
+ 1421              	.LBE279:
+ 1422              		.loc 1 318 0
+ 1423 0074 B285     		mv	a1,a2
+ 1424              	.LVL136:
+ 1425              	.L102:
+ 319:../src/uart.c **** 		}
+ 320:../src/uart.c **** 		c = reg_uart_rxdata;
+ 1426              		.loc 1 320 0
+ 1427 0076 9C52     		lw	a5,32(a3)
+ 1428              	.LVL137:
+ 308:../src/uart.c **** 	{
+ 1429              		.loc 1 308 0
+ 1430 0078 E38467FC 		beq	a5,t1,.L105
+ 321:../src/uart.c **** 	}
+ 322:../src/uart.c **** 
+ 323:../src/uart.c **** 	return c;
+ 324:../src/uart.c **** }
+ 1431              		.loc 1 324 0
+ 1432 007c 13958701 		slli	a0,a5,24
+ 1433              	.LVL138:
+ 1434 0080 6185     		srai	a0,a0,24
+ 1435 0082 8280     		ret
+ 1436              		.cfi_endproc
+ 1437              	.LFE12:
+ 1439              		.section	.text.get_char,"ax",@progbits
+ 1440              		.align	1
+ 1441              		.globl	get_char
+ 1443              	get_char:
+ 1444              	.LFB13:
+ 325:../src/uart.c **** 
+ 326:../src/uart.c **** /********************************************************************
+ 327:../src/uart.c ****  ** 函数名称：get_char
+ 328:../src/uart.c ****  ** 函数功能：串口获取一个字符
+ 329:../src/uart.c ****  ** 输入参数：无
+ 330:../src/uart.c ****  ** 输出参数：无
+ 331:../src/uart.c ****  ** 返回参数：输出的字符
+ 332:../src/uart.c ****  ********************************************************************/
+ 333:../src/uart.c **** char get_char()
+ 334:../src/uart.c **** {
+ 1445              		.loc 1 334 0
+ 1446              		.cfi_startproc
+ 1447 0000 4111     		addi	sp,sp,-16
+ 1448              		.cfi_def_cfa_offset 16
+ 335:../src/uart.c **** //	return getchar_prompt(0);
+ 336:../src/uart.c **** 	put_char(getchar_prompt(0));
+ 1449              		.loc 1 336 0
+ 1450 0002 0145     		li	a0,0
+ 334:../src/uart.c **** //	return getchar_prompt(0);
+ 1451              		.loc 1 334 0
+ 1452 0004 06C6     		sw	ra,12(sp)
+ 1453              		.cfi_offset 1, -4
+ 1454              		.loc 1 336 0
+ 1455 0006 97000000 		call	getchar_prompt
+ 1455      E7800000 
+ 1456              	.LVL139:
+ 1457              	.LBB284:
+ 1458              	.LBB285:
+  38:../src/uart.c **** 		put_char('\r');
+ 1459              		.loc 1 38 0
+ 1460 000e 2947     		li	a4,10
+ 1461              	.LBE285:
+ 1462              	.LBE284:
+ 1463              		.loc 1 336 0
+ 1464 0010 AA87     		mv	a5,a0
+ 1465              	.LVL140:
+ 1466              	.LBB294:
+ 1467              	.LBB290:
+  38:../src/uart.c **** 		put_char('\r');
+ 1468              		.loc 1 38 0
+ 1469 0012 6307E500 		beq	a0,a4,.L122
+ 1470              	.LBE290:
+ 1471              	.LBE294:
+ 337:../src/uart.c **** }
+ 1472              		.loc 1 337 0
+ 1473 0016 B240     		lw	ra,12(sp)
+ 1474              		.cfi_remember_state
+ 1475              		.cfi_restore 1
+ 1476              	.LBB295:
+ 1477              	.LBB291:
+  40:../src/uart.c **** }
+ 1478              		.loc 1 40 0
+ 1479 0018 2167     		li	a4,32768
+ 1480 001a 1CCB     		sw	a5,16(a4)
+ 1481              	.LVL141:
+ 1482              	.LBE291:
+ 1483              	.LBE295:
+ 1484              		.loc 1 337 0
+ 1485 001c 4101     		addi	sp,sp,16
+ 1486              		.cfi_def_cfa_offset 0
+ 1487 001e 8280     		jr	ra
+ 1488              	.LVL142:
+ 1489              	.L122:
+ 1490              		.cfi_restore_state
+ 1491              	.LBB296:
+ 1492              	.LBB292:
+ 1493              	.LBB286:
+ 1494              	.LBB287:
+  40:../src/uart.c **** }
+ 1495              		.loc 1 40 0
+ 1496 0020 2167     		li	a4,32768
+ 1497              	.LBE287:
+ 1498              	.LBE286:
+ 1499              	.LBE292:
+ 1500              	.LBE296:
+ 1501              		.loc 1 337 0
+ 1502 0022 B240     		lw	ra,12(sp)
+ 1503              		.cfi_restore 1
+ 1504              	.LBB297:
+ 1505              	.LBB293:
+ 1506              	.LBB289:
+ 1507              	.LBB288:
+  40:../src/uart.c **** }
+ 1508              		.loc 1 40 0
+ 1509 0024 B546     		li	a3,13
+ 1510 0026 14CB     		sw	a3,16(a4)
+ 1511              	.LBE288:
+ 1512              	.LBE289:
+ 1513 0028 2167     		li	a4,32768
+ 1514 002a 1CCB     		sw	a5,16(a4)
+ 1515              	.LVL143:
+ 1516              	.LBE293:
+ 1517              	.LBE297:
+ 1518              		.loc 1 337 0
+ 1519 002c 4101     		addi	sp,sp,16
+ 1520              		.cfi_def_cfa_offset 0
+ 1521 002e 8280     		jr	ra
+ 1522              		.cfi_endproc
+ 1523              	.LFE13:
+ 1525              		.globl	FLAG
+ 1526              		.section	.rodata.print_flt.cst8,"aM",@progbits,8
+ 1527              		.align	3
+ 1528              	.LC1:
+ 1529 0000 00000000 		.word	0
+ 1530 0004 80842E41 		.word	1093567616
+ 1531              		.section	.rodata.print_num.part.0.str1.4,"aMS",@progbits,1
+ 1532              		.align	2
+ 1533              	.LC0:
+ 1534 0000 30313233 		.string	"0123456789abcdef"
+ 1534      34353637 
+ 1534      38396162 
+ 1534      63646566 
+ 1534      00
+ 1535              		.section	.rodata.serial_receive_data.str1.4,"aMS",@progbits,1
+ 1536              		.align	2
+ 1537              	.LC2:
+ 1538 0000 50617261 		.string	"Parameter ID: %d, Parameter Value: %d\n"
+ 1538      6D657465 
+ 1538      72204944 
+ 1538      3A202564 
+ 1538      2C205061 
+ 1539              		.section	.rodata.uart_handler.str1.4,"aMS",@progbits,1
+ 1540              		.align	2
+ 1541              	.LC3:
+ 1542 0000 73756363 		.string	"successful\n"
+ 1542      65737366 
+ 1542      756C0A00 
+ 1543              	.LC4:
+ 1544 000c 6661696C 		.string	"failed\n"
+ 1544      65640A00 
+ 1545              		.section	.sbss.FLAG,"aw",@nobits
+ 1546              		.align	2
+ 1547              		.set	.LANCHOR3,. + 0
+ 1550              	FLAG:
+ 1551 0000 00000000 		.zero	4
+ 1552              		.section	.sbss.package.2518,"aw",@nobits
+ 1553              		.align	2
+ 1554              		.set	.LANCHOR2,. + 0
+ 1557              	package.2518:
+ 1558 0000 00000000 		.zero	6
+ 1558      0000
+ 1559              		.section	.sbss.package_num.2520,"aw",@nobits
+ 1560              		.set	.LANCHOR1,. + 0
+ 1563              	package_num.2520:
+ 1564 0000 00       		.zero	1
+ 1565              		.section	.sbss.state.2519,"aw",@nobits
+ 1566              		.set	.LANCHOR0,. + 0
+ 1569              	state.2519:
+ 1570 0000 00       		.zero	1
+ 1571              		.text
+ 1572              	.Letext0:
+ 1573              		.file 2 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+ 1574              		.file 3 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+ 1575              		.file 4 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+ 1576              		.file 5 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+ 1577              		.file 6 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+ 1578              		.file 7 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+ 1579              		.file 8 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+ 1580              		.file 9 "d:\\hummingbird\\hbird-eclipse_2018_09\\gnu mcu eclipse\\risc-v embedded gcc\\7.2.0-4-201
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 uart.c
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:10     .text.print_num:0000000000000000 print_num
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:14     .text.print_num:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:16     .text.print_num:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:17     .text.print_num:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:19     .text.print_num:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:29     .text.print_num.part.0:0000000000000000 print_num.part.0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:23     .text.print_num:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:32     .text.print_num.part.0:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:34     .text.print_num.part.0:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:35     .text.print_num.part.0:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:37     .text.print_num.part.0:0000000000000004 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:40     .text.print_num.part.0:0000000000000006 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:43     .text.print_num.part.0:000000000000000a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:44     .text.print_num.part.0:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:47     .text.print_num.part.0:0000000000000010 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:49     .text.print_num.part.0:0000000000000010 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:52     .text.print_num.part.0:0000000000000018 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:59     .text.print_num.part.0:0000000000000024 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:63     .text.print_num.part.0:0000000000000026 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:69     .text.print_num.part.0:000000000000002c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:73     .text.print_num.part.0:0000000000000030 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:74     .text.print_num.part.0:0000000000000032 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:75     .text.print_num.part.0:0000000000000032 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:77     .text.print_num.part.0:0000000000000034 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:81     .text.print_num.part.0:0000000000000034 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:86     .text.print_num.part.0:0000000000000038 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:87     .text.print_num.part.0:000000000000003a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:90     .text.print_num.part.0:000000000000003c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:94     .text.print_num.part.0:000000000000003e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:100    .text.print_num.part.0:000000000000003e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:106    .text.print_num.part.0:0000000000000040 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:107    .text.print_num.part.0:0000000000000042 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:109    .text.print_num.part.0:0000000000000044 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:115    .text.print_num.part.0:0000000000000044 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:124    .text.print_num.part.0:000000000000004c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:125    .text.print_num.part.0:000000000000004e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:128    .text.print_num.part.0:0000000000000050 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:130    .text.print_num.part.0:0000000000000052 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:137    .text.put_char:0000000000000000 put_char
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:140    .text.put_char:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:142    .text.put_char:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:143    .text.put_char:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:146    .text.put_char:0000000000000006 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:147    .text.put_char:0000000000000006 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:149    .text.put_char:0000000000000006 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:151    .text.put_char:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:153    .text.put_char:000000000000000a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:157    .text.put_char:000000000000000e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:160    .text.put_char:0000000000000012 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:161    .text.put_char:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:162    .text.put_char:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:164    .text.put_char:0000000000000016 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:166    .text.put_char:0000000000000018 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:170    .text.put_char:000000000000001a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:172    .text.put_char:000000000000001a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:177    .text.put_char:0000000000000026 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:184    .text.print_str:0000000000000000 print_str
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:187    .text.print_str:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:189    .text.print_str:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:190    .text.print_str:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:195    .text.print_str:0000000000000006 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:199    .text.print_str:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:210    .text.print_str:0000000000000010 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:215    .text.print_str:0000000000000016 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:220    .text.print_str:0000000000000018 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:225    .text.print_str:000000000000001c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:232    .text.print_str:0000000000000020 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:238    .text.print_str:0000000000000026 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:239    .text.print_str:0000000000000028 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:246    .text.print_hex:0000000000000000 print_hex
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:249    .text.print_hex:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:251    .text.print_hex:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:254    .text.print_hex:0000000000000004 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:258    .text.print_hex:000000000000000a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:262    .text.print_hex:000000000000000e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:264    .text.print_hex:0000000000000010 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:268    .text.print_hex:0000000000000012 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:275    .text.print_hex:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:283    .text.print_hex:0000000000000018 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:286    .text.print_hex:000000000000001c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:294    .text.print_hex:0000000000000020 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:301    .text.print_hex:0000000000000026 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:308    .text.print_hex:0000000000000036 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:310    .text.print_hex:000000000000003a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:313    .text.print_hex:000000000000003e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:320    .text.print_hex:0000000000000044 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:330    .text.print_hex:0000000000000046 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:338    .text.print_hex:000000000000004c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:345    .text.print_hex2:0000000000000000 print_hex2
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:348    .text.print_hex2:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:350    .text.print_hex2:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:351    .text.print_hex2:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:356    .text.print_hex2:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:362    .text.print_hex2:000000000000000a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:372    .text.print_hex2:0000000000000016 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:379    .text.print_dec:0000000000000000 print_dec
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:382    .text.print_dec:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:384    .text.print_dec:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:385    .text.print_dec:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:390    .text.print_dec:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:396    .text.print_dec:000000000000000a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:406    .text.print_dec:0000000000000016 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:417    .text.print_flt:0000000000000000 print_flt
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:420    .text.print_flt:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:422    .text.print_flt:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:423    .text.print_flt:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:429    .text.print_flt:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:430    .text.print_flt:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:431    .text.print_flt:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:432    .text.print_flt:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:433    .text.print_flt:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:435    .text.print_flt:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:438    .text.print_flt:0000000000000010 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:445    .text.print_flt:000000000000001a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:450    .text.print_flt:000000000000001c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:468    .text.print_flt:000000000000002c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:478    .text.print_flt:0000000000000046 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:488    .text.print_flt:0000000000000062 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:493    .text.print_flt:0000000000000064 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:494    .text.print_flt:0000000000000066 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:495    .text.print_flt:0000000000000066 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:497    .text.print_flt:0000000000000068 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:504    .text.print_flt:0000000000000068 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:511    .text.print_flt:000000000000006e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:512    .text.print_flt:0000000000000070 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:514    .text.print_flt:0000000000000072 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:516    .text.print_flt:0000000000000074 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:518    .text.print_flt:0000000000000076 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:522    .text.print_flt:0000000000000078 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:524    .text.print_flt:000000000000007a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:525    .text.print_flt:000000000000007a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:528    .text.print_flt:000000000000007c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:530    .text.print_flt:000000000000007e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:532    .text.print_flt:0000000000000080 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:534    .text.print_flt:0000000000000082 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:545    .text.print_flt:0000000000000086 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:553    .text.print_flt:000000000000008e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:570    .text.print_flt:000000000000009a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:577    .text.printk:0000000000000000 printk
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:580    .text.printk:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:582    .text.printk:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:583    .text.printk:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:593    .text.printk:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:594    .text.printk:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:595    .text.printk:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:596    .text.printk:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:597    .text.printk:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:598    .text.printk:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:599    .text.printk:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:600    .text.printk:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:602    .text.printk:0000000000000014 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:609    .text.printk:0000000000000020 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:611    .text.printk:0000000000000024 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:615    .text.printk:0000000000000028 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:617    .text.printk:000000000000002a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:620    .text.printk:0000000000000030 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:626    .text.printk:0000000000000032 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:633    .text.printk:0000000000000036 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:635    .text.printk:000000000000003a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:640    .text.printk:0000000000000040 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:645    .text.printk:0000000000000044 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:654    .text.printk:000000000000004e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:660    .text.printk:0000000000000058 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:667    .text.printk:000000000000005c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:679    .text.printk:000000000000006a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:684    .text.printk:0000000000000070 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:685    .text.printk:0000000000000072 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:686    .text.printk:0000000000000072 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:688    .text.printk:0000000000000074 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:690    .text.printk:0000000000000076 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:692    .text.printk:0000000000000078 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:694    .text.printk:000000000000007a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:696    .text.printk:000000000000007c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:698    .text.printk:000000000000007e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:700    .text.printk:0000000000000080 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:702    .text.printk:0000000000000082 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:706    .text.printk:0000000000000084 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:708    .text.printk:0000000000000084 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:811    .text.printk:00000000000000a0 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:822    .text.printk:00000000000000ac .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:830    .text.printk:00000000000000b6 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:833    .text.printk:00000000000000ba .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:840    .text.printk:00000000000000c0 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:844    .text.printk:00000000000000c2 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:852    .text.printk:00000000000000ca .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:858    .text.printk:00000000000000cc .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:869    .text.printk:00000000000000d6 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:873    .text.printk:00000000000000d8 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:881    .text.printk:00000000000000e0 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:898    .text.printk:00000000000000f0 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:906    .text.printk:00000000000000f8 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:909    .text.printk:00000000000000fe .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:914    .text.printk:0000000000000100 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:917    .text.printk:0000000000000104 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:921    .text.printk:0000000000000108 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:925    .text.printk:000000000000010e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:930    .text.printk:0000000000000110 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:936    .text.printk:0000000000000114 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:947    .text.printk:000000000000011a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:959    .text.printk:0000000000000132 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:983    .text.printk:0000000000000142 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:989    .text.printk:0000000000000148 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:996    .text.read_uart:0000000000000000 read_uart
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:999    .text.read_uart:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1000   .text.read_uart:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1001   .text.read_uart:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1005   .text.read_uart:0000000000000004 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1009   .text.read_uart:000000000000000a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1016   .text.serial_receive_data:0000000000000000 serial_receive_data
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1019   .text.serial_receive_data:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1021   .text.serial_receive_data:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1022   .text.serial_receive_data:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1024   .text.serial_receive_data:0000000000000004 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1026   .text.serial_receive_data:0000000000000004 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1028   .text.serial_receive_data:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1030   .text.serial_receive_data:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1031   .text.serial_receive_data:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1033   .text.serial_receive_data:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1037   .text.serial_receive_data:0000000000000016 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1041   .text.serial_receive_data:000000000000001c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1044   .text.serial_receive_data:0000000000000024 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1046   .text.serial_receive_data:0000000000000028 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1048   .text.serial_receive_data:000000000000002c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1051   .text.serial_receive_data:0000000000000030 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1056   .text.serial_receive_data:0000000000000038 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1057   .text.serial_receive_data:000000000000003a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1058   .text.serial_receive_data:000000000000003a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1060   .text.serial_receive_data:000000000000003c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1062   .text.serial_receive_data:000000000000003e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1064   .text.serial_receive_data:0000000000000040 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1068   .text.serial_receive_data:0000000000000042 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1070   .text.serial_receive_data:0000000000000042 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1073   .text.serial_receive_data:0000000000000048 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1084   .text.serial_receive_data:000000000000006e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1087   .text.serial_receive_data:0000000000000074 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1092   .text.serial_receive_data:000000000000007c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1095   .text.serial_receive_data:0000000000000082 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1101   .text.serial_receive_data:0000000000000088 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1105   .text.serial_receive_data:0000000000000094 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1108   .text.serial_receive_data:000000000000009c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1111   .text.serial_receive_data:00000000000000a4 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1114   .text.serial_receive_data:00000000000000a8 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1126   .text.serial_receive_data:00000000000000c6 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1134   .text.serial_receive_data:00000000000000da .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1138   .text.serial_receive_data:00000000000000e2 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1145   .text.serial_receive_data:00000000000000e8 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1153   .text.serial_receive_data:0000000000000102 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1156   .text.serial_receive_data:0000000000000108 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1159   .text.serial_receive_data:0000000000000110 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1160   .text.serial_receive_data:0000000000000112 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1162   .text.serial_receive_data:0000000000000114 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1164   .text.serial_receive_data:0000000000000116 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1166   .text.serial_receive_data:0000000000000118 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1168   .text.serial_receive_data:000000000000011a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1175   .text.uart_handler:0000000000000000 uart_handler
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1178   .text.uart_handler:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1180   .text.uart_handler:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1181   .text.uart_handler:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1185   .text.uart_handler:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1186   .text.uart_handler:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1187   .text.uart_handler:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1189   .text.uart_handler:0000000000000008 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1195   .text.uart_handler:000000000000000a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1205   .text.uart_handler:0000000000000010 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1212   .text.uart_handler:000000000000001c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1215   .text.uart_handler:000000000000001e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1221   .text.uart_handler:000000000000002e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1222   .text.uart_handler:0000000000000030 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1223   .text.uart_handler:0000000000000030 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1225   .text.uart_handler:0000000000000032 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1227   .text.uart_handler:0000000000000034 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1229   .text.uart_handler:0000000000000034 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1231   .text.uart_handler:0000000000000038 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1232   .text.uart_handler:0000000000000038 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1234   .text.uart_handler:000000000000003c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1235   .text.uart_handler:000000000000003e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1237   .text.uart_handler:000000000000003e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1240   .text.uart_handler:0000000000000046 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1242   .text.uart_handler:0000000000000046 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1247   .text.uart_handler:0000000000000056 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1248   .text.uart_handler:0000000000000058 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1250   .text.uart_handler:0000000000000058 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1252   .text.uart_handler:000000000000005c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1253   .text.uart_handler:000000000000005e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1255   .text.uart_handler:0000000000000060 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1257   .text.uart_handler:0000000000000062 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1259   .text.uart_handler:0000000000000064 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1266   .text.getchar_prompt:0000000000000000 getchar_prompt
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1269   .text.getchar_prompt:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1271   .text.getchar_prompt:0000000000000000 .L0 
+       ../src/uart.c:303    .text.getchar_prompt:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1279   .text.getchar_prompt:0000000000000004 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1284   .text.getchar_prompt:0000000000000006 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1290   .text.getchar_prompt:000000000000000e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1294   .text.getchar_prompt:0000000000000010 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1305   .text.getchar_prompt:0000000000000018 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1310   .text.getchar_prompt:000000000000001e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1315   .text.getchar_prompt:0000000000000020 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1320   .text.getchar_prompt:0000000000000024 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1327   .text.getchar_prompt:000000000000002a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1335   .text.getchar_prompt:0000000000000030 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1342   .text.getchar_prompt:0000000000000038 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1346   .text.getchar_prompt:000000000000003a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1355   .text.getchar_prompt:000000000000003e .L0 
+       ../src/uart.c:310    .text.getchar_prompt:0000000000000040 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1366   .text.getchar_prompt:0000000000000044 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1369   .text.getchar_prompt:0000000000000048 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1371   .text.getchar_prompt:000000000000004c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1374   .text.getchar_prompt:000000000000004e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1379   .text.getchar_prompt:0000000000000050 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1389   .text.getchar_prompt:000000000000005a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1393   .text.getchar_prompt:000000000000005c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1398   .text.getchar_prompt:0000000000000062 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1403   .text.getchar_prompt:0000000000000064 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1408   .text.getchar_prompt:0000000000000068 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1415   .text.getchar_prompt:000000000000006e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1423   .text.getchar_prompt:0000000000000074 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1427   .text.getchar_prompt:0000000000000076 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1430   .text.getchar_prompt:0000000000000078 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1432   .text.getchar_prompt:000000000000007c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1436   .text.getchar_prompt:0000000000000084 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1443   .text.get_char:0000000000000000 get_char
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1446   .text.get_char:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1447   .text.get_char:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1448   .text.get_char:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1450   .text.get_char:0000000000000002 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1452   .text.get_char:0000000000000004 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1453   .text.get_char:0000000000000006 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1455   .text.get_char:0000000000000006 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1460   .text.get_char:000000000000000e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1464   .text.get_char:0000000000000010 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1469   .text.get_char:0000000000000012 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1473   .text.get_char:0000000000000016 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1474   .text.get_char:0000000000000018 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1475   .text.get_char:0000000000000018 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1479   .text.get_char:0000000000000018 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1485   .text.get_char:000000000000001c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1486   .text.get_char:000000000000001e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1490   .text.get_char:0000000000000020 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1496   .text.get_char:0000000000000020 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1502   .text.get_char:0000000000000022 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1503   .text.get_char:0000000000000024 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1509   .text.get_char:0000000000000024 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1519   .text.get_char:000000000000002c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1520   .text.get_char:000000000000002e .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1522   .text.get_char:0000000000000030 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1550   .sbss.FLAG:0000000000000000 FLAG
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1547   .sbss.FLAG:0000000000000000 .LANCHOR3
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1554   .sbss.package.2518:0000000000000000 .LANCHOR2
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1557   .sbss.package.2518:0000000000000000 package.2518
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1560   .sbss.package_num.2520:0000000000000000 .LANCHOR1
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1563   .sbss.package_num.2520:0000000000000000 package_num.2520
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1566   .sbss.state.2519:0000000000000000 .LANCHOR0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1569   .sbss.state.2519:0000000000000000 state.2519
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:26     .text.print_num:000000000000000c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:133    .text.print_num.part.0:0000000000000052 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:180    .text.put_char:0000000000000026 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:242    .text.print_str:0000000000000028 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:341    .text.print_hex:000000000000004c .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:375    .text.print_hex2:0000000000000016 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:413    .text.print_dec:0000000000000016 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:573    .text.print_flt:000000000000009a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:992    .text.printk:0000000000000148 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1012   .text.read_uart:000000000000000a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1171   .text.serial_receive_data:000000000000011a .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1262   .text.uart_handler:0000000000000064 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1439   .text.getchar_prompt:0000000000000084 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1526   .text.get_char:0000000000000030 .L0 
+                     .debug_frame:0000000000000000 .L0 
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:20     .text.print_num:0000000000000004 .L4
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1533   .rodata.print_num.part.0.str1.4:0000000000000000 .LC0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:93     .text.print_num.part.0:000000000000003e .L8
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:169    .text.put_char:000000000000001a .L12
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:155    .text.put_char:000000000000000e .L10
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:236    .text.print_str:0000000000000026 .L13
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:213    .text.print_str:0000000000000016 .L16
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:203    .text.print_str:000000000000000e .L15
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:298    .text.print_hex:0000000000000026 .L25
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:322    .text.print_hex:0000000000000046 .L27
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:317    .text.print_hex:0000000000000044 .L28
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:278    .text.print_hex:0000000000000018 .L22
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:284    .text.print_hex:000000000000001c .L24
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:364    .text.print_hex2:000000000000000c .L30
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:398    .text.print_dec:000000000000000c .L34
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1528   .rodata.print_flt.cst8:0000000000000000 .LC1
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:552    .text.print_flt:000000000000008e .L38
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:521    .text.print_flt:0000000000000078 .L40
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:454    .text.print_flt:0000000000000024 .L39
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:720    .rodata.printk:0000000000000000 .L52
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:682    .text.printk:0000000000000070 .L44
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:657    .text.printk:0000000000000054 .L67
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:705    .text.printk:0000000000000084 .L48
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:638    .text.printk:0000000000000040 .L79
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:806    .text.printk:00000000000000a0 .L50
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:650    .text.printk:000000000000004e .L59
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:973    .text.printk:0000000000000142 .L80
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:961    .text.printk:0000000000000134 .L65
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:854    .text.printk:00000000000000cc .L78
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:861    .text.printk:00000000000000d4 .L66
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:931    .text.printk:0000000000000114 .L81
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:915    .text.printk:0000000000000104 .L63
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:831    .text.printk:00000000000000ba .L58
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:871    .text.printk:00000000000000d8 .L53
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:892    .text.printk:00000000000000f0 .L54
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:842    .text.printk:00000000000000c2 .L55
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:818    .text.printk:00000000000000ac .L56
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:939    .text.printk:000000000000011a .L57
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1537   .rodata.serial_receive_data.str1.4:0000000000000000 .LC2
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1067   .text.serial_receive_data:0000000000000042 .L84
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1141   .text.serial_receive_data:00000000000000e8 .L89
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1090   .text.serial_receive_data:000000000000007c .L87
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1054   .text.serial_receive_data:0000000000000038 .L83
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1039   .text.serial_receive_data:000000000000001c .L85
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1543   .rodata.uart_handler.str1.4:000000000000000c .LC4
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1541   .rodata.uart_handler.str1.4:0000000000000000 .LC3
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1197   .text.uart_handler:000000000000000c .L91
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1239   .text.uart_handler:0000000000000046 .L97
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1331   .text.getchar_prompt:0000000000000030 .L99
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1308   .text.getchar_prompt:000000000000001e .L101
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1298   .text.getchar_prompt:0000000000000016 .L100
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1425   .text.getchar_prompt:0000000000000076 .L102
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1396   .text.getchar_prompt:0000000000000062 .L104
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1419   .text.getchar_prompt:0000000000000074 .L118
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1385   .text.getchar_prompt:000000000000005a .L103
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1357   .text.getchar_prompt:0000000000000040 .L105
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1489   .text.get_char:0000000000000020 .L122
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:3691   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5977   .debug_str:0000000000000318 .LASF155
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6099   .debug_str:00000000000005dc .LASF156
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5825   .debug_str:000000000000000c .LASF157
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5627   .debug_ranges:0000000000000000 .Ldebug_ranges0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5821   .debug_line:0000000000000000 .Ldebug_line0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5911   .debug_str:00000000000001df .LASF0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5943   .debug_str:0000000000000270 .LASF1
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5879   .debug_str:0000000000000155 .LASF2
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5845   .debug_str:0000000000000089 .LASF6
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6025   .debug_str:0000000000000493 .LASF3
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6033   .debug_str:00000000000004b9 .LASF4
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5965   .debug_str:00000000000002d5 .LASF5
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6087   .debug_str:00000000000005a8 .LASF7
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5899   .debug_str:00000000000001a5 .LASF8
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5925   .debug_str:0000000000000222 .LASF9
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5951   .debug_str:0000000000000294 .LASF10
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5877   .debug_str:0000000000000147 .LASF11
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5859   .debug_str:00000000000000d0 .LASF12
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6121   .debug_str:000000000000064b .LASF13
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6023   .debug_str:000000000000048b .LASF14
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6073   .debug_str:0000000000000570 .LASF15
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5999   .debug_str:0000000000000411 .LASF16
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6001   .debug_str:000000000000041d .LASF17
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5905   .debug_str:00000000000001bd .LASF158
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5847   .debug_str:0000000000000093 .LASF18
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6017   .debug_str:0000000000000469 .LASF19
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6013   .debug_str:0000000000000458 .LASF20
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6079   .debug_str:000000000000058b .LASF21
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5957   .debug_str:00000000000002b6 .LASF22
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5979   .debug_str:00000000000003ba .LASF23
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5975   .debug_str:0000000000000312 .LASF24
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5945   .debug_str:000000000000027d .LASF25
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6071   .debug_str:0000000000000568 .LASF26
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6095   .debug_str:00000000000005cb .LASF27
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6045   .debug_str:00000000000004ea .LASF28
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5929   .debug_str:0000000000000233 .LASF29
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6105   .debug_str:00000000000005fa .LASF30
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5933   .debug_str:0000000000000244 .LASF35
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6091   .debug_str:00000000000005b8 .LASF31
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6065   .debug_str:0000000000000553 .LASF32
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5927   .debug_str:000000000000022d .LASF33
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6113   .debug_str:000000000000062f .LASF34
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5941   .debug_str:000000000000026b .LASF36
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5875   .debug_str:000000000000013e .LASF37
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6085   .debug_str:000000000000059f .LASF38
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5885   .debug_str:000000000000016d .LASF39
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6145   .debug_str:00000000000006b8 .LASF40
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6007   .debug_str:000000000000043c .LASF41
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5991   .debug_str:00000000000003ea .LASF42
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6115   .debug_str:0000000000000634 .LASF43
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6035   .debug_str:00000000000004c3 .LASF44
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6131   .debug_str:0000000000000675 .LASF45
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5889   .debug_str:000000000000017c .LASF46
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5921   .debug_str:0000000000000215 .LASF47
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5823   .debug_str:0000000000000000 .LASF48
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6097   .debug_str:00000000000005d3 .LASF49
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5903   .debug_str:00000000000001b5 .LASF50
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6009   .debug_str:0000000000000445 .LASF51
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6057   .debug_str:0000000000000523 .LASF52
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5923   .debug_str:000000000000021d .LASF53
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6039   .debug_str:00000000000004d6 .LASF54
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5883   .debug_str:0000000000000167 .LASF55
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5833   .debug_str:0000000000000058 .LASF56
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6047   .debug_str:00000000000004f5 .LASF57
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5901   .debug_str:00000000000001ae .LASF58
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5953   .debug_str:00000000000002a6 .LASF59
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5861   .debug_str:00000000000000e7 .LASF60
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5891   .debug_str:000000000000018a .LASF61
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5937   .debug_str:000000000000025b .LASF62
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5989   .debug_str:00000000000003e3 .LASF63
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6075   .debug_str:0000000000000579 .LASF64
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6135   .debug_str:000000000000068f .LASF65
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5881   .debug_str:0000000000000161 .LASF66
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6127   .debug_str:0000000000000667 .LASF67
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5909   .debug_str:00000000000001d6 .LASF68
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5915   .debug_str:00000000000001ee .LASF69
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5849   .debug_str:000000000000009b .LASF70
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5981   .debug_str:00000000000003c1 .LASF71
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6049   .debug_str:00000000000004fd .LASF72
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5983   .debug_str:00000000000003c7 .LASF73
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6067   .debug_str:000000000000055b .LASF74
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6081   .debug_str:0000000000000593 .LASF75
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6119   .debug_str:0000000000000644 .LASF76
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5947   .debug_str:0000000000000284 .LASF77
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5931   .debug_str:000000000000023c .LASF78
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6055   .debug_str:000000000000051e .LASF79
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5841   .debug_str:0000000000000072 .LASF80
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6063   .debug_str:000000000000053a .LASF81
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6059   .debug_str:0000000000000528 .LASF82
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6011   .debug_str:000000000000044d .LASF83
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6061   .debug_str:0000000000000530 .LASF84
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5973   .debug_str:000000000000030a .LASF85
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5939   .debug_str:0000000000000261 .LASF86
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6141   .debug_str:00000000000006a9 .LASF87
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6015   .debug_str:000000000000045f .LASF88
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5949   .debug_str:000000000000028c .LASF89
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5913   .debug_str:00000000000001e6 .LASF90
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6027   .debug_str:00000000000004a1 .LASF91
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5967   .debug_str:00000000000002e8 .LASF92
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6125   .debug_str:000000000000065d .LASF93
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5893   .debug_str:0000000000000192 .LASF94
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5887   .debug_str:0000000000000177 .LASF95
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6083   .debug_str:000000000000059a .LASF96
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6043   .debug_str:00000000000004e3 .LASF97
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6117   .debug_str:000000000000063e .LASF98
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5959   .debug_str:00000000000002bf .LASF99
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6041   .debug_str:00000000000004dd .LASF100
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5839   .debug_str:000000000000006a .LASF101
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6069   .debug_str:0000000000000562 .LASF102
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6089   .debug_str:00000000000005b2 .LASF103
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6101   .debug_str:00000000000005ea .LASF104
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6111   .debug_str:0000000000000622 .LASF105
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6093   .debug_str:00000000000005be .LASF106
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5971   .debug_str:00000000000002fd .LASF107
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6133   .debug_str:0000000000000680 .LASF108
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5935   .debug_str:000000000000024c .LASF109
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6051   .debug_str:0000000000000506 .LASF110
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6137   .debug_str:0000000000000696 .LASF111
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6053   .debug_str:0000000000000511 .LASF112
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6139   .debug_str:000000000000069b .LASF113
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5873   .debug_str:0000000000000130 .LASF114
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6123   .debug_str:0000000000000653 .LASF115
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5969   .debug_str:00000000000002f1 .LASF116
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6107   .debug_str:0000000000000602 .LASF117
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5919   .debug_str:0000000000000207 .LASF118
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5869   .debug_str:0000000000000119 .LASF119
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5917   .debug_str:00000000000001f6 .LASF120
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5853   .debug_str:00000000000000ab .LASF121
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5857   .debug_str:00000000000000bf .LASF122
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6031   .debug_str:00000000000004b0 .LASF123
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6003   .debug_str:000000000000042c .LASF124
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5993   .debug_str:00000000000003f4 .LASF125
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6129   .debug_str:000000000000066d .LASF126
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5863   .debug_str:00000000000000f0 .LASF159
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6077   .debug_str:000000000000057f .LASF127
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6109   .debug_str:000000000000060f .LASF128
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5855   .debug_str:00000000000000ba .LASF129
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6037   .debug_str:00000000000004cd .LASF136
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1444   .text.get_char:0000000000000000 .LFB13
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1523   .text.get_char:0000000000000030 .LFE13
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1457   .text.get_char:000000000000000e .LBB284
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4770   .debug_loc:0000000000000000 .LLST57
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1493   .text.get_char:0000000000000020 .LBB286
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1456   .text.get_char:000000000000000e .LVL139
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5997   .debug_str:0000000000000402 .LASF160
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1267   .text.getchar_prompt:0000000000000000 .LFB12
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1437   .text.getchar_prompt:0000000000000084 .LFE12
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5835   .debug_str:000000000000005e .LASF141
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4781   .debug_loc:000000000000001e .LLST47
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4795   .debug_loc:000000000000003f .LLST48
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5987   .debug_str:00000000000003d6 .LASF130
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4808   .debug_loc:000000000000005f .LLST49
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6019   .debug_str:000000000000047b .LASF131
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5907   .debug_str:00000000000001cf .LASF132
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4819   .debug_loc:000000000000007d .LLST50
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1281   .text.getchar_prompt:0000000000000006 .LBB256
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1333   .text.getchar_prompt:0000000000000030 .LBE256
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4835   .debug_loc:00000000000000a0 .LLST51
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1287   .text.getchar_prompt:000000000000000e .LBB258
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4846   .debug_loc:00000000000000be .LLST52
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1291   .text.getchar_prompt:0000000000000010 .LBB260
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4857   .debug_loc:00000000000000dc .LLST53
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1337   .text.getchar_prompt:0000000000000038 .LBB266
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4865   .debug_loc:00000000000000f0 .LLST54
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1339   .text.getchar_prompt:0000000000000038 .LBB268
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4876   .debug_loc:000000000000010e .LLST55
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1343   .text.getchar_prompt:000000000000003a .LBB270
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4887   .debug_loc:000000000000012c .LLST56
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5867   .debug_str:0000000000000105 .LASF146
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5961   .debug_str:00000000000002c6 .LASF139
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5871   .debug_str:0000000000000128 .LASF133
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5895   .debug_str:000000000000019a .LASF134
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5843   .debug_str:000000000000007d .LASF135
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5829   .debug_str:0000000000000044 .LASF137
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1176   .text.uart_handler:0000000000000000 .LFB10
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1260   .text.uart_handler:0000000000000064 .LFE10
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1190   .text.uart_handler:000000000000000a .LBB240
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1213   .text.uart_handler:000000000000001e .LBE240
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4895   .debug_loc:0000000000000140 .LLST45
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1191   .text.uart_handler:000000000000000a .LBB241
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1210   .text.uart_handler:000000000000001c .LBE241
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5897   .debug_str:00000000000001a0 .LASF138
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4919   .debug_loc:0000000000000172 .LLST46
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1192   .text.uart_handler:000000000000000a .LBB242
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1203   .text.uart_handler:0000000000000010 .LBE242
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1193   .text.uart_handler:000000000000000a .LBB243
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1202   .text.uart_handler:0000000000000010 .LBE243
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1209   .text.uart_handler:000000000000001c .LVL112
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1238   .text.uart_handler:0000000000000046 .LVL113
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1245   .text.uart_handler:0000000000000056 .LVL114
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5865   .debug_str:00000000000000fb .LASF161
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5827   .debug_str:000000000000003d .LASF140
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:578    .text.printk:0000000000000000 .LFB8
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:990    .text.printk:0000000000000148 .LFE8
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4926   .debug_loc:0000000000000185 .LLST24
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5837   .debug_str:0000000000000065 .LASF142
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:4940   .debug_loc:00000000000001a6 .LLST25
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:621    .text.printk:0000000000000032 .LBB198
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5044   .debug_loc:00000000000002ad .LLST26
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:623    .text.printk:0000000000000032 .LBB200
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5052   .debug_loc:00000000000002c1 .LLST27
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:642    .text.printk:0000000000000044 .LBB205
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:652    .text.printk:000000000000004e .LBE205
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5060   .debug_loc:00000000000002d5 .LLST28
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:808    .text.printk:00000000000000a0 .LBB208
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:820    .text.printk:00000000000000ac .LBE208
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5067   .debug_loc:00000000000002e8 .LLST29
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:827    .text.printk:00000000000000b6 .LBB210
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5076   .debug_loc:00000000000002fd .LLST30
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:980    .text.printk:0000000000000142 .LBB212
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:986    .text.printk:0000000000000148 .LBE212
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:849    .text.printk:00000000000000ca .LBB215
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5087   .debug_loc:000000000000031b .LLST31
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:855    .text.printk:00000000000000cc .LBB217
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:865    .text.printk:00000000000000d6 .LBE217
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5098   .debug_loc:0000000000000339 .LLST32
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:964    .text.printk:0000000000000134 .LBB219
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:975    .text.printk:0000000000000142 .LBE219
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5107   .debug_loc:000000000000034e .LLST33
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5115   .debug_loc:0000000000000362 .LLST34
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:968    .text.printk:000000000000013e .LVL93
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:878    .text.printk:00000000000000e0 .LBB222
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:896    .text.printk:00000000000000f0 .LBE222
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5122   .debug_loc:0000000000000375 .LLST35
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:883    .text.printk:00000000000000e2 .LBB224
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:894    .text.printk:00000000000000f0 .LBE224
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5129   .debug_loc:0000000000000388 .LLST36
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5137   .debug_loc:000000000000039c .LLST37
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:887    .text.printk:00000000000000ec .LVL81
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:903    .text.printk:00000000000000f8 .LBB226
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:945    .text.printk:000000000000011a .LBE226
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5144   .debug_loc:00000000000003af .LLST38
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:911    .text.printk:0000000000000100 .LBB228
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5151   .debug_loc:00000000000003c2 .LLST39
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:933    .text.printk:0000000000000114 .LBB230
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:941    .text.printk:000000000000011a .LBE230
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5162   .debug_loc:00000000000003e0 .LLST40
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:957    .text.printk:0000000000000132 .LVL91
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6029   .debug_str:00000000000004a6 .LASF143
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:418    .text.print_flt:0000000000000000 .LFB7
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:571    .text.print_flt:000000000000009a .LFE7
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5170   .debug_loc:00000000000003f4 .LLST16
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5995   .debug_str:00000000000003fd .LASF144
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5831   .debug_str:0000000000000051 .LASF145
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5228   .debug_loc:0000000000000456 .LLST17
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:442    .text.print_flt:000000000000001a .LBB136
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5248   .debug_loc:000000000000048b .LLST18
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:447    .text.print_flt:000000000000001c .LBB138
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:456    .text.print_flt:0000000000000024 .LBE138
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5259   .debug_loc:00000000000004a9 .LLST19
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:560    .text.print_flt:000000000000008e .LBB140
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:567    .text.print_flt:000000000000009a .LBE140
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:564    .text.print_flt:0000000000000098 .LVL55
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:459    .text.print_flt:0000000000000024 .LBB143
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:466    .text.print_flt:000000000000002c .LBE143
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5268   .debug_loc:00000000000004be .LLST20
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:485    .text.print_flt:0000000000000062 .LBB145
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5277   .debug_loc:00000000000004d3 .LLST21
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:501    .text.print_flt:0000000000000068 .LBB147
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:507    .text.print_flt:000000000000006e .LBE147
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5284   .debug_loc:00000000000004e6 .LLST22
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:537    .text.print_flt:0000000000000082 .LBB149
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5293   .debug_loc:00000000000004fb .LLST23
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:551    .text.print_flt:000000000000008e .LVL54
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5851   .debug_str:00000000000000a1 .LASF147
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6103   .debug_str:00000000000005ef .LASF148
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5963   .debug_str:00000000000002cb .LASF149
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:247    .text.print_hex:0000000000000000 .LFB4
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:339    .text.print_hex:000000000000004c .LFE4
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5985   .debug_str:00000000000003cf .LASF150
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5301   .debug_loc:000000000000050f .LLST8
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5312   .debug_loc:000000000000052d .LLST9
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5324   .debug_loc:000000000000054c .LLST10
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:259    .text.print_hex:000000000000000e .LBB114
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5335   .debug_loc:000000000000056a .LLST11
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:265    .text.print_hex:0000000000000012 .LBB116
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5955   .debug_str:00000000000002ac .LASF151
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6005   .debug_str:0000000000000433 .LASF152
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6143   .debug_str:00000000000006ae .LASF153
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:6021   .debug_str:0000000000000486 .LASF154
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:11     .text.print_num:0000000000000000 .LFB1
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:24     .text.print_num:000000000000000c .LFE1
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5350   .debug_loc:0000000000000593 .LLST0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5364   .debug_loc:00000000000005b4 .LLST1
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:22     .text.print_num:000000000000000c .LVL1
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:30     .text.print_num.part.0:0000000000000000 .LFB14
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:131    .text.print_num.part.0:0000000000000052 .LFE14
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5378   .debug_loc:00000000000005d5 .LLST2
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5396   .debug_loc:0000000000000601 .LLST3
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:56     .text.print_num.part.0:0000000000000024 .LBB80
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:97     .text.print_num.part.0:000000000000003e .LBB82
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:50     .text.print_num.part.0:0000000000000018 .LVL4
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:138    .text.put_char:0000000000000000 .LFB2
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:178    .text.put_char:0000000000000026 .LFE2
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5425   .debug_loc:0000000000000646 .LLST4
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:175    .text.put_char:0000000000000024 .LVL14
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:185    .text.print_str:0000000000000000 .LFB3
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:240    .text.print_str:0000000000000028 .LFE3
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5450   .debug_loc:0000000000000680 .LLST5
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:192    .text.print_str:0000000000000006 .LBB98
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5461   .debug_loc:000000000000069e .LLST6
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:196    .text.print_str:0000000000000008 .LBB100
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5472   .debug_loc:00000000000006bc .LLST7
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:346    .text.print_hex2:0000000000000000 .LFB5
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:373    .text.print_hex2:0000000000000016 .LFE5
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5480   .debug_loc:00000000000006d0 .LLST12
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:353    .text.print_hex2:0000000000000002 .LBB128
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:360    .text.print_hex2:000000000000000a .LBE128
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5494   .debug_loc:00000000000006f1 .LLST13
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:365    .text.print_hex2:000000000000000c .LBB130
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:371    .text.print_hex2:0000000000000016 .LBE130
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:369    .text.print_hex2:0000000000000016 .LVL35
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:380    .text.print_dec:0000000000000000 .LFB6
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:407    .text.print_dec:0000000000000016 .LFE6
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5503   .debug_loc:0000000000000706 .LLST14
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:387    .text.print_dec:0000000000000002 .LBB132
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:394    .text.print_dec:000000000000000a .LBE132
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5517   .debug_loc:0000000000000727 .LLST15
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:399    .text.print_dec:000000000000000c .LBB134
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:405    .text.print_dec:0000000000000016 .LBE134
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:403    .text.print_dec:0000000000000016 .LVL39
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:997    .text.read_uart:0000000000000000 .LFB9
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1010   .text.read_uart:000000000000000a .LFE9
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5526   .debug_loc:000000000000073c .LLST41
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1017   .text.serial_receive_data:0000000000000000 .LFB11
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1169   .text.serial_receive_data:000000000000011a .LFE11
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5533   .debug_loc:000000000000074f .LLST42
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5562   .debug_loc:0000000000000794 .LLST43
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1098   .text.serial_receive_data:0000000000000088 .LBB238
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1143   .text.serial_receive_data:00000000000000e8 .LBE238
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:5580   .debug_loc:00000000000007c0 .LLST44
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1099   .text.serial_receive_data:0000000000000088 .LBB239
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1142   .text.serial_receive_data:00000000000000e8 .LBE239
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1132   .text.serial_receive_data:00000000000000da .LVL104
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1465   .text.get_char:0000000000000012 .LVL140
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1481   .text.get_char:000000000000001c .LVL141
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1488   .text.get_char:0000000000000020 .LVL142
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1515   .text.get_char:000000000000002c .LVL143
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1270   .text.getchar_prompt:0000000000000000 .LVL115
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1433   .text.getchar_prompt:0000000000000080 .LVL138
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1428   .text.getchar_prompt:0000000000000078 .LVL137
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1276   .text.getchar_prompt:0000000000000004 .LVL116
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1372   .text.getchar_prompt:000000000000004e .LVL127
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1424   .text.getchar_prompt:0000000000000076 .LVL136
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1363   .text.getchar_prompt:0000000000000044 .LVL125
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1367   .text.getchar_prompt:0000000000000048 .LVL126
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1380   .text.getchar_prompt:0000000000000054 .LVL129
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1280   .text.getchar_prompt:0000000000000006 .LVL117
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1297   .text.getchar_prompt:0000000000000016 .LVL118
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1330   .text.getchar_prompt:0000000000000030 .LVL123
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1306   .text.getchar_prompt:000000000000001c .LVL119
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1311   .text.getchar_prompt:0000000000000020 .LVL120
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1328   .text.getchar_prompt:000000000000002e .LVL122
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1316   .text.getchar_prompt:0000000000000024 .LVL121
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1375   .text.getchar_prompt:0000000000000050 .LVL128
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1384   .text.getchar_prompt:000000000000005a .LVL130
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1394   .text.getchar_prompt:0000000000000060 .LVL131
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1399   .text.getchar_prompt:0000000000000064 .LVL132
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1416   .text.getchar_prompt:0000000000000072 .LVL134
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1404   .text.getchar_prompt:0000000000000068 .LVL133
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1418   .text.getchar_prompt:0000000000000074 .LVL135
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1179   .text.uart_handler:0000000000000000 .LVL107
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1196   .text.uart_handler:000000000000000c .LVL108
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1201   .text.uart_handler:0000000000000010 .LVL110
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1199   .text.uart_handler:000000000000000e .LVL109
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1206   .text.uart_handler:0000000000000012 .LVL111
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:581    .text.printk:0000000000000000 .LVL56
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:637    .text.printk:0000000000000040 .LVL58
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:613    .text.printk:0000000000000028 .LVL57
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:649    .text.printk:000000000000004e .LVL60
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:656    .text.printk:0000000000000054 .LVL61
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:681    .text.printk:0000000000000070 .LVL65
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:704    .text.printk:0000000000000084 .LVL66
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:815    .text.printk:00000000000000aa .LVL68
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:817    .text.printk:00000000000000ac .LVL69
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:834    .text.printk:00000000000000be .LVL71
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:836    .text.printk:00000000000000c0 .LVL72
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:841    .text.printk:00000000000000c2 .LVL73
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:860    .text.printk:00000000000000d4 .LVL76
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:863    .text.printk:00000000000000d6 .LVL77
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:870    .text.printk:00000000000000d8 .LVL78
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:889    .text.printk:00000000000000ee .LVL82
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:891    .text.printk:00000000000000f0 .LVL83
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:949    .text.printk:000000000000011e .LVL90
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:960    .text.printk:0000000000000134 .LVL92
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:970    .text.printk:0000000000000140 .LVL94
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:972    .text.printk:0000000000000142 .LVL95
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:661    .text.printk:000000000000005c .LVL62
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:668    .text.printk:0000000000000060 .LVL63
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:641    .text.printk:0000000000000044 .LVL59
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:807    .text.printk:00000000000000a0 .LVL67
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:824    .text.printk:00000000000000b2 .LVL70
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:846    .text.printk:00000000000000c6 .LVL74
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:853    .text.printk:00000000000000cc .LVL75
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:875    .text.printk:00000000000000dc .LVL79
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:882    .text.printk:00000000000000e2 .LVL80
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:900    .text.printk:00000000000000f4 .LVL84
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:938    .text.printk:000000000000011a .LVL89
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:910    .text.printk:0000000000000100 .LVL85
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:922    .text.printk:000000000000010c .LVL86
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:926    .text.printk:0000000000000110 .LVL87
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:932    .text.printk:0000000000000114 .LVL88
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:421    .text.print_flt:0000000000000000 .LVL40
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:439    .text.print_flt:0000000000000018 .LVL41
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:464    .text.print_flt:000000000000002c .LVL45
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:498    .text.print_flt:0000000000000068 .LVL51
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:520    .text.print_flt:0000000000000078 .LVL52
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:526    .text.print_flt:000000000000007a .LVL53
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:441    .text.print_flt:000000000000001a .LVL42
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:484    .text.print_flt:0000000000000062 .LVL49
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:453    .text.print_flt:0000000000000024 .LVL44
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:446    .text.print_flt:000000000000001c .LVL43
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:489    .text.print_flt:0000000000000064 .LVL50
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:250    .text.print_hex:0000000000000000 .LVL22
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:287    .text.print_hex:000000000000001e .LVL24
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:289    .text.print_hex:0000000000000020 .LVL25
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:277    .text.print_hex:0000000000000018 .LVL23
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:297    .text.print_hex:0000000000000026 .LVL27
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:306    .text.print_hex:0000000000000036 .LVL28
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:316    .text.print_hex:0000000000000044 .LVL30
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:321    .text.print_hex:0000000000000046 .LVL31
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:15     .text.print_num:0000000000000000 .LVL0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:33     .text.print_num.part.0:0000000000000000 .LVL2
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:41     .text.print_num.part.0:000000000000000a .LVL3
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:53     .text.print_num.part.0:000000000000001c .LVL5
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:88     .text.print_num.part.0:000000000000003a .LVL7
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:92     .text.print_num.part.0:000000000000003e .LVL8
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:126    .text.print_num.part.0:000000000000004e .LVL9
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:141    .text.put_char:0000000000000000 .LVL10
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:154    .text.put_char:000000000000000e .LVL11
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:168    .text.put_char:000000000000001a .LVL12
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:173    .text.put_char:000000000000001c .LVL13
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:188    .text.print_str:0000000000000000 .LVL15
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:216    .text.print_str:0000000000000018 .LVL18
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:202    .text.print_str:000000000000000e .LVL16
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:211    .text.print_str:0000000000000014 .LVL17
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:233    .text.print_str:0000000000000024 .LVL20
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:221    .text.print_str:000000000000001c .LVL19
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:235    .text.print_str:0000000000000026 .LVL21
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:349    .text.print_hex2:0000000000000000 .LVL32
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:352    .text.print_hex2:0000000000000002 .LVL33
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:363    .text.print_hex2:000000000000000c .LVL34
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:383    .text.print_dec:0000000000000000 .LVL36
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:386    .text.print_dec:0000000000000002 .LVL37
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:397    .text.print_dec:000000000000000c .LVL38
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1003   .text.read_uart:0000000000000004 .LVL96
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1006   .text.read_uart:0000000000000006 .LVL97
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1020   .text.serial_receive_data:0000000000000000 .LVL98
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1053   .text.serial_receive_data:0000000000000038 .LVL100
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1066   .text.serial_receive_data:0000000000000042 .LVL101
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1129   .text.serial_receive_data:00000000000000ce .LVL103
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1140   .text.serial_receive_data:00000000000000e8 .LVL106
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1049   .text.serial_receive_data:0000000000000030 .LVL99
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1097   .text.serial_receive_data:0000000000000088 .LVL102
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1582   .debug_info:0000000000000000 .Ldebug_info0
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:61     .text.print_num.part.0:0000000000000026 .LBE80
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:66     .text.print_num.part.0:000000000000002c .LBB90
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:71     .text.print_num.part.0:0000000000000030 .LBE90
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:78     .text.print_num.part.0:0000000000000034 .LBB91
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:84     .text.print_num.part.0:0000000000000038 .LBE91
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:95     .text.print_num.part.0:000000000000003e .LBB92
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:104    .text.print_num.part.0:0000000000000040 .LBE92
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:110    .text.print_num.part.0:0000000000000044 .LBB93
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:122    .text.print_num.part.0:000000000000004c .LBE93
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:102    .text.print_num.part.0:0000000000000040 .LBE82
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:112    .text.print_num.part.0:0000000000000044 .LBB85
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:118    .text.print_num.part.0:0000000000000048 .LBE85
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:208    .text.print_str:0000000000000010 .LBE98
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:217    .text.print_str:0000000000000018 .LBB105
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:230    .text.print_str:0000000000000020 .LBE105
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:205    .text.print_str:000000000000000e .LBE100
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:222    .text.print_str:000000000000001c .LBB103
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:227    .text.print_str:000000000000001e .LBE103
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:252    .text.print_hex:0000000000000004 .LBB112
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:318    .text.print_hex:0000000000000044 .LBE112
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:323    .text.print_hex:0000000000000046 .LBB127
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:337    .text.print_hex:000000000000004c .LBE127
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:256    .text.print_hex:000000000000000a .LBB113
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:273    .text.print_hex:0000000000000014 .LBE113
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:279    .text.print_hex:0000000000000018 .LBB124
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:292    .text.print_hex:0000000000000020 .LBE124
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:299    .text.print_hex:0000000000000026 .LBB125
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:311    .text.print_hex:000000000000003e .LBE125
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:324    .text.print_hex:0000000000000046 .LBB126
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:336    .text.print_hex:000000000000004c .LBE126
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:272    .text.print_hex:0000000000000014 .LBE114
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:280    .text.print_hex:0000000000000018 .LBB122
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:291    .text.print_hex:0000000000000020 .LBE122
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:325    .text.print_hex:0000000000000046 .LBB123
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:335    .text.print_hex:000000000000004c .LBE123
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:270    .text.print_hex:0000000000000014 .LBE116
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:327    .text.print_hex:0000000000000046 .LBB119
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:333    .text.print_hex:000000000000004c .LBE119
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:458    .text.print_flt:0000000000000024 .LBE136
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:558    .text.print_flt:000000000000008e .LBB159
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:569    .text.print_flt:000000000000009a .LBE159
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:491    .text.print_flt:0000000000000064 .LBE145
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:499    .text.print_flt:0000000000000068 .LBB156
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:509    .text.print_flt:000000000000006e .LBE156
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:535    .text.print_flt:0000000000000082 .LBB157
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:543    .text.print_flt:0000000000000084 .LBE157
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:546    .text.print_flt:0000000000000086 .LBB158
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:557    .text.print_flt:000000000000008e .LBE158
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:541    .text.print_flt:0000000000000084 .LBE149
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:548    .text.print_flt:0000000000000086 .LBB152
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:555    .text.print_flt:000000000000008e .LBE152
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:631    .text.printk:0000000000000036 .LBE198
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:662    .text.printk:000000000000005c .LBB207
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:677    .text.printk:000000000000006a .LBE207
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:629    .text.printk:0000000000000036 .LBE200
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:664    .text.printk:000000000000005c .LBB203
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:670    .text.printk:0000000000000060 .LBE203
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:838    .text.printk:00000000000000c0 .LBE210
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:978    .text.printk:0000000000000142 .LBB235
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:988    .text.printk:0000000000000148 .LBE235
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:867    .text.printk:00000000000000d6 .LBE215
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:962    .text.printk:0000000000000134 .LBB234
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:977    .text.printk:0000000000000142 .LBE234
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:919    .text.printk:0000000000000108 .LBE228
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:927    .text.printk:0000000000000110 .LBB233
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:943    .text.printk:000000000000011a .LBE233
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1303   .text.getchar_prompt:0000000000000018 .LBE258
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1312   .text.getchar_prompt:0000000000000020 .LBB265
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1325   .text.getchar_prompt:000000000000002a .LBE265
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1300   .text.getchar_prompt:0000000000000016 .LBE260
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1317   .text.getchar_prompt:0000000000000024 .LBB263
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1322   .text.getchar_prompt:0000000000000028 .LBE263
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1353   .text.getchar_prompt:000000000000003e .LBE266
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1376   .text.getchar_prompt:0000000000000050 .LBB279
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1421   .text.getchar_prompt:0000000000000074 .LBE279
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1351   .text.getchar_prompt:000000000000003e .LBE268
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1386   .text.getchar_prompt:000000000000005a .LBB276
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1391   .text.getchar_prompt:000000000000005c .LBE276
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1400   .text.getchar_prompt:0000000000000064 .LBB277
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1413   .text.getchar_prompt:000000000000006e .LBE277
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1349   .text.getchar_prompt:000000000000003e .LBE270
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1405   .text.getchar_prompt:0000000000000068 .LBB273
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1410   .text.getchar_prompt:000000000000006c .LBE273
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1462   .text.get_char:0000000000000010 .LBE284
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1466   .text.get_char:0000000000000012 .LBB294
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1471   .text.get_char:0000000000000016 .LBE294
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1476   .text.get_char:0000000000000018 .LBB295
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1483   .text.get_char:000000000000001c .LBE295
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1491   .text.get_char:0000000000000020 .LBB296
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1500   .text.get_char:0000000000000022 .LBE296
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1504   .text.get_char:0000000000000024 .LBB297
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1517   .text.get_char:000000000000002c .LBE297
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1498   .text.get_char:0000000000000022 .LBE286
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1506   .text.get_char:0000000000000024 .LBB289
+C:\Users\lpc01\AppData\Local\Temp\ccF6y4sh.s:1512   .text.get_char:0000000000000028 .LBE289
+
+UNDEFINED SYMBOLS
+__fixdfsi
+__floatunsidf
+__subdf3
+__muldf3

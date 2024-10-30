@@ -1,0 +1,1661 @@
+   1              		.file	"firmware.c"
+   2              		.option nopic
+   3              		.text
+   4              	.Ltext0:
+   5              		.cfi_sections	.debug_frame
+   6              		.section	.text.putchar,"ax",@progbits
+   7              		.align	2
+   8              		.globl	putchar
+  10              	putchar:
+  11              	.LFB0:
+  12              		.file 1 "../src/firmware.c"
+   1:../src/firmware.c **** /*
+   2:../src/firmware.c ****  *  PicoSoC - A simple example SoC using PicoRV32
+   3:../src/firmware.c ****  *
+   4:../src/firmware.c ****  *  Copyright (C) 2017  Clifford Wolf <clifford@clifford.at>
+   5:../src/firmware.c ****  *
+   6:../src/firmware.c ****  *  Permission to use, copy, modify, and/or distribute this software for any
+   7:../src/firmware.c ****  *  purpose with or without fee is hereby granted, provided that the above
+   8:../src/firmware.c ****  *  copyright notice and this permission notice appear in all copies.
+   9:../src/firmware.c ****  *
+  10:../src/firmware.c ****  *  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  11:../src/firmware.c ****  *  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  12:../src/firmware.c ****  *  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  13:../src/firmware.c ****  *  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  14:../src/firmware.c ****  *  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  15:../src/firmware.c ****  *  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  16:../src/firmware.c ****  *  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  17:../src/firmware.c ****  *
+  18:../src/firmware.c ****  */
+  19:../src/firmware.c **** 
+  20:../src/firmware.c **** #include <stdint.h>
+  21:../src/firmware.c **** #include <stdbool.h>
+  22:../src/firmware.c **** 
+  23:../src/firmware.c **** 
+  24:../src/firmware.c **** 
+  25:../src/firmware.c **** // a pointer to this is a null pointer, but the compiler does not
+  26:../src/firmware.c **** // know that because "sram" is a linker symbol from sections.lds.
+  27:../src/firmware.c **** 
+  28:../src/firmware.c **** #define reg_spictrl     (*(volatile uint32_t*)0x02000000)
+  29:../src/firmware.c **** #define reg_uart_clkdiv (*(volatile uint32_t*)0x02000004)
+  30:../src/firmware.c **** #define reg_uart_data   (*(volatile uint32_t*)0x02000008)
+  31:../src/firmware.c **** 
+  32:../src/firmware.c **** 
+  33:../src/firmware.c **** void putchar(char c)
+  34:../src/firmware.c **** {
+  13              		.loc 1 34 0
+  14              		.cfi_startproc
+  15              	.LVL0:
+  16 0000 130101FF 		addi	sp,sp,-16
+  17              		.cfi_def_cfa_offset 16
+  18 0004 23248100 		sw	s0,8(sp)
+  19 0008 23261100 		sw	ra,12(sp)
+  20              		.cfi_offset 8, -8
+  21              		.cfi_offset 1, -4
+  35:../src/firmware.c **** 	if (c == '\n')
+  22              		.loc 1 35 0
+  23 000c 9307A000 		li	a5,10
+  34:../src/firmware.c **** 	if (c == '\n')
+  24              		.loc 1 34 0
+  25 0010 13040500 		mv	s0,a0
+  26              		.loc 1 35 0
+  27 0014 6318F500 		bne	a0,a5,.L2
+  36:../src/firmware.c **** 		putchar('\r');
+  28              		.loc 1 36 0
+  29 0018 1305D000 		li	a0,13
+  30              	.LVL1:
+  31 001c 97000000 		call	putchar
+  31      E7800000 
+  32              	.LVL2:
+  33              	.L2:
+  37:../src/firmware.c **** 	reg_uart_data = c;
+  34              		.loc 1 37 0
+  35 0024 B7070002 		li	a5,33554432
+  36 0028 23A48700 		sw	s0,8(a5)
+  38:../src/firmware.c **** }
+  37              		.loc 1 38 0
+  38 002c 8320C100 		lw	ra,12(sp)
+  39              		.cfi_restore 1
+  40 0030 03248100 		lw	s0,8(sp)
+  41              		.cfi_restore 8
+  42 0034 13010101 		addi	sp,sp,16
+  43              		.cfi_def_cfa_offset 0
+  44 0038 67800000 		jr	ra
+  45              		.cfi_endproc
+  46              	.LFE0:
+  48              		.section	.text.print,"ax",@progbits
+  49              		.align	2
+  50              		.globl	print
+  52              	print:
+  53              	.LFB1:
+  39:../src/firmware.c **** 
+  40:../src/firmware.c **** void print(const char *p)
+  41:../src/firmware.c **** {
+  54              		.loc 1 41 0
+  55              		.cfi_startproc
+  56              	.LVL3:
+  57 0000 130101FF 		addi	sp,sp,-16
+  58              		.cfi_def_cfa_offset 16
+  59 0004 23248100 		sw	s0,8(sp)
+  60 0008 23261100 		sw	ra,12(sp)
+  61              		.cfi_offset 8, -8
+  62              		.cfi_offset 1, -4
+  63 000c 13040500 		mv	s0,a0
+  64              	.LVL4:
+  65              	.L5:
+  42:../src/firmware.c **** 	while (*p)
+  66              		.loc 1 42 0
+  67 0010 03450400 		lbu	a0,0(s0)
+  68 0014 631A0500 		bnez	a0,.L6
+  43:../src/firmware.c **** 		putchar(*(p++));
+  44:../src/firmware.c **** }
+  69              		.loc 1 44 0
+  70 0018 8320C100 		lw	ra,12(sp)
+  71              		.cfi_remember_state
+  72              		.cfi_restore 1
+  73 001c 03248100 		lw	s0,8(sp)
+  74              		.cfi_restore 8
+  75              	.LVL5:
+  76 0020 13010101 		addi	sp,sp,16
+  77              		.cfi_def_cfa_offset 0
+  78 0024 67800000 		jr	ra
+  79              	.LVL6:
+  80              	.L6:
+  81              		.cfi_restore_state
+  43:../src/firmware.c **** 		putchar(*(p++));
+  82              		.loc 1 43 0
+  83 0028 13041400 		addi	s0,s0,1
+  84              	.LVL7:
+  85 002c 97000000 		call	putchar
+  85      E7800000 
+  86              	.LVL8:
+  87 0034 6FF0DFFD 		j	.L5
+  88              		.cfi_endproc
+  89              	.LFE1:
+  91              		.section	.text.print_hex,"ax",@progbits
+  92              		.align	2
+  93              		.globl	print_hex
+  95              	print_hex:
+  96              	.LFB2:
+  45:../src/firmware.c **** 
+  46:../src/firmware.c **** void print_hex(uint32_t v, int digits)
+  47:../src/firmware.c **** {
+  97              		.loc 1 47 0
+  98              		.cfi_startproc
+  99              	.LVL9:
+ 100 0000 130101FE 		addi	sp,sp,-32
+ 101              		.cfi_def_cfa_offset 32
+ 102 0004 232A9100 		sw	s1,20(sp)
+ 103              		.cfi_offset 9, -12
+ 104              	.LBB40:
+ 105              	.LBB41:
+  48:../src/firmware.c **** 	for (int i = 7; i >= 0; i--) {
+  49:../src/firmware.c **** 		char c = "0123456789abcdef"[(v >> (4*i)) & 15];
+ 106              		.loc 1 49 0
+ 107 0008 B7040000 		lui	s1,%hi(.LC0)
+ 108              	.LBE41:
+ 109              	.LBE40:
+  47:../src/firmware.c **** 	for (int i = 7; i >= 0; i--) {
+ 110              		.loc 1 47 0
+ 111 000c 232C8100 		sw	s0,24(sp)
+ 112 0010 23282101 		sw	s2,16(sp)
+ 113 0014 23263101 		sw	s3,12(sp)
+ 114 0018 23244101 		sw	s4,8(sp)
+ 115 001c 232E1100 		sw	ra,28(sp)
+ 116              		.cfi_offset 8, -8
+ 117              		.cfi_offset 18, -16
+ 118              		.cfi_offset 19, -20
+ 119              		.cfi_offset 20, -24
+ 120              		.cfi_offset 1, -4
+  47:../src/firmware.c **** 	for (int i = 7; i >= 0; i--) {
+ 121              		.loc 1 47 0
+ 122 0020 93090500 		mv	s3,a0
+ 123              	.LBB44:
+  48:../src/firmware.c **** 	for (int i = 7; i >= 0; i--) {
+ 124              		.loc 1 48 0
+ 125 0024 13047000 		li	s0,7
+ 126              	.LBB42:
+ 127              		.loc 1 49 0
+ 128 0028 93840400 		addi	s1,s1,%lo(.LC0)
+  50:../src/firmware.c **** 		if (c == '0' && i >= digits) continue;
+ 129              		.loc 1 50 0
+ 130 002c 130A0003 		li	s4,48
+ 131              	.LBE42:
+  48:../src/firmware.c **** 	for (int i = 7; i >= 0; i--) {
+ 132              		.loc 1 48 0
+ 133 0030 1309F0FF 		li	s2,-1
+ 134              	.LVL10:
+ 135              	.L11:
+ 136              	.LBB43:
+  49:../src/firmware.c **** 		if (c == '0' && i >= digits) continue;
+ 137              		.loc 1 49 0
+ 138 0034 93172400 		slli	a5,s0,2
+ 139 0038 B3D7F900 		srl	a5,s3,a5
+ 140 003c 93F7F700 		andi	a5,a5,15
+ 141 0040 B3879700 		add	a5,a5,s1
+ 142 0044 03C50700 		lbu	a0,0(a5)
+ 143              	.LVL11:
+ 144              		.loc 1 50 0
+ 145 0048 63144501 		bne	a0,s4,.L9
+ 146              		.loc 1 50 0 is_stmt 0 discriminator 1
+ 147 004c 6358B400 		ble	a1,s0,.L10
+ 148              	.L9:
+  51:../src/firmware.c **** 		putchar(c);
+ 149              		.loc 1 51 0 is_stmt 1
+ 150 0050 97000000 		call	putchar
+ 150      E7800000 
+ 151              	.LVL12:
+ 152 0058 93050400 		mv	a1,s0
+ 153              	.LVL13:
+ 154              	.L10:
+ 155              	.LBE43:
+  48:../src/firmware.c **** 		char c = "0123456789abcdef"[(v >> (4*i)) & 15];
+ 156              		.loc 1 48 0 discriminator 2
+ 157 005c 1304F4FF 		addi	s0,s0,-1
+ 158              	.LVL14:
+ 159 0060 E31A24FD 		bne	s0,s2,.L11
+ 160              	.LBE44:
+  52:../src/firmware.c **** 		digits = i;
+  53:../src/firmware.c **** 	}
+  54:../src/firmware.c **** }
+ 161              		.loc 1 54 0
+ 162 0064 8320C101 		lw	ra,28(sp)
+ 163              		.cfi_restore 1
+ 164 0068 03248101 		lw	s0,24(sp)
+ 165              		.cfi_restore 8
+ 166              	.LVL15:
+ 167 006c 83244101 		lw	s1,20(sp)
+ 168              		.cfi_restore 9
+ 169 0070 03290101 		lw	s2,16(sp)
+ 170              		.cfi_restore 18
+ 171 0074 8329C100 		lw	s3,12(sp)
+ 172              		.cfi_restore 19
+ 173              	.LVL16:
+ 174 0078 032A8100 		lw	s4,8(sp)
+ 175              		.cfi_restore 20
+ 176 007c 13010102 		addi	sp,sp,32
+ 177              		.cfi_def_cfa_offset 0
+ 178 0080 67800000 		jr	ra
+ 179              		.cfi_endproc
+ 180              	.LFE2:
+ 182              		.section	.text.print_dec,"ax",@progbits
+ 183              		.align	2
+ 184              		.globl	print_dec
+ 186              	print_dec:
+ 187              	.LFB3:
+  55:../src/firmware.c **** 
+  56:../src/firmware.c **** 
+  57:../src/firmware.c **** void print_dec(uint32_t v)
+  58:../src/firmware.c **** {
+ 188              		.loc 1 58 0
+ 189              		.cfi_startproc
+ 190              	.LVL17:
+  59:../src/firmware.c **** 	if (v >= 100) {
+ 191              		.loc 1 59 0
+ 192 0000 93073006 		li	a5,99
+ 193 0004 63FAA700 		bleu	a0,a5,.L15
+  60:../src/firmware.c **** 		print(">=100");
+ 194              		.loc 1 60 0
+ 195 0008 37050000 		lui	a0,%hi(.LC1)
+ 196              	.LVL18:
+ 197 000c 13050500 		addi	a0,a0,%lo(.LC1)
+ 198 0010 17030000 		tail	print
+ 198      67000300 
+ 199              	.LVL19:
+ 200              	.L15:
+  61:../src/firmware.c **** 		return;
+  62:../src/firmware.c **** 	}
+  63:../src/firmware.c **** 
+  64:../src/firmware.c **** 	if      (v >= 90) { putchar('9'); v -= 90; }
+ 201              		.loc 1 64 0
+ 202 0018 93079005 		li	a5,89
+ 203 001c 63F6A702 		bleu	a0,a5,.L16
+ 204              	.LVL20:
+ 205              	.LBB45:
+ 206              	.LBB46:
+  37:../src/firmware.c **** }
+ 207              		.loc 1 37 0
+ 208 0020 B7070002 		li	a5,33554432
+ 209 0024 13079003 		li	a4,57
+ 210 0028 23A4E700 		sw	a4,8(a5)
+ 211              	.LVL21:
+ 212              	.LBE46:
+ 213              	.LBE45:
+ 214              		.loc 1 64 0
+ 215 002c 130565FA 		addi	a0,a0,-90
+ 216              	.LVL22:
+ 217              	.L17:
+  65:../src/firmware.c **** 	else if (v >= 80) { putchar('8'); v -= 80; }
+  66:../src/firmware.c **** 	else if (v >= 70) { putchar('7'); v -= 70; }
+  67:../src/firmware.c **** 	else if (v >= 60) { putchar('6'); v -= 60; }
+  68:../src/firmware.c **** 	else if (v >= 50) { putchar('5'); v -= 50; }
+  69:../src/firmware.c **** 	else if (v >= 40) { putchar('4'); v -= 40; }
+  70:../src/firmware.c **** 	else if (v >= 30) { putchar('3'); v -= 30; }
+  71:../src/firmware.c **** 	else if (v >= 20) { putchar('2'); v -= 20; }
+  72:../src/firmware.c **** 	else if (v >= 10) { putchar('1'); v -= 10; }
+  73:../src/firmware.c **** 
+  74:../src/firmware.c **** 	if      (v >= 9) { putchar('9'); v -= 9; }
+ 218              		.loc 1 74 0
+ 219 0030 93079000 		li	a5,9
+ 220 0034 631AF50E 		bne	a0,a5,.L25
+ 221              	.LVL23:
+ 222              	.LBB47:
+ 223              	.LBB48:
+  37:../src/firmware.c **** }
+ 224              		.loc 1 37 0
+ 225 0038 B7070002 		li	a5,33554432
+ 226 003c 13079003 		li	a4,57
+ 227              	.LVL24:
+ 228              	.L35:
+ 229              	.LBE48:
+ 230              	.LBE47:
+ 231              	.LBB49:
+ 232              	.LBB50:
+ 233 0040 23A4E700 		sw	a4,8(a5)
+ 234              	.LBE50:
+ 235              	.LBE49:
+  75:../src/firmware.c **** 	else if (v >= 8) { putchar('8'); v -= 8; }
+  76:../src/firmware.c **** 	else if (v >= 7) { putchar('7'); v -= 7; }
+  77:../src/firmware.c **** 	else if (v >= 6) { putchar('6'); v -= 6; }
+  78:../src/firmware.c **** 	else if (v >= 5) { putchar('5'); v -= 5; }
+  79:../src/firmware.c **** 	else if (v >= 4) { putchar('4'); v -= 4; }
+  80:../src/firmware.c **** 	else if (v >= 3) { putchar('3'); v -= 3; }
+  81:../src/firmware.c **** 	else if (v >= 2) { putchar('2'); v -= 2; }
+  82:../src/firmware.c **** 	else if (v >= 1) { putchar('1'); v -= 1; }
+  83:../src/firmware.c **** 	else putchar('0');
+  84:../src/firmware.c **** }
+ 236              		.loc 1 84 0
+ 237 0044 67800000 		ret
+ 238              	.L16:
+  65:../src/firmware.c **** 	else if (v >= 80) { putchar('8'); v -= 80; }
+ 239              		.loc 1 65 0
+ 240 0048 9307F004 		li	a5,79
+ 241 004c 63FCA700 		bleu	a0,a5,.L18
+ 242              	.LVL25:
+ 243              	.LBB52:
+ 244              	.LBB53:
+  37:../src/firmware.c **** }
+ 245              		.loc 1 37 0
+ 246 0050 B7070002 		li	a5,33554432
+ 247 0054 13078003 		li	a4,56
+ 248 0058 23A4E700 		sw	a4,8(a5)
+ 249              	.LVL26:
+ 250              	.LBE53:
+ 251              	.LBE52:
+  65:../src/firmware.c **** 	else if (v >= 80) { putchar('8'); v -= 80; }
+ 252              		.loc 1 65 0
+ 253 005c 130505FB 		addi	a0,a0,-80
+ 254              	.LVL27:
+ 255 0060 6FF01FFD 		j	.L17
+ 256              	.L18:
+  66:../src/firmware.c **** 	else if (v >= 60) { putchar('6'); v -= 60; }
+ 257              		.loc 1 66 0
+ 258 0064 93075004 		li	a5,69
+ 259 0068 63FCA700 		bleu	a0,a5,.L19
+ 260              	.LVL28:
+ 261              	.LBB54:
+ 262              	.LBB55:
+  37:../src/firmware.c **** }
+ 263              		.loc 1 37 0
+ 264 006c B7070002 		li	a5,33554432
+ 265 0070 13077003 		li	a4,55
+ 266 0074 23A4E700 		sw	a4,8(a5)
+ 267              	.LVL29:
+ 268              	.LBE55:
+ 269              	.LBE54:
+  66:../src/firmware.c **** 	else if (v >= 60) { putchar('6'); v -= 60; }
+ 270              		.loc 1 66 0
+ 271 0078 1305A5FB 		addi	a0,a0,-70
+ 272              	.LVL30:
+ 273 007c 6FF05FFB 		j	.L17
+ 274              	.L19:
+  67:../src/firmware.c **** 	else if (v >= 50) { putchar('5'); v -= 50; }
+ 275              		.loc 1 67 0
+ 276 0080 9307B003 		li	a5,59
+ 277 0084 63FCA700 		bleu	a0,a5,.L20
+ 278              	.LVL31:
+ 279              	.LBB56:
+ 280              	.LBB57:
+  37:../src/firmware.c **** }
+ 281              		.loc 1 37 0
+ 282 0088 B7070002 		li	a5,33554432
+ 283 008c 13076003 		li	a4,54
+ 284 0090 23A4E700 		sw	a4,8(a5)
+ 285              	.LVL32:
+ 286              	.LBE57:
+ 287              	.LBE56:
+  67:../src/firmware.c **** 	else if (v >= 50) { putchar('5'); v -= 50; }
+ 288              		.loc 1 67 0
+ 289 0094 130545FC 		addi	a0,a0,-60
+ 290              	.LVL33:
+ 291 0098 6FF09FF9 		j	.L17
+ 292              	.L20:
+  68:../src/firmware.c **** 	else if (v >= 40) { putchar('4'); v -= 40; }
+ 293              		.loc 1 68 0
+ 294 009c 93071003 		li	a5,49
+ 295 00a0 63FCA700 		bleu	a0,a5,.L21
+ 296              	.LVL34:
+ 297              	.LBB58:
+ 298              	.LBB59:
+  37:../src/firmware.c **** }
+ 299              		.loc 1 37 0
+ 300 00a4 B7070002 		li	a5,33554432
+ 301 00a8 13075003 		li	a4,53
+ 302 00ac 23A4E700 		sw	a4,8(a5)
+ 303              	.LVL35:
+ 304              	.LBE59:
+ 305              	.LBE58:
+  68:../src/firmware.c **** 	else if (v >= 40) { putchar('4'); v -= 40; }
+ 306              		.loc 1 68 0
+ 307 00b0 1305E5FC 		addi	a0,a0,-50
+ 308              	.LVL36:
+ 309 00b4 6FF0DFF7 		j	.L17
+ 310              	.L21:
+  69:../src/firmware.c **** 	else if (v >= 30) { putchar('3'); v -= 30; }
+ 311              		.loc 1 69 0
+ 312 00b8 93077002 		li	a5,39
+ 313 00bc 63FCA700 		bleu	a0,a5,.L22
+ 314              	.LVL37:
+ 315              	.LBB60:
+ 316              	.LBB61:
+  37:../src/firmware.c **** }
+ 317              		.loc 1 37 0
+ 318 00c0 B7070002 		li	a5,33554432
+ 319 00c4 13074003 		li	a4,52
+ 320 00c8 23A4E700 		sw	a4,8(a5)
+ 321              	.LVL38:
+ 322              	.LBE61:
+ 323              	.LBE60:
+  69:../src/firmware.c **** 	else if (v >= 30) { putchar('3'); v -= 30; }
+ 324              		.loc 1 69 0
+ 325 00cc 130585FD 		addi	a0,a0,-40
+ 326              	.LVL39:
+ 327 00d0 6FF01FF6 		j	.L17
+ 328              	.L22:
+  70:../src/firmware.c **** 	else if (v >= 20) { putchar('2'); v -= 20; }
+ 329              		.loc 1 70 0
+ 330 00d4 9307D001 		li	a5,29
+ 331 00d8 63FCA700 		bleu	a0,a5,.L23
+ 332              	.LVL40:
+ 333              	.LBB62:
+ 334              	.LBB63:
+  37:../src/firmware.c **** }
+ 335              		.loc 1 37 0
+ 336 00dc B7070002 		li	a5,33554432
+ 337 00e0 13073003 		li	a4,51
+ 338 00e4 23A4E700 		sw	a4,8(a5)
+ 339              	.LVL41:
+ 340              	.LBE63:
+ 341              	.LBE62:
+  70:../src/firmware.c **** 	else if (v >= 20) { putchar('2'); v -= 20; }
+ 342              		.loc 1 70 0
+ 343 00e8 130525FE 		addi	a0,a0,-30
+ 344              	.LVL42:
+ 345 00ec 6FF05FF4 		j	.L17
+ 346              	.L23:
+  71:../src/firmware.c **** 	else if (v >= 10) { putchar('1'); v -= 10; }
+ 347              		.loc 1 71 0
+ 348 00f0 93073001 		li	a5,19
+ 349 00f4 63FCA700 		bleu	a0,a5,.L24
+ 350              	.LVL43:
+ 351              	.LBB64:
+ 352              	.LBB65:
+  37:../src/firmware.c **** }
+ 353              		.loc 1 37 0
+ 354 00f8 B7070002 		li	a5,33554432
+ 355 00fc 13072003 		li	a4,50
+ 356 0100 23A4E700 		sw	a4,8(a5)
+ 357              	.LVL44:
+ 358              	.LBE65:
+ 359              	.LBE64:
+  71:../src/firmware.c **** 	else if (v >= 10) { putchar('1'); v -= 10; }
+ 360              		.loc 1 71 0
+ 361 0104 1305C5FE 		addi	a0,a0,-20
+ 362              	.LVL45:
+ 363 0108 6FF09FF2 		j	.L17
+ 364              	.L24:
+  72:../src/firmware.c **** 
+ 365              		.loc 1 72 0
+ 366 010c 93079000 		li	a5,9
+ 367 0110 E3F0A7F2 		bleu	a0,a5,.L17
+ 368              	.LVL46:
+ 369              	.LBB66:
+ 370              	.LBB67:
+  37:../src/firmware.c **** }
+ 371              		.loc 1 37 0
+ 372 0114 B7070002 		li	a5,33554432
+ 373 0118 13071003 		li	a4,49
+ 374 011c 23A4E700 		sw	a4,8(a5)
+ 375              	.LVL47:
+ 376              	.LBE67:
+ 377              	.LBE66:
+  72:../src/firmware.c **** 
+ 378              		.loc 1 72 0
+ 379 0120 130565FF 		addi	a0,a0,-10
+ 380              	.LVL48:
+ 381 0124 6FF0DFF0 		j	.L17
+ 382              	.L25:
+  75:../src/firmware.c **** 	else if (v >= 7) { putchar('7'); v -= 7; }
+ 383              		.loc 1 75 0
+ 384 0128 93078000 		li	a5,8
+ 385 012c 6318F500 		bne	a0,a5,.L27
+ 386              	.LVL49:
+ 387              	.LBB68:
+ 388              	.LBB69:
+  37:../src/firmware.c **** }
+ 389              		.loc 1 37 0
+ 390 0130 B7070002 		li	a5,33554432
+ 391 0134 13078003 		li	a4,56
+ 392 0138 6FF09FF0 		j	.L35
+ 393              	.LVL50:
+ 394              	.L27:
+ 395              	.LBE69:
+ 396              	.LBE68:
+  76:../src/firmware.c **** 	else if (v >= 6) { putchar('6'); v -= 6; }
+ 397              		.loc 1 76 0
+ 398 013c 93077000 		li	a5,7
+ 399 0140 6318F500 		bne	a0,a5,.L28
+ 400              	.LVL51:
+ 401              	.LBB70:
+ 402              	.LBB71:
+  37:../src/firmware.c **** }
+ 403              		.loc 1 37 0
+ 404 0144 B7070002 		li	a5,33554432
+ 405 0148 13077003 		li	a4,55
+ 406 014c 6FF05FEF 		j	.L35
+ 407              	.LVL52:
+ 408              	.L28:
+ 409              	.LBE71:
+ 410              	.LBE70:
+  77:../src/firmware.c **** 	else if (v >= 5) { putchar('5'); v -= 5; }
+ 411              		.loc 1 77 0
+ 412 0150 93076000 		li	a5,6
+ 413 0154 6318F500 		bne	a0,a5,.L29
+ 414              	.LVL53:
+ 415              	.LBB72:
+ 416              	.LBB73:
+  37:../src/firmware.c **** }
+ 417              		.loc 1 37 0
+ 418 0158 B7070002 		li	a5,33554432
+ 419 015c 13076003 		li	a4,54
+ 420 0160 6FF01FEE 		j	.L35
+ 421              	.LVL54:
+ 422              	.L29:
+ 423              	.LBE73:
+ 424              	.LBE72:
+  78:../src/firmware.c **** 	else if (v >= 4) { putchar('4'); v -= 4; }
+ 425              		.loc 1 78 0
+ 426 0164 93075000 		li	a5,5
+ 427 0168 6318F500 		bne	a0,a5,.L30
+ 428              	.LVL55:
+ 429              	.LBB74:
+ 430              	.LBB75:
+  37:../src/firmware.c **** }
+ 431              		.loc 1 37 0
+ 432 016c B7070002 		li	a5,33554432
+ 433 0170 13075003 		li	a4,53
+ 434 0174 6FF0DFEC 		j	.L35
+ 435              	.LVL56:
+ 436              	.L30:
+ 437              	.LBE75:
+ 438              	.LBE74:
+  79:../src/firmware.c **** 	else if (v >= 3) { putchar('3'); v -= 3; }
+ 439              		.loc 1 79 0
+ 440 0178 93074000 		li	a5,4
+ 441 017c 6318F500 		bne	a0,a5,.L31
+ 442              	.LVL57:
+ 443              	.LBB76:
+ 444              	.LBB77:
+  37:../src/firmware.c **** }
+ 445              		.loc 1 37 0
+ 446 0180 B7070002 		li	a5,33554432
+ 447 0184 13074003 		li	a4,52
+ 448 0188 6FF09FEB 		j	.L35
+ 449              	.LVL58:
+ 450              	.L31:
+ 451              	.LBE77:
+ 452              	.LBE76:
+  80:../src/firmware.c **** 	else if (v >= 2) { putchar('2'); v -= 2; }
+ 453              		.loc 1 80 0
+ 454 018c 93073000 		li	a5,3
+ 455 0190 6318F500 		bne	a0,a5,.L32
+ 456              	.LVL59:
+ 457              	.LBB78:
+ 458              	.LBB79:
+  37:../src/firmware.c **** }
+ 459              		.loc 1 37 0
+ 460 0194 B7070002 		li	a5,33554432
+ 461 0198 13073003 		li	a4,51
+ 462 019c 6FF05FEA 		j	.L35
+ 463              	.LVL60:
+ 464              	.L32:
+ 465              	.LBE79:
+ 466              	.LBE78:
+  81:../src/firmware.c **** 	else if (v >= 1) { putchar('1'); v -= 1; }
+ 467              		.loc 1 81 0
+ 468 01a0 93072000 		li	a5,2
+ 469 01a4 6318F500 		bne	a0,a5,.L33
+ 470              	.LVL61:
+ 471              	.LBB80:
+ 472              	.LBB81:
+  37:../src/firmware.c **** }
+ 473              		.loc 1 37 0
+ 474 01a8 B7070002 		li	a5,33554432
+ 475 01ac 13072003 		li	a4,50
+ 476 01b0 6FF01FE9 		j	.L35
+ 477              	.LVL62:
+ 478              	.L33:
+ 479              	.LBE81:
+ 480              	.LBE80:
+ 481              	.LBB82:
+ 482              	.LBB83:
+ 483 01b4 B7070002 		li	a5,33554432
+ 484 01b8 13071003 		li	a4,49
+ 485              	.LBE83:
+ 486              	.LBE82:
+  82:../src/firmware.c **** 	else putchar('0');
+ 487              		.loc 1 82 0
+ 488 01bc E31205E8 		bnez	a0,.L35
+ 489              	.LVL63:
+ 490              	.LBB84:
+ 491              	.LBB51:
+  37:../src/firmware.c **** }
+ 492              		.loc 1 37 0
+ 493 01c0 13070003 		li	a4,48
+ 494 01c4 6FF0DFE7 		j	.L35
+ 495              	.LBE51:
+ 496              	.LBE84:
+ 497              		.cfi_endproc
+ 498              	.LFE3:
+ 500              		.section	.text.getchar_prompt,"ax",@progbits
+ 501              		.align	2
+ 502              		.globl	getchar_prompt
+ 504              	getchar_prompt:
+ 505              	.LFB4:
+  85:../src/firmware.c **** 
+  86:../src/firmware.c **** char getchar_prompt(char *prompt)
+  87:../src/firmware.c **** {
+ 506              		.loc 1 87 0
+ 507              		.cfi_startproc
+ 508              	.LVL64:
+ 509 0000 130101FE 		addi	sp,sp,-32
+ 510              		.cfi_def_cfa_offset 32
+ 511 0004 232C8100 		sw	s0,24(sp)
+ 512 0008 232E1100 		sw	ra,28(sp)
+ 513 000c 232A9100 		sw	s1,20(sp)
+ 514 0010 23282101 		sw	s2,16(sp)
+ 515 0014 23263101 		sw	s3,12(sp)
+ 516 0018 23244101 		sw	s4,8(sp)
+ 517              		.cfi_offset 8, -8
+ 518              		.cfi_offset 1, -4
+ 519              		.cfi_offset 9, -12
+ 520              		.cfi_offset 18, -16
+ 521              		.cfi_offset 19, -20
+ 522              		.cfi_offset 20, -24
+ 523              		.loc 1 87 0
+ 524 001c 13040500 		mv	s0,a0
+  88:../src/firmware.c **** 	int32_t c = -1;
+  89:../src/firmware.c **** 
+  90:../src/firmware.c **** 	uint32_t cycles_begin, cycles_now, cycles;
+  91:../src/firmware.c **** 	__asm__ volatile ("rdcycle %0" : "=r"(cycles_begin));
+ 525              		.loc 1 91 0
+ 526              	 #APP
+ 527              	# 91 "../src/firmware.c" 1
+  92              	
+ 528              		rdcycle s2
+ 529              	# 0 "" 2
+ 530              	.LVL65:
+  93:../src/firmware.c **** 
+  94:../src/firmware.c **** 	if (prompt)
+ 531              		.loc 1 94 0
+ 532              	 #NO_APP
+ 533 0024 63060500 		beqz	a0,.L37
+  95:../src/firmware.c **** 		print(prompt);
+ 534              		.loc 1 95 0
+ 535 0028 97000000 		call	print
+ 535      E7800000 
+ 536              	.LVL66:
+ 537              	.L37:
+  96:../src/firmware.c **** 
+  97:../src/firmware.c **** 	while (c == -1) {
+  98:../src/firmware.c **** 		__asm__ volatile ("rdcycle %0" : "=r"(cycles_now));
+  99:../src/firmware.c **** 		cycles = cycles_now - cycles_begin;
+ 100:../src/firmware.c **** 		if (cycles > 12000000) {
+ 538              		.loc 1 100 0
+ 539 0030 B724B700 		li	s1,12001280
+ 540 0034 938404B0 		addi	s1,s1,-1280
+ 101:../src/firmware.c **** 			if (prompt)
+ 102:../src/firmware.c **** 				print(prompt);
+ 103:../src/firmware.c **** 			cycles_begin = cycles_now;
+ 104:../src/firmware.c **** 		}
+ 105:../src/firmware.c **** 		c = reg_uart_data;
+ 541              		.loc 1 105 0
+ 542 0038 370A0002 		li	s4,33554432
+  97:../src/firmware.c **** 		__asm__ volatile ("rdcycle %0" : "=r"(cycles_now));
+ 543              		.loc 1 97 0
+ 544 003c 9309F0FF 		li	s3,-1
+ 545              	.LVL67:
+ 546              	.L39:
+  98:../src/firmware.c **** 		cycles = cycles_now - cycles_begin;
+ 547              		.loc 1 98 0
+ 548              	 #APP
+ 549              	# 98 "../src/firmware.c" 1
+ 550              		rdcycle a5
+ 551              	# 0 "" 2
+ 552              	.LVL68:
+  99:../src/firmware.c **** 		if (cycles > 12000000) {
+ 553              		.loc 1 99 0
+ 554              	 #NO_APP
+ 555 0044 33872741 		sub	a4,a5,s2
+ 556              	.LVL69:
+ 100:../src/firmware.c **** 			if (prompt)
+ 557              		.loc 1 100 0
+ 558 0048 63FCE400 		bleu	a4,s1,.L38
+ 103:../src/firmware.c **** 		}
+ 559              		.loc 1 103 0
+ 560 004c 13890700 		mv	s2,a5
+ 561              	.LVL70:
+ 101:../src/firmware.c **** 				print(prompt);
+ 562              		.loc 1 101 0
+ 563 0050 63080400 		beqz	s0,.L38
+ 102:../src/firmware.c **** 			cycles_begin = cycles_now;
+ 564              		.loc 1 102 0
+ 565 0054 13050400 		mv	a0,s0
+ 566 0058 97000000 		call	print
+ 566      E7800000 
+ 567              	.LVL71:
+ 568              	.L38:
+ 569              		.loc 1 105 0
+ 570 0060 03258A00 		lw	a0,8(s4)
+ 571              	.LVL72:
+  97:../src/firmware.c **** 		__asm__ volatile ("rdcycle %0" : "=r"(cycles_now));
+ 572              		.loc 1 97 0
+ 573 0064 E30E35FD 		beq	a0,s3,.L39
+ 106:../src/firmware.c **** 	}
+ 107:../src/firmware.c **** 
+ 108:../src/firmware.c **** 	return c;
+ 109:../src/firmware.c **** }
+ 574              		.loc 1 109 0
+ 575 0068 8320C101 		lw	ra,28(sp)
+ 576              		.cfi_restore 1
+ 577 006c 03248101 		lw	s0,24(sp)
+ 578              		.cfi_restore 8
+ 579              	.LVL73:
+ 580 0070 83244101 		lw	s1,20(sp)
+ 581              		.cfi_restore 9
+ 582 0074 03290101 		lw	s2,16(sp)
+ 583              		.cfi_restore 18
+ 584              	.LVL74:
+ 585 0078 8329C100 		lw	s3,12(sp)
+ 586              		.cfi_restore 19
+ 587 007c 032A8100 		lw	s4,8(sp)
+ 588              		.cfi_restore 20
+ 589 0080 1375F50F 		andi	a0,a0,0xff
+ 590              	.LVL75:
+ 591 0084 13010102 		addi	sp,sp,32
+ 592              		.cfi_def_cfa_offset 0
+ 593 0088 67800000 		jr	ra
+ 594              		.cfi_endproc
+ 595              	.LFE4:
+ 597              		.section	.text.getchar,"ax",@progbits
+ 598              		.align	2
+ 599              		.globl	getchar
+ 601              	getchar:
+ 602              	.LFB5:
+ 110:../src/firmware.c **** 
+ 111:../src/firmware.c **** char getchar()
+ 112:../src/firmware.c **** {
+ 603              		.loc 1 112 0
+ 604              		.cfi_startproc
+ 113:../src/firmware.c **** 	return getchar_prompt(0);
+ 605              		.loc 1 113 0
+ 606 0000 13050000 		li	a0,0
+ 607 0004 17030000 		tail	getchar_prompt
+ 607      67000300 
+ 608              	.LVL76:
+ 609              		.cfi_endproc
+ 610              	.LFE5:
+ 612              		.section	.rodata.print_dec.str1.4,"aMS",@progbits,1
+ 613              		.align	2
+ 614              	.LC1:
+ 615 0000 3E3D3130 		.string	">=100"
+ 615      3000
+ 616              		.section	.rodata.print_hex.str1.4,"aMS",@progbits,1
+ 617              		.align	2
+ 618              	.LC0:
+ 619 0000 30313233 		.string	"0123456789abcdef"
+ 619      34353637 
+ 619      38396162 
+ 619      63646566 
+ 619      00
+ 620              		.text
+ 621              	.Letext0:
+ 622              		.file 2 "d:\\pico\\eclipse\\risc-v embedded gcc\\7.2.0-1-20171109-1926\\riscv-none-embed\\include\
+ 623              		.file 3 "d:\\pico\\eclipse\\risc-v embedded gcc\\7.2.0-1-20171109-1926\\riscv-none-embed\\include\
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 firmware.c
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:10     .text.putchar:0000000000000000 putchar
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:14     .text.putchar:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:16     .text.putchar:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:17     .text.putchar:0000000000000004 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:20     .text.putchar:000000000000000c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:21     .text.putchar:000000000000000c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:23     .text.putchar:000000000000000c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:25     .text.putchar:0000000000000010 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:27     .text.putchar:0000000000000014 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:29     .text.putchar:0000000000000018 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:35     .text.putchar:0000000000000024 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:38     .text.putchar:000000000000002c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:39     .text.putchar:0000000000000030 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:41     .text.putchar:0000000000000034 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:43     .text.putchar:0000000000000038 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:45     .text.putchar:000000000000003c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:52     .text.print:0000000000000000 print
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:55     .text.print:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:57     .text.print:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:58     .text.print:0000000000000004 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:61     .text.print:000000000000000c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:62     .text.print:000000000000000c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:67     .text.print:0000000000000010 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:70     .text.print:0000000000000018 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:71     .text.print:000000000000001c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:72     .text.print:000000000000001c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:74     .text.print:0000000000000020 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:77     .text.print:0000000000000024 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:81     .text.print:0000000000000028 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:83     .text.print:0000000000000028 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:88     .text.print:0000000000000038 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:95     .text.print_hex:0000000000000000 print_hex
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:98     .text.print_hex:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:100    .text.print_hex:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:101    .text.print_hex:0000000000000004 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:103    .text.print_hex:0000000000000008 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:107    .text.print_hex:0000000000000008 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:111    .text.print_hex:000000000000000c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:116    .text.print_hex:0000000000000020 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:117    .text.print_hex:0000000000000020 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:118    .text.print_hex:0000000000000020 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:119    .text.print_hex:0000000000000020 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:120    .text.print_hex:0000000000000020 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:122    .text.print_hex:0000000000000020 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:125    .text.print_hex:0000000000000024 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:128    .text.print_hex:0000000000000028 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:130    .text.print_hex:000000000000002c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:133    .text.print_hex:0000000000000030 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:138    .text.print_hex:0000000000000034 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:145    .text.print_hex:0000000000000048 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:147    .text.print_hex:000000000000004c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:150    .text.print_hex:0000000000000050 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:157    .text.print_hex:000000000000005c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:162    .text.print_hex:0000000000000064 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:163    .text.print_hex:0000000000000068 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:165    .text.print_hex:000000000000006c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:168    .text.print_hex:0000000000000070 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:170    .text.print_hex:0000000000000074 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:172    .text.print_hex:0000000000000078 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:175    .text.print_hex:000000000000007c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:177    .text.print_hex:0000000000000080 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:179    .text.print_hex:0000000000000084 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:186    .text.print_dec:0000000000000000 print_dec
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:189    .text.print_dec:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:191    .text.print_dec:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:192    .text.print_dec:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:195    .text.print_dec:0000000000000008 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:202    .text.print_dec:0000000000000018 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:208    .text.print_dec:0000000000000020 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:215    .text.print_dec:000000000000002c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:219    .text.print_dec:0000000000000030 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:225    .text.print_dec:0000000000000038 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:237    .text.print_dec:0000000000000044 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:240    .text.print_dec:0000000000000048 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:246    .text.print_dec:0000000000000050 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:253    .text.print_dec:000000000000005c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:258    .text.print_dec:0000000000000064 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:264    .text.print_dec:000000000000006c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:271    .text.print_dec:0000000000000078 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:276    .text.print_dec:0000000000000080 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:282    .text.print_dec:0000000000000088 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:289    .text.print_dec:0000000000000094 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:294    .text.print_dec:000000000000009c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:300    .text.print_dec:00000000000000a4 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:307    .text.print_dec:00000000000000b0 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:312    .text.print_dec:00000000000000b8 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:318    .text.print_dec:00000000000000c0 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:325    .text.print_dec:00000000000000cc .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:330    .text.print_dec:00000000000000d4 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:336    .text.print_dec:00000000000000dc .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:343    .text.print_dec:00000000000000e8 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:348    .text.print_dec:00000000000000f0 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:354    .text.print_dec:00000000000000f8 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:361    .text.print_dec:0000000000000104 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:366    .text.print_dec:000000000000010c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:372    .text.print_dec:0000000000000114 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:379    .text.print_dec:0000000000000120 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:384    .text.print_dec:0000000000000128 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:390    .text.print_dec:0000000000000130 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:398    .text.print_dec:000000000000013c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:404    .text.print_dec:0000000000000144 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:412    .text.print_dec:0000000000000150 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:418    .text.print_dec:0000000000000158 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:426    .text.print_dec:0000000000000164 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:432    .text.print_dec:000000000000016c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:440    .text.print_dec:0000000000000178 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:446    .text.print_dec:0000000000000180 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:454    .text.print_dec:000000000000018c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:460    .text.print_dec:0000000000000194 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:468    .text.print_dec:00000000000001a0 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:474    .text.print_dec:00000000000001a8 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:488    .text.print_dec:00000000000001bc .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:493    .text.print_dec:00000000000001c0 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:497    .text.print_dec:00000000000001c8 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:504    .text.getchar_prompt:0000000000000000 getchar_prompt
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:507    .text.getchar_prompt:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:509    .text.getchar_prompt:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:510    .text.getchar_prompt:0000000000000004 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:517    .text.getchar_prompt:000000000000001c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:518    .text.getchar_prompt:000000000000001c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:519    .text.getchar_prompt:000000000000001c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:520    .text.getchar_prompt:000000000000001c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:521    .text.getchar_prompt:000000000000001c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:522    .text.getchar_prompt:000000000000001c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:524    .text.getchar_prompt:000000000000001c .L0 
+   ../src/firmware.c:91     .text.getchar_prompt:0000000000000020 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:533    .text.getchar_prompt:0000000000000024 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:535    .text.getchar_prompt:0000000000000028 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:539    .text.getchar_prompt:0000000000000030 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:542    .text.getchar_prompt:0000000000000038 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:544    .text.getchar_prompt:000000000000003c .L0 
+   ../src/firmware.c:98     .text.getchar_prompt:0000000000000040 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:555    .text.getchar_prompt:0000000000000044 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:558    .text.getchar_prompt:0000000000000048 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:560    .text.getchar_prompt:000000000000004c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:563    .text.getchar_prompt:0000000000000050 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:565    .text.getchar_prompt:0000000000000054 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:570    .text.getchar_prompt:0000000000000060 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:573    .text.getchar_prompt:0000000000000064 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:575    .text.getchar_prompt:0000000000000068 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:576    .text.getchar_prompt:000000000000006c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:578    .text.getchar_prompt:0000000000000070 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:581    .text.getchar_prompt:0000000000000074 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:583    .text.getchar_prompt:0000000000000078 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:586    .text.getchar_prompt:000000000000007c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:588    .text.getchar_prompt:0000000000000080 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:592    .text.getchar_prompt:0000000000000088 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:594    .text.getchar_prompt:000000000000008c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:601    .text.getchar:0000000000000000 getchar
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:604    .text.getchar:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:605    .text.getchar:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:606    .text.getchar:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:609    .text.getchar:000000000000000c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:48     .text.putchar:000000000000003c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:91     .text.print:0000000000000038 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:182    .text.print_hex:0000000000000084 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:500    .text.print_dec:00000000000001c8 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:597    .text.getchar_prompt:000000000000008c .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:612    .text.getchar:000000000000000c .L0 
+                     .debug_frame:0000000000000000 .L0 
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:33     .text.putchar:0000000000000024 .L2
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:80     .text.print:0000000000000028 .L6
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:65     .text.print:0000000000000010 .L5
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:618    .rodata.print_hex.str1.4:0000000000000000 .LC0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:148    .text.print_hex:0000000000000050 .L9
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:154    .text.print_hex:000000000000005c .L10
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:135    .text.print_hex:0000000000000034 .L11
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:614    .rodata.print_dec.str1.4:0000000000000000 .LC1
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:200    .text.print_dec:0000000000000018 .L15
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:238    .text.print_dec:0000000000000048 .L16
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:382    .text.print_dec:0000000000000128 .L25
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:256    .text.print_dec:0000000000000064 .L18
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:217    .text.print_dec:0000000000000030 .L17
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:274    .text.print_dec:0000000000000080 .L19
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:292    .text.print_dec:000000000000009c .L20
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:310    .text.print_dec:00000000000000b8 .L21
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:328    .text.print_dec:00000000000000d4 .L22
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:346    .text.print_dec:00000000000000f0 .L23
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:364    .text.print_dec:000000000000010c .L24
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:394    .text.print_dec:000000000000013c .L27
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:228    .text.print_dec:0000000000000040 .L35
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:408    .text.print_dec:0000000000000150 .L28
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:422    .text.print_dec:0000000000000164 .L29
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:436    .text.print_dec:0000000000000178 .L30
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:450    .text.print_dec:000000000000018c .L31
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:464    .text.print_dec:00000000000001a0 .L32
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:478    .text.print_dec:00000000000001b4 .L33
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:537    .text.getchar_prompt:0000000000000030 .L37
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:568    .text.getchar_prompt:0000000000000060 .L38
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:546    .text.getchar_prompt:0000000000000040 .L39
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1122   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3506   .debug_str:00000000000005a8 .LASF492
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4050   .debug_str:000000000000222f .LASF493
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3736   .debug_str:0000000000001175 .LASF494
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1841   .debug_ranges:0000000000000000 .Ldebug_ranges0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3410   .debug_line:0000000000000000 .Ldebug_line0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1877   .debug_macro:0000000000000000 .Ldebug_macro0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3610   .debug_str:0000000000000b54 .LASF470
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4240   .debug_str:0000000000002bd0 .LASF471
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4098   .debug_str:0000000000002496 .LASF472
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4320   .debug_str:0000000000002fc7 .LASF473
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4162   .debug_str:00000000000027bb .LASF475
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3412   .debug_str:0000000000000000 .LASF474
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4246   .debug_str:0000000000002c1e .LASF476
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4204   .debug_str:00000000000029f8 .LASF477
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3912   .debug_str:0000000000001aa4 .LASF478
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3646   .debug_str:0000000000000cb3 .LASF479
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3484   .debug_str:0000000000000497 .LASF480
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4216   .debug_str:0000000000002ab0 .LASF481
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3620   .debug_str:0000000000000bad .LASF482
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4256   .debug_str:0000000000002c9b .LASF486
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:602    .text.getchar:0000000000000000 .LFB5
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:610    .text.getchar:000000000000000c .LFE5
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:608    .text.getchar:000000000000000c .LVL76
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3830   .debug_str:00000000000016c3 .LASF351
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4048   .debug_str:0000000000002220 .LASF495
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:505    .text.getchar_prompt:0000000000000000 .LFB4
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:595    .text.getchar_prompt:000000000000008c .LFE4
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3738   .debug_str:000000000000119a .LASF488
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1497   .debug_loc:0000000000000000 .LLST24
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1515   .debug_loc:000000000000002c .LLST25
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4120   .debug_str:000000000000259f .LASF483
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1528   .debug_loc:000000000000004c .LLST26
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3936   .debug_str:0000000000001c17 .LASF484
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1539   .debug_loc:000000000000006a .LLST27
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4364   .debug_str:0000000000003236 .LASF485
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1550   .debug_loc:0000000000000088 .LLST28
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:536    .text.getchar_prompt:0000000000000030 .LVL66
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:567    .text.getchar_prompt:0000000000000060 .LVL71
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3898   .debug_str:00000000000019fa .LASF487
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:187    .text.print_dec:0000000000000000 .LFB3
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:498    .text.print_dec:00000000000001c8 .LFE3
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1566   .debug_loc:00000000000000ab .LLST6
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:205    .text.print_dec:0000000000000020 .LBB45
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:213    .text.print_dec:000000000000002c .LBE45
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1584   .debug_loc:00000000000000d7 .LLST7
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:222    .text.print_dec:0000000000000038 .LBB47
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:230    .text.print_dec:0000000000000040 .LBE47
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1593   .debug_loc:00000000000000ec .LLST8
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:231    .text.print_dec:0000000000000040 .LBB49
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:243    .text.print_dec:0000000000000050 .LBB52
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:251    .text.print_dec:000000000000005c .LBE52
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1602   .debug_loc:0000000000000101 .LLST9
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:261    .text.print_dec:000000000000006c .LBB54
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:269    .text.print_dec:0000000000000078 .LBE54
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1611   .debug_loc:0000000000000116 .LLST10
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:279    .text.print_dec:0000000000000088 .LBB56
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:287    .text.print_dec:0000000000000094 .LBE56
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1620   .debug_loc:000000000000012b .LLST11
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:297    .text.print_dec:00000000000000a4 .LBB58
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:305    .text.print_dec:00000000000000b0 .LBE58
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1629   .debug_loc:0000000000000140 .LLST12
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:315    .text.print_dec:00000000000000c0 .LBB60
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:323    .text.print_dec:00000000000000cc .LBE60
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1638   .debug_loc:0000000000000155 .LLST13
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:333    .text.print_dec:00000000000000dc .LBB62
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:341    .text.print_dec:00000000000000e8 .LBE62
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1647   .debug_loc:000000000000016a .LLST14
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:351    .text.print_dec:00000000000000f8 .LBB64
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:359    .text.print_dec:0000000000000104 .LBE64
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1656   .debug_loc:000000000000017f .LLST15
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:369    .text.print_dec:0000000000000114 .LBB66
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:377    .text.print_dec:0000000000000120 .LBE66
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1665   .debug_loc:0000000000000194 .LLST16
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:387    .text.print_dec:0000000000000130 .LBB68
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:396    .text.print_dec:000000000000013c .LBE68
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1674   .debug_loc:00000000000001a9 .LLST17
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:401    .text.print_dec:0000000000000144 .LBB70
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:410    .text.print_dec:0000000000000150 .LBE70
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1683   .debug_loc:00000000000001be .LLST18
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:415    .text.print_dec:0000000000000158 .LBB72
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:424    .text.print_dec:0000000000000164 .LBE72
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1692   .debug_loc:00000000000001d3 .LLST19
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:429    .text.print_dec:000000000000016c .LBB74
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:438    .text.print_dec:0000000000000178 .LBE74
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1701   .debug_loc:00000000000001e8 .LLST20
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:443    .text.print_dec:0000000000000180 .LBB76
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:452    .text.print_dec:000000000000018c .LBE76
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1710   .debug_loc:00000000000001fd .LLST21
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:457    .text.print_dec:0000000000000194 .LBB78
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:466    .text.print_dec:00000000000001a0 .LBE78
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1719   .debug_loc:0000000000000212 .LLST22
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:471    .text.print_dec:00000000000001a8 .LBB80
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:480    .text.print_dec:00000000000001b4 .LBE80
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1728   .debug_loc:0000000000000227 .LLST23
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:481    .text.print_dec:00000000000001b4 .LBB82
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:486    .text.print_dec:00000000000001bc .LBE82
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:199    .text.print_dec:0000000000000018 .LVL19
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3498   .debug_str:000000000000055c .LASF489
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:96     .text.print_hex:0000000000000000 .LFB2
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:180    .text.print_hex:0000000000000084 .LFE2
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1737   .debug_loc:000000000000023c .LLST2
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3698   .debug_str:0000000000000f62 .LASF490
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1755   .debug_loc:0000000000000268 .LLST3
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1770   .debug_loc:0000000000000291 .LLST4
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1782   .debug_loc:00000000000002b0 .LLST5
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:151    .text.print_hex:0000000000000058 .LVL12
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4092   .debug_str:000000000000243e .LASF491
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:53     .text.print:0000000000000000 .LFB1
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:89     .text.print:0000000000000038 .LFE1
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1789   .debug_loc:00000000000002c3 .LLST1
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:86     .text.print:0000000000000034 .LVL8
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3564   .debug_str:00000000000008fe .LASF496
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:11     .text.putchar:0000000000000000 .LFB0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:46     .text.putchar:000000000000003c .LFE0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1804   .debug_loc:00000000000002ec .LLST0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:32     .text.putchar:0000000000000024 .LVL2
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:508    .text.getchar_prompt:0000000000000000 .LVL64
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:579    .text.getchar_prompt:0000000000000070 .LVL73
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:571    .text.getchar_prompt:0000000000000064 .LVL72
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:590    .text.getchar_prompt:0000000000000084 .LVL75
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:530    .text.getchar_prompt:0000000000000024 .LVL65
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:561    .text.getchar_prompt:0000000000000050 .LVL70
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:584    .text.getchar_prompt:0000000000000078 .LVL74
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:552    .text.getchar_prompt:0000000000000044 .LVL68
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:556    .text.getchar_prompt:0000000000000048 .LVL69
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:190    .text.print_dec:0000000000000000 .LVL17
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:196    .text.print_dec:000000000000000c .LVL18
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:204    .text.print_dec:0000000000000020 .LVL20
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:211    .text.print_dec:000000000000002c .LVL21
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:221    .text.print_dec:0000000000000038 .LVL23
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:227    .text.print_dec:0000000000000040 .LVL24
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:242    .text.print_dec:0000000000000050 .LVL25
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:249    .text.print_dec:000000000000005c .LVL26
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:260    .text.print_dec:000000000000006c .LVL28
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:267    .text.print_dec:0000000000000078 .LVL29
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:278    .text.print_dec:0000000000000088 .LVL31
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:285    .text.print_dec:0000000000000094 .LVL32
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:296    .text.print_dec:00000000000000a4 .LVL34
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:303    .text.print_dec:00000000000000b0 .LVL35
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:314    .text.print_dec:00000000000000c0 .LVL37
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:321    .text.print_dec:00000000000000cc .LVL38
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:332    .text.print_dec:00000000000000dc .LVL40
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:339    .text.print_dec:00000000000000e8 .LVL41
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:350    .text.print_dec:00000000000000f8 .LVL43
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:357    .text.print_dec:0000000000000104 .LVL44
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:368    .text.print_dec:0000000000000114 .LVL46
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:375    .text.print_dec:0000000000000120 .LVL47
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:386    .text.print_dec:0000000000000130 .LVL49
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:393    .text.print_dec:000000000000013c .LVL50
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:400    .text.print_dec:0000000000000144 .LVL51
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:407    .text.print_dec:0000000000000150 .LVL52
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:414    .text.print_dec:0000000000000158 .LVL53
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:421    .text.print_dec:0000000000000164 .LVL54
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:428    .text.print_dec:000000000000016c .LVL55
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:435    .text.print_dec:0000000000000178 .LVL56
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:442    .text.print_dec:0000000000000180 .LVL57
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:449    .text.print_dec:000000000000018c .LVL58
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:456    .text.print_dec:0000000000000194 .LVL59
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:463    .text.print_dec:00000000000001a0 .LVL60
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:470    .text.print_dec:00000000000001a8 .LVL61
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:477    .text.print_dec:00000000000001b4 .LVL62
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:99     .text.print_hex:0000000000000000 .LVL9
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:134    .text.print_hex:0000000000000034 .LVL10
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:173    .text.print_hex:0000000000000078 .LVL16
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:153    .text.print_hex:000000000000005c .LVL13
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:166    .text.print_hex:000000000000006c .LVL15
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:143    .text.print_hex:0000000000000048 .LVL11
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:56     .text.print:0000000000000000 .LVL3
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:64     .text.print:0000000000000010 .LVL4
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:75     .text.print:0000000000000020 .LVL5
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:79     .text.print:0000000000000028 .LVL6
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:15     .text.putchar:0000000000000000 .LVL0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:30     .text.putchar:000000000000001c .LVL1
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:625    .debug_info:0000000000000000 .Ldebug_info0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:104    .text.print_hex:0000000000000008 .LBB40
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:109    .text.print_hex:000000000000000c .LBE40
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:123    .text.print_hex:0000000000000024 .LBB44
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:160    .text.print_hex:0000000000000064 .LBE44
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:105    .text.print_hex:0000000000000008 .LBB41
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:108    .text.print_hex:000000000000000c .LBE41
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:126    .text.print_hex:0000000000000028 .LBB42
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:131    .text.print_hex:0000000000000030 .LBE42
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:136    .text.print_hex:0000000000000034 .LBB43
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:155    .text.print_hex:000000000000005c .LBE43
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:235    .text.print_dec:0000000000000044 .LBE49
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:490    .text.print_dec:00000000000001c0 .LBB84
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:496    .text.print_dec:00000000000001c8 .LBE84
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:1954   .debug_macro:0000000000000000 .Ldebug_macro1
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3420   .debug_str:000000000000006d .LASF308
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4100   .debug_str:00000000000024a0 .LASF309
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3664   .debug_str:0000000000000da1 .LASF310
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:2883   .debug_macro:0000000000000000 .Ldebug_macro2
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:2903   .debug_macro:0000000000000000 .Ldebug_macro3
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:2965   .debug_macro:0000000000000000 .Ldebug_macro4
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3006   .debug_macro:0000000000000000 .Ldebug_macro5
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3122   .debug_macro:0000000000000000 .Ldebug_macro6
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3178   .debug_macro:0000000000000000 .Ldebug_macro7
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3390   .debug_macro:0000000000000000 .Ldebug_macro8
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3732   .debug_str:000000000000112f .LASF467
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3900   .debug_str:0000000000001a04 .LASF468
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3932   .debug_str:0000000000001bab .LASF469
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3970   .debug_str:0000000000001e60 .LASF0
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3872   .debug_str:00000000000018c6 .LASF1
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4016   .debug_str:0000000000002059 .LASF2
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3572   .debug_str:0000000000000945 .LASF3
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4218   .debug_str:0000000000002ab8 .LASF4
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3504   .debug_str:000000000000059d .LASF5
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3480   .debug_str:0000000000000473 .LASF6
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4004   .debug_str:0000000000001fe7 .LASF7
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4064   .debug_str:00000000000022dc .LASF8
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3588   .debug_str:0000000000000a42 .LASF9
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3538   .debug_str:00000000000007a5 .LASF10
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4054   .debug_str:0000000000002253 .LASF11
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3518   .debug_str:00000000000006e4 .LASF12
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4236   .debug_str:0000000000002bad .LASF13
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3980   .debug_str:0000000000001ec9 .LASF14
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4142   .debug_str:00000000000026a5 .LASF15
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3532   .debug_str:0000000000000774 .LASF16
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3928   .debug_str:0000000000001b80 .LASF17
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4300   .debug_str:0000000000002eca .LASF18
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3972   .debug_str:0000000000001e6b .LASF19
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4156   .debug_str:0000000000002775 .LASF20
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3542   .debug_str:00000000000007c6 .LASF21
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4326   .debug_str:000000000000300e .LASF22
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4002   .debug_str:0000000000001fd3 .LASF23
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3688   .debug_str:0000000000000eda .LASF24
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3494   .debug_str:0000000000000525 .LASF25
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3914   .debug_str:0000000000001ab2 .LASF26
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4330   .debug_str:000000000000303a .LASF27
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3722   .debug_str:00000000000010a6 .LASF28
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3502   .debug_str:0000000000000583 .LASF29
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4080   .debug_str:000000000000239f .LASF30
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3556   .debug_str:000000000000086d .LASF31
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4036   .debug_str:0000000000002156 .LASF32
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4172   .debug_str:000000000000283a .LASF33
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4270   .debug_str:0000000000002d42 .LASF34
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3520   .debug_str:00000000000006f7 .LASF35
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3670   .debug_str:0000000000000de6 .LASF36
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3988   .debug_str:0000000000001f26 .LASF37
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4302   .debug_str:0000000000002edb .LASF38
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4244   .debug_str:0000000000002bf6 .LASF39
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3496   .debug_str:0000000000000539 .LASF40
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4056   .debug_str:0000000000002266 .LASF41
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4386   .debug_str:00000000000033a6 .LASF42
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4128   .debug_str:00000000000025ee .LASF43
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3524   .debug_str:0000000000000720 .LASF44
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4104   .debug_str:00000000000024d1 .LASF45
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3792   .debug_str:00000000000014a2 .LASF46
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4158   .debug_str:000000000000278c .LASF47
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3778   .debug_str:00000000000013bb .LASF48
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4168   .debug_str:0000000000002800 .LASF49
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4312   .debug_str:0000000000002f52 .LASF50
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3548   .debug_str:0000000000000807 .LASF51
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3882   .debug_str:0000000000001945 .LASF52
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3590   .debug_str:0000000000000a55 .LASF53
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4166   .debug_str:00000000000027dd .LASF54
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3924   .debug_str:0000000000001b55 .LASF55
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4082   .debug_str:00000000000023b9 .LASF56
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4062   .debug_str:00000000000022b4 .LASF57
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3512   .debug_str:0000000000000665 .LASF58
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3692   .debug_str:0000000000000f0c .LASF59
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3770   .debug_str:0000000000001369 .LASF60
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4296   .debug_str:0000000000002e9a .LASF61
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3606   .debug_str:0000000000000b17 .LASF62
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3422   .debug_str:0000000000000078 .LASF63
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3824   .debug_str:0000000000001650 .LASF64
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4108   .debug_str:0000000000002506 .LASF65
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3662   .debug_str:0000000000000d75 .LASF66
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4252   .debug_str:0000000000002c71 .LASF67
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3628   .debug_str:0000000000000bd8 .LASF68
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4226   .debug_str:0000000000002b1d .LASF69
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3468   .debug_str:000000000000035a .LASF70
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4322   .debug_str:0000000000002fda .LASF71
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3578   .debug_str:000000000000098e .LASF72
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4078   .debug_str:000000000000238b .LASF73
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3516   .debug_str:00000000000006cd .LASF74
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3990   .debug_str:0000000000001f41 .LASF75
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3788   .debug_str:000000000000146d .LASF76
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4180   .debug_str:00000000000028ac .LASF77
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3566   .debug_str:0000000000000906 .LASF78
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4130   .debug_str:0000000000002608 .LASF79
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4008   .debug_str:000000000000200c .LASF80
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3652   .debug_str:0000000000000cf0 .LASF81
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3594   .debug_str:0000000000000a9b .LASF82
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3996   .debug_str:0000000000001f87 .LASF83
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4160   .debug_str:00000000000027a9 .LASF84
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4188   .debug_str:000000000000292d .LASF85
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4052   .debug_str:0000000000002241 .LASF86
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3464   .debug_str:0000000000000321 .LASF87
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3782   .debug_str:0000000000001418 .LASF88
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4090   .debug_str:000000000000242c .LASF89
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4284   .debug_str:0000000000002ded .LASF90
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4040   .debug_str:000000000000218a .LASF91
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3710   .debug_str:0000000000001001 .LASF92
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4306   .debug_str:0000000000002f03 .LASF93
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4212   .debug_str:0000000000002a70 .LASF94
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3552   .debug_str:000000000000083d .LASF95
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3874   .debug_str:00000000000018df .LASF96
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3750   .debug_str:000000000000121e .LASF97
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4046   .debug_str:00000000000021f3 .LASF98
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4070   .debug_str:000000000000231c .LASF99
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3672   .debug_str:0000000000000df9 .LASF100
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3992   .debug_str:0000000000001f5a .LASF101
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4086   .debug_str:00000000000023f8 .LASF102
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3966   .debug_str:0000000000001dff .LASF103
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3862   .debug_str:000000000000183b .LASF104
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3864   .debug_str:000000000000184e .LASF105
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4024   .debug_str:00000000000020b5 .LASF106
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3952   .debug_str:0000000000001d2a .LASF107
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3546   .debug_str:00000000000007ef .LASF108
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4174   .debug_str:000000000000284f .LASF109
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3860   .debug_str:0000000000001824 .LASF110
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3574   .debug_str:0000000000000957 .LASF111
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3948   .debug_str:0000000000001cff .LASF112
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3614   .debug_str:0000000000000b71 .LASF113
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4374   .debug_str:00000000000032ba .LASF114
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4350   .debug_str:0000000000003191 .LASF115
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4266   .debug_str:0000000000002d01 .LASF116
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3848   .debug_str:000000000000177a .LASF117
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4150   .debug_str:000000000000270f .LASF118
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3718   .debug_str:0000000000001074 .LASF119
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3666   .debug_str:0000000000000db2 .LASF120
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4006   .debug_str:0000000000001ffd .LASF121
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3658   .debug_str:0000000000000d41 .LASF122
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3490   .debug_str:0000000000000507 .LASF123
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4122   .debug_str:00000000000025ac .LASF124
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3436   .debug_str:000000000000014f .LASF125
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3682   .debug_str:0000000000000e5a .LASF126
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4192   .debug_str:0000000000002958 .LASF127
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3500   .debug_str:0000000000000566 .LASF128
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4338   .debug_str:00000000000030e2 .LASF129
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4362   .debug_str:0000000000003218 .LASF130
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3434   .debug_str:0000000000000137 .LASF131
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3956   .debug_str:0000000000001d76 .LASF132
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3984   .debug_str:0000000000001ef6 .LASF133
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3636   .debug_str:0000000000000c39 .LASF134
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4402   .debug_str:0000000000003471 .LASF135
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3752   .debug_str:000000000000123c .LASF136
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3822   .debug_str:0000000000001630 .LASF137
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4146   .debug_str:00000000000026e3 .LASF138
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4144   .debug_str:00000000000026b9 .LASF139
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4224   .debug_str:0000000000002b03 .LASF140
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3922   .debug_str:0000000000001b41 .LASF141
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4360   .debug_str:00000000000031fc .LASF142
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3878   .debug_str:000000000000190f .LASF143
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4022   .debug_str:000000000000209d .LASF144
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3842   .debug_str:000000000000173c .LASF145
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4292   .debug_str:0000000000002e62 .LASF146
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4254   .debug_str:0000000000002c85 .LASF147
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3684   .debug_str:0000000000000e85 .LASF148
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3812   .debug_str:00000000000015c8 .LASF149
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3638   .debug_str:0000000000000c61 .LASF150
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4342   .debug_str:0000000000003118 .LASF151
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3426   .debug_str:00000000000000b0 .LASF152
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4234   .debug_str:0000000000002b99 .LASF153
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3794   .debug_str:00000000000014bf .LASF154
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4084   .debug_str:00000000000023e2 .LASF155
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3826   .debug_str:0000000000001672 .LASF156
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4248   .debug_str:0000000000002c29 .LASF157
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4288   .debug_str:0000000000002e0e .LASF158
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4186   .debug_str:00000000000028ef .LASF159
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4400   .debug_str:000000000000345c .LASF160
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3960   .debug_str:0000000000001daf .LASF161
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4298   .debug_str:0000000000002eb2 .LASF162
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3510   .debug_str:0000000000000651 .LASF163
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4396   .debug_str:0000000000003437 .LASF164
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3462   .debug_str:0000000000000309 .LASF165
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3828   .debug_str:00000000000016a9 .LASF166
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3976   .debug_str:0000000000001e88 .LASF167
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4318   .debug_str:0000000000002fb0 .LASF168
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4404   .debug_str:0000000000003489 .LASF169
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3764   .debug_str:0000000000001300 .LASF170
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3916   .debug_str:0000000000001ac1 .LASF171
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4382   .debug_str:0000000000003345 .LASF172
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3444   .debug_str:00000000000001dd .LASF173
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3562   .debug_str:00000000000008e9 .LASF174
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4294   .debug_str:0000000000002e83 .LASF175
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3690   .debug_str:0000000000000ef4 .LASF176
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3452   .debug_str:000000000000027f .LASF177
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4238   .debug_str:0000000000002bc0 .LASF178
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4088   .debug_str:0000000000002412 .LASF179
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3998   .debug_str:0000000000001f99 .LASF180
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3700   .debug_str:0000000000000f69 .LASF181
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4376   .debug_str:00000000000032da .LASF182
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3482   .debug_str:0000000000000484 .LASF183
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4260   .debug_str:0000000000002cab .LASF184
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3780   .debug_str:00000000000013de .LASF185
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3558   .debug_str:0000000000000894 .LASF186
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3796   .debug_str:00000000000014d5 .LASF187
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3580   .debug_str:00000000000009a1 .LASF188
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4392   .debug_str:00000000000033e2 .LASF189
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4020   .debug_str:0000000000002085 .LASF190
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4126   .debug_str:00000000000025d5 .LASF191
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3446   .debug_str:0000000000000226 .LASF192
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3836   .debug_str:00000000000016fa .LASF193
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3820   .debug_str:0000000000001617 .LASF194
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3560   .debug_str:00000000000008ce .LASF195
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3884   .debug_str:0000000000001964 .LASF196
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4368   .debug_str:0000000000003257 .LASF197
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3660   .debug_str:0000000000000d5d .LASF198
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3514   .debug_str:0000000000000692 .LASF199
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4380   .debug_str:000000000000330a .LASF200
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4094   .debug_str:0000000000002444 .LASF201
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4044   .debug_str:00000000000021b1 .LASF202
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3630   .debug_str:0000000000000bf6 .LASF203
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3418   .debug_str:0000000000000054 .LASF204
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3654   .debug_str:0000000000000d0b .LASF205
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3550   .debug_str:0000000000000827 .LASF206
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3584   .debug_str:0000000000000a27 .LASF207
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4290   .debug_str:0000000000002e48 .LASF208
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3762   .debug_str:00000000000012e4 .LASF209
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3424   .debug_str:0000000000000099 .LASF210
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3720   .debug_str:000000000000108d .LASF211
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3816   .debug_str:00000000000015e9 .LASF212
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3934   .debug_str:0000000000001bdb .LASF213
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3488   .debug_str:00000000000004cb .LASF214
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4176   .debug_str:000000000000285d .LASF215
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4370   .debug_str:000000000000326f .LASF216
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3838   .debug_str:000000000000170a .LASF217
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3696   .debug_str:0000000000000f49 .LASF218
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3414   .debug_str:0000000000000009 .LASF219
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3450   .debug_str:0000000000000267 .LASF220
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3776   .debug_str:00000000000013a9 .LASF221
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3650   .debug_str:0000000000000cd4 .LASF222
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4034   .debug_str:0000000000002138 .LASF223
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3680   .debug_str:0000000000000e41 .LASF224
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3758   .debug_str:000000000000128a .LASF225
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4190   .debug_str:000000000000293e .LASF226
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3472   .debug_str:00000000000003a3 .LASF227
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3760   .debug_str:00000000000012a5 .LASF228
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4152   .debug_str:0000000000002724 .LASF229
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4334   .debug_str:000000000000307a .LASF230
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4390   .debug_str:00000000000033ca .LASF231
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3834   .debug_str:00000000000016e0 .LASF232
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3608   .debug_str:0000000000000b39 .LASF233
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3902   .debug_str:0000000000001a36 .LASF234
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3896   .debug_str:00000000000019e8 .LASF235
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4118   .debug_str:0000000000002584 .LASF236
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4106   .debug_str:00000000000024e9 .LASF237
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3432   .debug_str:000000000000011f .LASF238
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4358   .debug_str:00000000000031e2 .LASF239
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3458   .debug_str:00000000000002d7 .LASF240
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3968   .debug_str:0000000000001e22 .LASF241
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3946   .debug_str:0000000000001cc1 .LASF242
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3800   .debug_str:000000000000151b .LASF243
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3686   .debug_str:0000000000000e95 .LASF244
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3844   .debug_str:0000000000001752 .LASF245
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3598   .debug_str:0000000000000ac8 .LASF246
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4316   .debug_str:0000000000002f95 .LASF247
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3986   .debug_str:0000000000001f0e .LASF248
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4194   .debug_str:000000000000296f .LASF249
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3634   .debug_str:0000000000000c1d .LASF250
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3748   .debug_str:0000000000001200 .LASF251
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3536   .debug_str:000000000000078c .LASF252
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4026   .debug_str:00000000000020d1 .LASF253
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4354   .debug_str:00000000000031b8 .LASF254
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3944   .debug_str:0000000000001c82 .LASF255
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4394   .debug_str:00000000000033f8 .LASF256
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3440   .debug_str:0000000000000182 .LASF257
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3428   .debug_str:00000000000000c9 .LASF258
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3740   .debug_str:00000000000011a1 .LASF259
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4114   .debug_str:0000000000002551 .LASF260
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3958   .debug_str:0000000000001d94 .LASF261
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4042   .debug_str:000000000000219c .LASF262
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4242   .debug_str:0000000000002bde .LASF263
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3742   .debug_str:00000000000011b9 .LASF264
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3644   .debug_str:0000000000000c9d .LASF265
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3876   .debug_str:00000000000018f3 .LASF266
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3528   .debug_str:000000000000074b .LASF267
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3954   .debug_str:0000000000001d4f .LASF268
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4398   .debug_str:0000000000003446 .LASF269
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3852   .debug_str:00000000000017c4 .LASF270
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4102   .debug_str:00000000000024bb .LASF271
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4378   .debug_str:00000000000032f3 .LASF272
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3706   .debug_str:0000000000000fbe .LASF273
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3442   .debug_str:00000000000001c3 .LASF274
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3416   .debug_str:0000000000000023 .LASF275
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3730   .debug_str:0000000000001118 .LASF276
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3668   .debug_str:0000000000000dcb .LASF277
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4068   .debug_str:0000000000002304 .LASF278
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4116   .debug_str:000000000000256b .LASF279
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4346   .debug_str:000000000000314d .LASF280
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3674   .debug_str:0000000000000e0b .LASF281
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3582   .debug_str:00000000000009e2 .LASF282
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3818   .debug_str:0000000000001602 .LASF283
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4202   .debug_str:00000000000029e1 .LASF284
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3784   .debug_str:000000000000142b .LASF285
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3522   .debug_str:000000000000070c .LASF286
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4344   .debug_str:000000000000312f .LASF287
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4000   .debug_str:0000000000001fb5 .LASF288
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3466   .debug_str:0000000000000338 .LASF289
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4208   .debug_str:0000000000002a28 .LASF290
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3850   .debug_str:00000000000017a3 .LASF291
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4278   .debug_str:0000000000002da4 .LASF292
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3708   .debug_str:0000000000000fe4 .LASF293
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3894   .debug_str:00000000000019ca .LASF294
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4232   .debug_str:0000000000002b7a .LASF295
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3938   .debug_str:0000000000001c22 .LASF296
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4200   .debug_str:00000000000029c0 .LASF297
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3950   .debug_str:0000000000001d0e .LASF298
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4384   .debug_str:000000000000338a .LASF299
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4032   .debug_str:0000000000002123 .LASF300
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3474   .debug_str:00000000000003e2 .LASF301
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3724   .debug_str:00000000000010c3 .LASF302
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4304   .debug_str:0000000000002ef9 .LASF303
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3808   .debug_str:0000000000001592 .LASF304
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4198   .debug_str:00000000000029a7 .LASF305
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3460   .debug_str:00000000000002f1 .LASF306
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4348   .debug_str:0000000000003187 .LASF307
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3544   .debug_str:00000000000007d9 .LASF311
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4264   .debug_str:0000000000002ce9 .LASF312
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3678   .debug_str:0000000000000e34 .LASF313
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3602   .debug_str:0000000000000af1 .LASF314
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3832   .debug_str:00000000000016c8 .LASF315
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3476   .debug_str:00000000000003f6 .LASF316
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4074   .debug_str:0000000000002355 .LASF317
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4178   .debug_str:000000000000289c .LASF318
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3766   .debug_str:0000000000001342 .LASF319
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3492   .debug_str:0000000000000517 .LASF320
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4280   .debug_str:0000000000002dc3 .LASF321
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4154   .debug_str:0000000000002765 .LASF322
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3994   .debug_str:0000000000001f6f .LASF323
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3600   .debug_str:0000000000000ae2 .LASF324
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3612   .debug_str:0000000000000b60 .LASF325
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3890   .debug_str:000000000000199c .LASF326
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4356   .debug_str:00000000000031d2 .LASF327
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3772   .debug_str:0000000000001381 .LASF328
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4184   .debug_str:00000000000028da .LASF329
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4136   .debug_str:0000000000002653 .LASF330
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4250   .debug_str:0000000000002c60 .LASF331
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3470   .debug_str:000000000000038c .LASF332
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3854   .debug_str:00000000000017dd .LASF333
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3908   .debug_str:0000000000001a7a .LASF334
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4112   .debug_str:000000000000253c .LASF335
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3618   .debug_str:0000000000000b99 .LASF336
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3430   .debug_str:000000000000010f .LASF337
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3886   .debug_str:000000000000197a .LASF338
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3754   .debug_str:000000000000125b .LASF339
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3768   .debug_str:0000000000001354 .LASF340
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3728   .debug_str:0000000000001103 .LASF341
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4282   .debug_str:0000000000002dd3 .LASF342
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3870   .debug_str:00000000000018ab .LASF343
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3892   .debug_str:00000000000019af .LASF344
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3840   .debug_str:0000000000001721 .LASF345
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4274   .debug_str:0000000000002d86 .LASF346
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3530   .debug_str:0000000000000764 .LASF347
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4228   .debug_str:0000000000002b45 .LASF348
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4124   .debug_str:00000000000025ce .LASF349
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3534   .debug_str:0000000000000783 .LASF350
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3804   .debug_str:0000000000001576 .LASF352
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4258   .debug_str:0000000000002ca3 .LASF353
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3640   .debug_str:0000000000000c6f .LASF354
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3648   .debug_str:0000000000000cca .LASF355
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4286   .debug_str:0000000000002e02 .LASF356
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3568   .debug_str:0000000000000929 .LASF357
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3508   .debug_str:0000000000000648 .LASF358
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3974   .debug_str:0000000000001e7d .LASF359
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3624   .debug_str:0000000000000bc6 .LASF360
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3926   .debug_str:0000000000001b78 .LASF361
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3846   .debug_str:000000000000176a .LASF362
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3622   .debug_str:0000000000000bb6 .LASF363
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4012   .debug_str:000000000000203a .LASF364
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4148   .debug_str:0000000000002703 .LASF365
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4388   .debug_str:00000000000033be .LASF366
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3814   .debug_str:00000000000015dc .LASF367
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4076   .debug_str:0000000000002382 .LASF368
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3798   .debug_str:0000000000001511 .LASF369
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3586   .debug_str:0000000000000a38 .LASF370
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3790   .debug_str:0000000000001494 .LASF371
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3540   .debug_str:00000000000007b8 .LASF372
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3676   .debug_str:0000000000000e26 .LASF373
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3888   .debug_str:000000000000198e .LASF374
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3616   .debug_str:0000000000000b8a .LASF375
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3632   .debug_str:0000000000000c0d .LASF376
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3526   .debug_str:0000000000000739 .LASF377
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3604   .debug_str:0000000000000b04 .LASF378
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4060   .debug_str:00000000000022a1 .LASF379
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4014   .debug_str:0000000000002046 .LASF380
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3570   .debug_str:0000000000000931 .LASF381
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4096   .debug_str:0000000000002482 .LASF382
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4030   .debug_str:0000000000002110 .LASF383
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3596   .debug_str:0000000000000ab4 .LASF384
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4110   .debug_str:0000000000002528 .LASF385
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4352   .debug_str:00000000000031a5 .LASF386
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3712   .debug_str:0000000000001025 .LASF387
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4066   .debug_str:00000000000022f0 .LASF388
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3930   .debug_str:0000000000001b97 .LASF389
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4182   .debug_str:00000000000028c5 .LASF390
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3904   .debug_str:0000000000001a4d .LASF391
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4220   .debug_str:0000000000002aca .LASF392
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4230   .debug_str:0000000000002b61 .LASF393
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3962   .debug_str:0000000000001dc6 .LASF394
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3982   .debug_str:0000000000001edc .LASF395
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3920   .debug_str:0000000000001b27 .LASF396
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4140   .debug_str:000000000000268d .LASF397
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4058   .debug_str:0000000000002288 .LASF398
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4328   .debug_str:0000000000003021 .LASF399
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3906   .debug_str:0000000000001a61 .LASF400
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4072   .debug_str:0000000000002334 .LASF401
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3576   .debug_str:0000000000000972 .LASF402
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4010   .debug_str:000000000000201c .LASF403
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4324   .debug_str:0000000000002ff1 .LASF404
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3774   .debug_str:0000000000001391 .LASF405
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4366   .debug_str:000000000000323d .LASF406
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3726   .debug_str:00000000000010da .LASF407
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3918   .debug_str:0000000000001b03 .LASF408
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3880   .debug_str:000000000000191f .LASF409
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3714   .debug_str:0000000000001039 .LASF410
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3756   .debug_str:0000000000001270 .LASF411
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3716   .debug_str:0000000000001058 .LASF412
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3786   .debug_str:0000000000001442 .LASF413
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3694   .debug_str:0000000000000f23 .LASF414
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4268   .debug_str:0000000000002d1a .LASF415
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3964   .debug_str:0000000000001de0 .LASF416
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4134   .debug_str:0000000000002639 .LASF417
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3656   .debug_str:0000000000000d25 .LASF418
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3866   .debug_str:0000000000001864 .LASF419
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3746   .debug_str:00000000000011da .LASF420
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3456   .debug_str:00000000000002af .LASF421
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4308   .debug_str:0000000000002f19 .LASF422
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3802   .debug_str:000000000000155c .LASF423
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3868   .debug_str:000000000000188f .LASF424
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3448   .debug_str:000000000000023c .LASF425
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3810   .debug_str:00000000000015a2 .LASF426
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3592   .debug_str:0000000000000a73 .LASF427
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4332   .debug_str:0000000000003053 .LASF428
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4336   .debug_str:00000000000030c0 .LASF429
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4222   .debug_str:0000000000002adf .LASF430
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4272   .debug_str:0000000000002d5d .LASF431
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3942   .debug_str:0000000000001c5e .LASF432
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4196   .debug_str:0000000000002981 .LASF433
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3642   .debug_str:0000000000000c74 .LASF434
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4028   .debug_str:00000000000020ec .LASF435
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4210   .debug_str:0000000000002a4a .LASF436
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3478   .debug_str:000000000000044a .LASF437
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4138   .debug_str:0000000000002669 .LASF438
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4262   .debug_str:0000000000002cc3 .LASF439
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4314   .debug_str:0000000000002f79 .LASF440
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3438   .debug_str:0000000000000165 .LASF441
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3704   .debug_str:0000000000000fa0 .LASF442
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4164   .debug_str:00000000000027c5 .LASF443
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3978   .debug_str:0000000000001e9d .LASF444
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3486   .debug_str:00000000000004a4 .LASF445
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4206   .debug_str:0000000000002a0a .LASF446
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4340   .debug_str:00000000000030f9 .LASF447
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4214   .debug_str:0000000000002a96 .LASF448
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3856   .debug_str:00000000000017ee .LASF449
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4170   .debug_str:0000000000002822 .LASF450
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4132   .debug_str:0000000000002621 .LASF451
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3806   .debug_str:000000000000157c .LASF452
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3940   .debug_str:0000000000001c46 .LASF453
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3734   .debug_str:000000000000115d .LASF454
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3910   .debug_str:0000000000001a8a .LASF455
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3554   .debug_str:0000000000000855 .LASF456
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4018   .debug_str:000000000000206b .LASF457
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4276   .debug_str:0000000000002d8c .LASF458
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3454   .debug_str:0000000000000295 .LASF459
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4310   .debug_str:0000000000002f38 .LASF460
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3858   .debug_str:0000000000001808 .LASF461
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3744   .debug_str:00000000000011ce .LASF462
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3626   .debug_str:0000000000000bcd .LASF463
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4038   .debug_str:0000000000002183 .LASF464
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:4372   .debug_str:00000000000032b2 .LASF465
+C:\Users\qingsong\AppData\Local\Temp\ccw2Qwos.s:3702   .debug_str:0000000000000f80 .LASF466
+                           .group:0000000000000000 wm4.0.98f0bb1469cf693efc8b955607a2d969
+                           .group:0000000000000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:0000000000000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:0000000000000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:0000000000000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:0000000000000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:0000000000000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:0000000000000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+
+NO UNDEFINED SYMBOLS
